@@ -48,12 +48,15 @@ MongoClient.connect(mongoURL, (err, db) => {
   // Tasks
   app.get('/tasks', (req, res) => {
     console.log('GET /tasks')
-    if (!req.query.ids) {
-      return res.status(400).send({error: 'Please provide spatial entity ids'})
-    } 
-    const ids = JSON.parse(req.query.ids) //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
 
-    Tasks.find({_id: {$in: ids}}).toArray((err, docs) => {
+    let search = {}
+
+    if (req.query.ids) {
+      const ids = JSON.parse(req.query.ids) //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
+      search = {_id: {$in: ids}}
+    } 
+    
+    Tasks.find(search).toArray((err, docs) => {
       res.send({data: docs})
     })
   })
@@ -68,12 +71,14 @@ MongoClient.connect(mongoURL, (err, db) => {
   app.get('/spatial_entities', (req, res) => {
     console.log('GET /spatial_entities')
 
-    if (!req.query.ids) {
-      return res.status(400).send({error: 'Please provide spatial entity ids'})
-    } 
-    const ids = JSON.parse(req.query.ids) //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
+    let search = {}
 
-    SpatialEntities.find({_id: {$in: ids}}).toArray((err, docs) => {
+    if (req.query.ids) {
+      const ids = JSON.parse(req.query.ids)//.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
+      search = {_id: {$in: ids}}
+    } 
+     
+    SpatialEntities.find(search).toArray((err, docs) => {
       res.send({data: docs})
     })
   })
