@@ -3,13 +3,7 @@ const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const cors = require('cors')
 
-const spatial_entities = require('../seed/spatial_entities.json')
-const tasks = require('../seed/tasks.json')
-const clusters = require('../seed/clusters.json')
-
 const app = express()
-
-app.use(cors())
 
 const mongoURL = process.env.MONGODB_URI 
 
@@ -19,6 +13,8 @@ MongoClient.connect(mongoURL, (err, db) => {
   let Clusters = db.collection('clusters')
   let Tasks = db.collection('tasks')
   let SpatialEntities = db.collection('spatial_entities')
+
+  app.use(cors())
   
   app.get('/', (req, res) => {
     res.send({data: "DOUMA API v1"})
