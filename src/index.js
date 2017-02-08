@@ -26,28 +26,32 @@ MongoClient.connect(mongoURL, (err, db) => {
   app.get('/clusters', (req, res) => {
     console.log('GET /clusters')
 
-    const locations = JSON.parse(req.query.locations || '[]') 
-    const ids       = JSON.parse(req.query.ids       || '[]') 
+    
+    let search = {}
 
-    if (ids.length !== 0) {
+    if (req.query.ids) {
       // Find by IDs
-      Clusters.find({_id: {$in: ids}}).toArray((err, docs) => {
-        res.send({data: docs})
-      })
-    } else {
+      const ids = JSON.parse(req.query.ids || '[]') 
+      search = {_id: {$in: ids}}
+      
+    } else if (req.query.locations) {
+
       // Find by locations
-      let search = []
+      let array = []
+      const locations = JSON.parse(req.query.locations || '[]') 
 
       locations.forEach(({location_type, name}) => {
         let obj = {}
         obj['location.' + location_type] = name
-        search.push(obj)
+        array.push(obj)
       })
 
-      Clusters.find({$or: search}).toArray((err, docs) => {
-        res.send({data: docs})
-      })
+      search = {$or: array}
     }
+
+    Clusters.find(search).toArray((err, docs) => {
+      res.send({data: docs})
+    })
 
   })
 
