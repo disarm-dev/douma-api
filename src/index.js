@@ -11,7 +11,7 @@ const app = express()
 
 app.use(cors())
 
-const mongoURL = 'mongodb://localhost:27017/irs_progress';
+const mongoURL = process.env.MONGODB_URI 
 
 MongoClient.connect(mongoURL, (err, db) => {
   if (err) return console.log(err)
