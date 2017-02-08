@@ -22,21 +22,33 @@ MongoClient.connect(mongoURL, (err, db) => {
 
   // Clusters
   // /cluster?locations=[{location_type: region, name: Hhohho}, {location_type: region, name: Hhohho}]
+  // /cluster?ids=['123', '456']
   app.get('/clusters', (req, res) => {
     console.log('GET /clusters')
 
-    let locations = JSON.parse(req.query.locations || '[]') 
-    let search = []
+    const locations = JSON.parse(req.query.locations || '[]') 
+    const ids       = JSON.parse(req.query.ids       || '[]') 
 
-    locations.forEach(({location_type, name}) => {
-      let obj = {}
-      obj['location.' + location_type] = name
-      search.push(obj)
-    })
+    if (ids.length !== 0) {
+      // Find by IDs
+      Clusters.find({_id: {$in: ids}}).toArray((err, docs) => {
+        res.send({data: docs})
+      })
+    } else {
+      // Find by locations
+      let search = []
 
-    Clusters.find({$or: search}).toArray((err, docs) => {
-      res.send({data: docs})
-    })
+      locations.forEach(({location_type, name}) => {
+        let obj = {}
+        obj['location.' + location_type] = name
+        search.push(obj)
+      })
+
+      Clusters.find({$or: search}).toArray((err, docs) => {
+        res.send({data: docs})
+      })
+    }
+
   })
 
   // TODO: @feature Needed for R Server
