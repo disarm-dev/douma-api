@@ -88,8 +88,8 @@ MongoClient.connect(mongoURL, (err, db) => {
   // })
 
 
-  app.listen(8080, () => {
-    console.log('[DOUMA API] Listening on port 3000')
+  app.listen(process.env.port || 3000, () => {
+    console.log('[DOUMA API] Listening on port ' + (process.env.port || 3000))
   })
 
 })
