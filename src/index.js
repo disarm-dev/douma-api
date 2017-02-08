@@ -51,7 +51,7 @@ MongoClient.connect(mongoURL, (err, db) => {
     if (!req.query.ids) {
       return res.status(500).send({error: 'Please provide spatial entity ids'})
     } 
-    const ids = JSON.parse(req.query.ids).map(id => new ObjectID(id))
+    const ids = JSON.parse(req.query.ids) //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
 
     Tasks.find({_id: {$in: ids}}).toArray((err, docs) => {
       res.send({data: docs})
@@ -71,7 +71,7 @@ MongoClient.connect(mongoURL, (err, db) => {
     if (!req.query.ids) {
       return res.status(500).send({error: 'Please provide spatial entity ids'})
     } 
-    const ids = JSON.parse(req.query.ids)//.map(id => new ObjectID(id))
+    const ids = JSON.parse(req.query.ids) //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
 
     SpatialEntities.find({_id: {$in: ids}}).toArray((err, docs) => {
       res.send({data: docs})
