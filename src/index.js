@@ -3,13 +3,7 @@ const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const cors = require('cors')
 
-const spatial_entities = require('../seed/spatial_entities.json')
-const tasks = require('../seed/tasks.json')
-const clusters = require('../seed/clusters.json')
-
 const app = express()
-
-
 
 const mongoURL = process.env.MONGODB_URI 
 
