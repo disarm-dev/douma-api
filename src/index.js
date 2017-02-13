@@ -2,6 +2,7 @@ const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const cors = require('cors')
+var bodyParser = require('body-parser');
 
 const app = express()
 
@@ -15,6 +16,7 @@ MongoClient.connect(mongoURL, (err, db) => {
   let SpatialEntities = db.collection('spatial_entities')
 
   app.use(cors())
+  app.use(bodyParser.json())
   
   app.get('/', (req, res) => {
     res.send({data: "DOUMA API v1"})
@@ -56,9 +58,21 @@ MongoClient.connect(mongoURL, (err, db) => {
   })
 
   // TODO: @feature Needed for R Server
-  // app.post('/clusters/:id', (req, res) => {
-  //   res.send({data: "GET Cluster " + req.params.id })
-  // })
+  app.post('/clusters', (req, res) => {
+    console.log('POST cluster', req.body)
+    let doc = req.body
+
+    // TODO: @feature Set default properties
+
+    Clusters.insert(doc, (err, result) => {
+      if (err) {
+        res.send({data: req.body })    
+      } else {
+        res.send(result)
+      }
+      
+    })
+  })
 
 
   // Tasks
@@ -70,16 +84,30 @@ MongoClient.connect(mongoURL, (err, db) => {
     if (req.query.ids) {
       const ids = JSON.parse(req.query.ids) //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
       search = {_id: {$in: ids}}
-    } 
+    } else if (req.query.spatial_entity_ids) {
+      const spatial_entity_ids = JSON.parse(req.query.spatial_entity_ids)
+      search = {spatial_entity_id: {$in: spatial_entity_ids}}
+    }
     
     Tasks.find(search).toArray((err, docs) => {
       res.send({data: docs})
     })
   })
 
-  app.post('/tasks/:id', (req, res) => {
+  app.post('/tasks', (req, res) => {
+    console.log('POST Tasks', req.body)
+    let doc = req.body
 
-    res.send({data: "POST Tasks" })
+    // TODO: @feature Set default properties
+
+    Tasks.insert(doc, (err, result) => {
+      if (err) {
+        res.send(err)    
+      } else {
+        res.send(result)
+      }
+      
+    })
   })
 
 
@@ -100,9 +128,21 @@ MongoClient.connect(mongoURL, (err, db) => {
   })
 
   // TODO: @feature Needed for R Server
-  // app.post('/spatial_entities/:id', (req, res) => {
-  //   res.send({data: "POST Spatial Entity " + req.params.id })
-  // })
+  app.post('/spatial_entities', (req, res) => {
+    console.log('POST SE', req.body)
+    let doc = req.body
+
+    // TODO: @feature Set default properties
+
+    SpatialEntities.insert(doc, (err, result) => {
+      if (err) {
+        res.send({data: req.body })    
+      } else {
+        res.send(result)
+      }
+      
+    })
+  })
 
 
   app.listen(process.env.PORT || 3000, () => {
