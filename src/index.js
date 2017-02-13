@@ -83,9 +83,9 @@ MongoClient.connect(mongoURL, (err, db) => {
     if (req.query.ids) {
       const ids = JSON.parse(req.query.ids) //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
       search = {_id: {$in: ids}}
-    } else if (req.query.se_ids) {
-      const se_ids = JSON.parse(req.query.se_ids)
-      search = {spatial_entity_id: {$in: se_ids}}
+    } else if (req.query.spatial_entity_ids) {
+      const spatial_entity_ids = JSON.parse(req.query.spatial_entity_ids)
+      search = {spatial_entity_id: {$in: spatial_entity_ids}}
     }
     
     Tasks.find(search).toArray((err, docs) => {
