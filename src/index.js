@@ -16,7 +16,7 @@ MongoClient.connect(mongoURL, (err, db) => {
   let SpatialEntities = db.collection('spatial_entities')
 
   app.use(cors())
-  app.use(bodyParser.json())
+  app.use(bodyParser.json({limit: '50mb'}))
   
   app.get('/', (req, res) => {
     res.send({data: "DOUMA API v1"})
