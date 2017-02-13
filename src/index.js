@@ -59,6 +59,7 @@ MongoClient.connect(mongoURL, (err, db) => {
 
   // TODO: @feature Needed for R Server
   app.post('/clusters', (req, res) => {
+    console.log('POST cluster', req.body)
     let doc = req.body
 
     // TODO: @feature Set default properties
@@ -94,6 +95,7 @@ MongoClient.connect(mongoURL, (err, db) => {
   })
 
   app.post('/tasks', (req, res) => {
+    console.log('POST Tasks', req.body)
     let doc = req.body
 
     // TODO: @feature Set default properties
@@ -127,6 +129,7 @@ MongoClient.connect(mongoURL, (err, db) => {
 
   // TODO: @feature Needed for R Server
   app.post('/spatial_entities', (req, res) => {
+    console.log('POST SE', req.body)
     let doc = req.body
 
     // TODO: @feature Set default properties
