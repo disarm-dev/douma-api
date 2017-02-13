@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "rerun 'node src/index.js' './src/*.js'"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.16.1",
     "cors": "^2.8.1",
     "express": "^4.14.1",
     "mongodb": "^2.2.22"
