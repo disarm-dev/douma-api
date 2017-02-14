@@ -2,9 +2,20 @@ const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const cors = require('cors')
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
+const Raven = require('raven')
+
+Raven.config('https://05f42524abca4b84ba7a9b9d05fb620a:25ed5315d6684ae8bae0860db8e203bf@sentry.io/134727').install()
 
 const app = express()
+app.use(Raven.requestHandler())
+app.use(Raven.errorHandler())
+
+app.use(function (err, req, res, next) {
+  res.status(500)
+  res.end(res.sentry + '\n')
+})
+
 app.use(cors())
 app.use(bodyParser.json({limit: '50mb'}))
 
