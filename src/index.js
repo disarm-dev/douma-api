@@ -244,13 +244,12 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
   app.post('/spatial_entities', (req, res) => {
     console.log('POST SE', req.body)
-    let doc = req.body
 
     // TODO: @feature Set default properties
 
-    SpatialEntities.insert(doc, (err, result) => {
+    SpatialEntities.insert(req.body, (err, result) => {
       if (err) {
-        res.send({data: req.body })    
+        res.send({data: 'Success' })    
       } else {
         res.send(result)
       }
