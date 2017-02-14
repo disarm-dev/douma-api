@@ -26,14 +26,19 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     res.send({data: "DOUMA API v0.3"})
   })
 
-  app.get('/error', (req, res) => {
-    throw new Error('Something crashed')
-    res.send({data: "DOUMA API v0.3"})
-  })
 
-  // Clusters
-  // /cluster?locations=[{location_type: region, name: Hhohho}, {location_type: region, name: Hhohho}]
-  // /cluster?ids=['123', '456']
+/**
+ * @api {get} /clusters Get clusters
+ * @apiName GetCluster
+ * @apiGroup Clusters
+ *
+ * @apiParam {Array} ids Cluster ids
+ * @apiParam {Array} locationObjects Location objects {location_type: 'region', name: 'Hhohho'}
+ *
+ * @apiSuccess {Array} clusters Array of cluster objects
+ */
+
+
   app.get('/clusters', (req, res) => {
     console.log('GET /clusters')
 
@@ -65,7 +70,16 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
   })
 
-  // TODO: @feature Needed for R Server
+  /**
+ * @api {post} /clusters Create clusters
+ * @apiName CreateClusters
+ * @apiGroup Clusters
+ *
+ * @apiParamExample {json} Request-Example: 
+                  [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"] }]
+ * @apiSuccess {Array} clusters Array of cluster objects
+ */
+
   app.post('/clusters', (req, res) => {
     console.log('POST cluster', req.body)
 
@@ -77,10 +91,11 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     
     let cluster_promises = clusters.map((cluster) => {
-      console.log(typeof cluster.spatial_entity_ids)
-      if (typeof cluster.spatial_entity_ids === 'string') {
+
+      if (!Array.isArray(cluster.spatial_entity_ids)) {
         throw new Error(`Not an array ${JSON.stringify(cluster.spatial_entity_ids)}`) 
       }
+
       let task_promises = cluster.spatial_entity_ids.map((spatial_entity_id) => {
         return Tasks.find({spatial_entity_id})
           .toArray()
@@ -134,7 +149,17 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   })
 
 
-  // Tasks
+/**
+ * @api {get} /tasks Get tasks
+ * @apiName GetTasks
+ * @apiGroup Tasks
+ *
+ * @apiParam {Array} ids Task ids
+ * @apiParam {Array} spatial_entity_ids Spatial entity ids or osm_ids
+ *
+ * @apiSuccess {Array} clusters Array of task objects
+ */
+  
   app.get('/tasks', (req, res) => {
     console.log('GET /tasks')
 
@@ -153,6 +178,17 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     })
   })
 
+/**
+ * @api {post} /tasks Create tasks
+ * @apiName CreateTasks
+ * @apiGroup Tasks
+ *
+ * @apiParamExample {json} Sending an Array: 
+                  [ {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}]
+* @apiParamExample {json} Sending an Object: 
+                  {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}
+ */
+
   app.post('/tasks', (req, res) => {
     console.log('POST Tasks', req.body)
     let doc = req.body
@@ -170,7 +206,16 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   })
 
 
-  // Spatial Entities
+/**
+ * @api {get} /spatial_entities Get spatial entities
+ * @apiName GetSpatialEntities
+ * @apiGroup SpatialEntities
+ *
+ * @apiParam {Array} ids Task ids
+ * @apiParam {Array} spatial_entity_ids Spatial entity ids or osm_ids
+ *
+ * @apiSuccess {Array} clusters Array of spatial entity objects
+ */
   app.get('/spatial_entities', (req, res) => {
     console.log('GET /spatial_entities')
 
@@ -186,7 +231,17 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     })
   })
 
-  // TODO: @feature Needed for R Server
+  /**
+ * @api {post} /spatial_entities Create spatial entity
+ * @apiName CreateSpatialEntities
+ * @apiGroup SpatialEntities
+ *
+ * @apiParamExample {json} Sending Array: 
+                  [ {"osm_id": "123123", "polygon": {}}]
+* @apiParamExample {json} Sending Object: 
+                  {"osm_id": "123123", "polygon": {}}
+ */
+
   app.post('/spatial_entities', (req, res) => {
     console.log('POST SE', req.body)
     let doc = req.body
@@ -204,11 +259,6 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   })
 
   app.use(Raven.errorHandler())
-
-  app.use(function (err, req, res, next) {
-    res.status(500)
-    res.end(res.sentry + '\n')
-  })
 
 
   app.listen(process.env.PORT || 3000, () => {
