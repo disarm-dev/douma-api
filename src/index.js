@@ -78,6 +78,9 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     
     let cluster_promises = clusters.map((cluster) => {
       console.log(typeof cluster.spatial_entity_ids)
+      if (typeof cluster.spatial_entity_ids === 'string') {
+        throw new Error(`Not an array ${JSON.stringify(cluster.spatial_entity_ids)}`) 
+      }
       let task_promises = cluster.spatial_entity_ids.map((spatial_entity_id) => {
         return Tasks.find({spatial_entity_id})
           .toArray()
