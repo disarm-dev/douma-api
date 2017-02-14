@@ -5,28 +5,29 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const Raven = require('raven')
 
-Raven.config('https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843').install()
 
-const app = express()
-app.use(Raven.requestHandler())
-app.use(Raven.errorHandler())
-
-app.use(function (err, req, res, next) {
-  res.status(500)
-  res.end(res.sentry + '\n')
-})
-
-app.use(cors())
-app.use(bodyParser.json({limit: '50mb'}))
 
 MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   console.log('Connected to db')
+
+  Raven.config('https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843').install()
+
+  const app = express()
+  app.use(Raven.requestHandler())
+
+  app.use(cors())
+  app.use(bodyParser.json({limit: '50mb'}))
 
   let Clusters = db.collection('clusters')
   let Tasks = db.collection('tasks')
   let SpatialEntities = db.collection('spatial_entities')
 
   app.get('/', (req, res) => {
+    res.send({data: "DOUMA API v0.3"})
+  })
+
+  app.get('/error', (req, res) => {
+    throw new Error('Something crashed')
     res.send({data: "DOUMA API v0.3"})
   })
 
@@ -197,6 +198,13 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       }
       
     })
+  })
+
+  app.use(Raven.errorHandler())
+
+  app.use(function (err, req, res, next) {
+    res.status(500)
+    res.end(res.sentry + '\n')
   })
 
 
