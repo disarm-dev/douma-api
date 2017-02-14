@@ -16,7 +16,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   app.use(Raven.requestHandler())
 
   app.use(cors())
-  app.use(bodyParser.json({limit: '50mb'}))
+  app.use(bodyParser.json({limit: '500mb'}))
 
   let Clusters = db.collection('clusters')
   let Tasks = db.collection('tasks')
