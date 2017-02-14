@@ -7,7 +7,8 @@
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rerun 'node src/index.js' './src/*.js'",
-    "docs": "apidoc -i src/ -o docs/"
+    "docs": "apidoc -i src/ -o docs/",
+    "deploy-docs": "npm run docs; surge docs douma-api-docs.disarm.io"
   },
   "author": "",
   "license": "ISC",
