@@ -5,19 +5,16 @@ const cors = require('cors')
 var bodyParser = require('body-parser');
 
 const app = express()
+app.use(cors())
+app.use(bodyParser.json({limit: '50mb'}))
 
-const mongoURL = process.env.MONGODB_URI 
-
-MongoClient.connect(mongoURL, (err, db) => {
-  if (err) return console.log(err)
+MongoClient.connect(process.env.MONGODB_URI).then((db) => {
+  console.log('Connected to db')
 
   let Clusters = db.collection('clusters')
   let Tasks = db.collection('tasks')
   let SpatialEntities = db.collection('spatial_entities')
 
-  app.use(cors())
-  app.use(bodyParser.json({limit: '50mb'}))
-  
   app.get('/', (req, res) => {
     res.send({data: "DOUMA API v1"})
   })
@@ -28,7 +25,6 @@ MongoClient.connect(mongoURL, (err, db) => {
   app.get('/clusters', (req, res) => {
     console.log('GET /clusters')
 
-    
     let search = {}
 
     if (req.query.ids) {
@@ -60,17 +56,65 @@ MongoClient.connect(mongoURL, (err, db) => {
   // TODO: @feature Needed for R Server
   app.post('/clusters', (req, res) => {
     console.log('POST cluster', req.body)
-    let doc = req.body
 
-    // TODO: @feature Set default properties
+    if (!Array.isArray(req.body)) {
+      return res.status(400).end()
+    }
 
-    Clusters.insert(doc, (err, result) => {
-      if (err) {
-        res.send({data: req.body })    
-      } else {
-        res.send(result)
-      }
+    let clusters = req.body
+
+    
+    let cluster_promises = clusters.map((cluster) => {
       
+      let task_promises = cluster.spatial_entity_ids.map((spatial_entity_id) => {
+        return Tasks.find({spatial_entity_id})
+          .toArray()
+          .then((task) => {
+            if (task.length === 0)  {
+              return Tasks.insert({
+                properties: {
+                  status: 'unvisited'
+                },
+                task_date: new Date(),
+                task_type: "irs_record",
+                spatial_entity_id
+              })
+            } else {
+              return new Promise((resolve, reject) => resolve())
+            }
+          })
+      })
+
+      return Promise.all(task_promises).then((results) => {
+        let task_ids = []
+
+
+        results
+        .filter(r => r)
+        .filter(({result}) => {
+          if (result) {
+            return result.ok === 1  
+          }
+          return false
+        })
+        .forEach(({insertedIds}) => {
+          if (insertedIds) {
+            insertedIds.forEach((id) => task_ids.push(id))  
+          }
+        })
+
+        cluster.task_ids = task_ids
+
+        return Clusters.insert(cluster)
+      })
+    })
+    
+
+    Promise.all(cluster_promises).then((clusters) => {
+      res.send(`Inserted ${clusters.length} clusters`)
+    }).catch((err) => {
+      console.log('error here', err)
+      res.status(500).send('Something broke!')
     })
   })
 
@@ -149,7 +193,6 @@ MongoClient.connect(mongoURL, (err, db) => {
     console.log('[DOUMA API] Listening on port ' + (process.env.PORT || 3000))
   })
 
-})
-
+}).catch((err) => console.log(err))
 
 
