@@ -5,7 +5,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const Raven = require('raven')
 
-Raven.config('https://05f42524abca4b84ba7a9b9d05fb620a:25ed5315d6684ae8bae0860db8e203bf@sentry.io/134727').install()
+Raven.config('https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843').install()
 
 const app = express()
 app.use(Raven.requestHandler())
