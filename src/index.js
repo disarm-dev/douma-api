@@ -16,7 +16,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   let SpatialEntities = db.collection('spatial_entities')
 
   app.get('/', (req, res) => {
-    res.send({data: "DOUMA API v1"})
+    res.send({data: "DOUMA API v0.2"})
   })
 
   // Clusters
