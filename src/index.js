@@ -166,7 +166,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     let search = {}
 
     if (req.query.ids) {
-      const ids = JSON.parse(req.query.ids).map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
+      const ids = req.query.ids.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
       search = {_id: {$in: ids}}
     } else if (req.query.spatial_entity_ids) {
       const spatial_entity_ids = JSON.parse(req.query.spatial_entity_ids)
@@ -222,7 +222,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     let search = {}
 
     if (req.query.ids) {
-      const ids = JSON.parse(req.query.ids).map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
+      const ids = req.query.ids.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
       search = {_id: {$in: ids}}
     } 
      
