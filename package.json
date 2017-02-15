@@ -9,7 +9,7 @@
     "dev": "rerun 'node src/index.js' './src/*.js'",
     "docs": "apidoc -i src/ -o docs/",
     "deploy-docs": "npm run docs; surge docs douma-api-docs.disarm.io",
-    "full-deploy": "git push heroku master; git push origin master; npm run deploy-docs",
+    "full-deploy": "git push heroku master; git push origin master; npm run deploy-docs"
   },
   "author": "",
   "license": "ISC",
