@@ -34,7 +34,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiGroup Clusters
  *
  * @apiParam {Array} ids Cluster ids
- * @apiParam {Array} locationObjects Location objects {location_type: 'region', name: 'Hhohho'}
+ * @apiParam {Array} locationObjects Location objects {location_type: 'region', name: 'Hhohho', ...}
  *
  * @apiSuccess {Array} clusters Array of cluster objects
  */
@@ -77,13 +77,12 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiGroup Clusters
  *
  * @apiParamExample {json} Request-Example: 
-                  [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"] }]
+                  [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
  * @apiSuccess {Array} clusters Array of cluster objects
  */
 
   app.post('/clusters', (req, res) => {
     console.log('POST cluster', req.body)
-
     if (!Array.isArray(req.body)) {
       return res.status(400).end()
     }
@@ -185,7 +184,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiGroup Tasks
  *
  * @apiParamExample {json} Sending an Array: 
-                  [ {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}]
+                  [ {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}, ...]
 * @apiParamExample {json} Sending an Object: 
                   {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}
  */
@@ -238,9 +237,9 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiGroup SpatialEntities
  *
  * @apiParamExample {json} Sending Array: 
-                  [ {"osm_id": "123123", "polygon": {}}]
+                  [ {"osm_id": "123123", "polygon": {...}}, ...]
 * @apiParamExample {json} Sending Object: 
-                  {"osm_id": "123123", "polygon": {}}
+                  {"osm_id": "123123", "polygon": {...}}
  */
 
   app.post('/spatial_entities', (req, res) => {
@@ -287,7 +286,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiName CreateSpatialEntityPoints
  * @apiGroup SpatialEntityPoints
  * @apiParamExample {json} Sending Array: 
-                  [ {"type": "Feature", "properties": {}, "geometry": {}}]
+                  [ {"type": "Feature", "properties": {...}, "geometry": {...}, ...]
  *
  */
 
