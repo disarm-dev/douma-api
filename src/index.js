@@ -222,8 +222,8 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     let search = {}
 
     if (req.query.ids) {
-      const ids = JSON.parse(req.query.ids).map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
-      search = {_id: {$in: ids}}
+      const ids = JSON.parse(req.query.ids)
+      search = {properties: {osm_id: {$in: ids}}}
     } 
      
     SpatialEntities.find(search).toArray((err, docs) => {
