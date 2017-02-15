@@ -223,7 +223,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     if (req.query.ids) {
       const ids = JSON.parse(req.query.ids)
-      search = {properties: {osm_id: {$in: ids}}}
+      search = {"properties.osm_id": {$in: ids}}
     } 
      
     SpatialEntities.find(search).toArray((err, docs) => {
