@@ -24,7 +24,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   let SpatialEntityPoints = db.collection('spatial_entity_points')
 
   app.get('/', (req, res) => {
-    res.send({data: "DOUMA API v0.3"})
+    res.send({data: "DOUMA API v0.4"})
   })
 
 
