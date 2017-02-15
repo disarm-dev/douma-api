@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "rerun 'node src/index.js' './src/*.js'"
+    "dev": "rerun 'node src/index.js' './src/*.js'",
+    "docs": "apidoc -i src/ -o docs/",
+    "deploy-docs": "npm run docs; surge docs douma-api-docs.disarm.io",
+    "full-deploy": "git push heroku master; git push origin master; npm run deploy-docs"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +17,11 @@
     "body-parser": "^1.16.1",
     "cors": "^2.8.1",
     "express": "^4.14.1",
-    "mongodb": "^2.2.22"
+    "mongodb": "^2.2.22",
+    "raven": "^1.1.2"
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.5",
+    "surge": "^0.18.0"
   }
 }
