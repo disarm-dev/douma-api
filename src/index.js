@@ -21,6 +21,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   let Clusters = db.collection('clusters')
   let Tasks = db.collection('tasks')
   let SpatialEntities = db.collection('spatial_entities')
+  let SpatialEntityPoints = db.collection('spatial_entity_points')
 
   app.get('/', (req, res) => {
     res.send({data: "DOUMA API v0.3"})
@@ -248,6 +249,54 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     // TODO: @feature Set default properties
 
     SpatialEntities.insert(req.body, (err, result) => {
+      if (err) {
+        res.send({data: 'Success' })    
+      } else {
+        res.send(result)
+      }
+      
+    })
+  })
+
+  /**
+ * @api {get} /spatial_entity_points Get spatial entity points
+ * @apiName GetSpatialEntityPoints
+ * @apiGroup SpatialEntityPoints
+ *
+ * @apiParam {Array} ids Spatial entity ids
+ *
+ * @apiSuccess {Array} points Array of spatial entity points
+ */
+  app.get('/spatial_entity_points', (req, res) => {
+    console.log('GET /spatial_entity_points')
+
+    let search = {}
+
+    if (req.query.ids) {
+      const ids = JSON.parse(req.query.ids)//.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
+      search = {_id: {$in: ids}}
+    } 
+     
+    SpatialEntityPoints.find(search).toArray((err, docs) => {
+      res.send({data: docs})
+    })
+  })
+
+  /**
+ * @api {post} /spatial_entity_points Create spatial entity points
+ * @apiName CreateSpatialEntityPoints
+ * @apiGroup SpatialEntityPoints
+ * @apiParamExample {json} Sending Array: 
+                  [ {"type": "Feature", "properties": {}, "geometry": {}}]
+ *
+ */
+
+  app.post('/spatial_entity_points', (req, res) => {
+    console.log('POST /spatial_entity_points', req.body)
+
+    // TODO: @feature Set default properties
+
+    SpatialEntityPoints.insert(req.body, (err, result) => {
       if (err) {
         res.send({data: 'Success' })    
       } else {
