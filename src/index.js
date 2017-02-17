@@ -179,30 +179,65 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   })
 
 /**
- * @api {post} /tasks Create tasks
- * @apiName CreateTasks
+ * @api {put} /tasks Update tasks
+ * @apiName UpdateTasks
  * @apiGroup Tasks
  *
  * @apiParamExample {json} Sending an Array: 
                   [ {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}, ...]
-* @apiParamExample {json} Sending an Object: 
-                  {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}
  */
 
-  app.post('/tasks', (req, res) => {
-    console.log('POST Tasks', req.body)
-    let doc = req.body
+  app.put('/tasks', (req, res) => {
+    console.log('PUT Tasks', req.body)
+    let docs = req.body
 
+    if (!Array.isArray(req.body)) {
+      return res.status(400).end()
+    }
+
+    console.log("Count of docs to update:", docs.length)
     // TODO: @feature Set default properties
 
-    Tasks.insert(doc, (err, result) => {
-      if (err) {
-        res.send(err)    
-      } else {
-        res.send(result)
-      }
-      
+    let task_promises = docs.map((doc) => {
+      return new Promise((resolve, reject) => {
+        doc._id = new ObjectID(doc._id)
+        const query = {_id: doc._id}
+        const update = doc
+
+        Tasks.update(query, update, {upsert: true}, (err, response) => {
+          if (err) {
+            console.log(err)
+            resolve({error: err})
+          } else {
+            resolve({success: response, _id: doc._id})
+          }
+        })
+      })
     })
+
+    Promise.all(task_promises)
+    .then(results => {
+      global.results = results
+      // res.send(results)
+      const results_for_client = results.reduce((output, result) => {
+        if(result.hasOwnProperty('success')) {
+          output.modified.push(result._id)
+        } else if(result.hasOwnProperty('error')) {
+          output.errors.push(result.error)
+        }
+        return output
+      }, {modified:[], errors:[]})
+      res.send(results_for_client)
+    }).catch((error) => res.send(error))
+
+    // Tasks.insert(docs, (err, result) => {
+    //   if (err) {
+    //     res.send(err)    
+    //   } else {
+    //     res.send(result)
+    //   }
+      
+    // })
   })
 
 
