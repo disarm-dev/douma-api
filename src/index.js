@@ -204,7 +204,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         const query = {_id: doc._id}
         const update = doc
 
-        Tasks.update(query, update, {upsert: true}, (err, response) => {
+        Tasks.update(query, update, {upsert: false}, (err, response) => {
           if (err) {
             console.log(err)
             resolve({error: err})
@@ -221,9 +221,9 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       // res.send(results)
       const results_for_client = results.reduce((output, result) => {
         if(result.hasOwnProperty('success')) {
-          output.modified.push(result._id)
+          return output.modified.push(result._id)
         } else if(result.hasOwnProperty('error')) {
-          output.errors.push(result.error)
+          return output.errors.push(result.error)
         }
         return output
       }, {modified:[], errors:[]})
