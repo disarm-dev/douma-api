@@ -72,6 +72,10 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       search = {$or: array}
     }
 
+    if (req.query.team_id) {
+      search.team_id = req.query.team_id
+    }
+
     Clusters.find(search).toArray((err, docs) => {
       res.send({data: docs})
     })
@@ -178,6 +182,10 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     } else if (req.query.spatial_entity_ids) {
       const spatial_entity_ids = JSON.parse(req.query.spatial_entity_ids)
       search = {spatial_entity_id: {$in: spatial_entity_ids}}
+    }
+
+    if (req.query.team_id) {
+      search.team_id = req.query.team_id
     }
     
     Tasks.find(search).toArray((err, docs) => {
