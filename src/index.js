@@ -239,7 +239,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       console.log(results_for_client)
 
       res.send(results_for_client)
-    }).catch((error) => res.status(400).send(error))
+    }).catch((error) => console.error(error))
 
     // Tasks.insert(docs, (err, result) => {
     //   if (err) {
