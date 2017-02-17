@@ -226,6 +226,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     .then(results => {
       global.results = results
       // res.send(results)
+      
       const results_for_client = results.reduce((output, result) => {
         if(result.hasOwnProperty('success')) {
           return output.modified.push(result._id)
@@ -234,8 +235,11 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         }
         return output
       }, {modified:[], errors:[]})
+      
+      console.log(results_for_client)
+
       res.send(results_for_client)
-    }).catch((error) => res.send(error))
+    }).catch((error) => res.status(400).send(error))
 
     // Tasks.insert(docs, (err, result) => {
     //   if (err) {
