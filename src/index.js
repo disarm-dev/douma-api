@@ -159,6 +159,63 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     })
   })
 
+    /**
+ * @api {put} /clusters Update clusters
+ * @apiName UpdateClusters
+ * @apiGroup Clusters
+ *
+ * @apiParamExample {json} Request-Example: 
+                  [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
+ */
+
+ app.put('/clusters', (req, res) => {
+  console.log('PUT Clusters', req.body)
+    let docs = req.body
+
+    if (!Array.isArray(req.body)) {
+      return res.status(400).end()
+    }
+
+    console.log("Count of docs to update:", docs.length)
+    // TODO: @feature Set default properties
+
+    let cluster_promises = docs.map((doc) => {
+      return new Promise((resolve, reject) => {
+        doc._id = new ObjectID(doc._id)
+        const query = {_id: doc._id}
+        const update = doc
+
+        Clusters.update(query, update, {upsert: false}, (err, response) => {
+          if (err) {
+            console.log(err)
+            resolve({error: err})
+          } else {
+            resolve({success: response, _id: doc._id})
+          }
+        })
+      })
+    })
+
+    Promise.all(cluster_promises)
+    .then(results => {
+      global.results = results
+      // res.send(results)
+      
+      const results_for_client = results.reduce((output, result) => {
+        if(result.hasOwnProperty('success')) {
+          output.modified.push(result._id)
+        } else if(result.hasOwnProperty('error')) {
+          output.errors.push(result.error)
+        }
+        return output
+      }, {modified:[], errors:[]})
+      
+      console.log(results_for_client)
+
+      res.send(results_for_client)
+    }).catch((error) => console.error(error))
+ })
+
 
 /**
  * @api {get} /tasks Get tasks
