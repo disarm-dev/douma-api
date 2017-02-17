@@ -4,6 +4,7 @@ const ObjectID = require('mongodb').ObjectID
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const Raven = require('raven')
+const fetch = require('node-fetch');
 
 
 
@@ -31,6 +32,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   });
 
   app.get('/', (req, res) => {
+    send_push('Push from DOUMA')
     res.send({data: "DOUMA API v0.4"})
   })
 
@@ -72,8 +74,8 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       search = {$or: array}
     }
 
-    if (req.query.team_id) {
-      search.team_id = req.query.team_id
+    if (req.query.demo_instance_id) {
+      search.demo_instance_id = req.query.demo_instance_id
     }
 
     Clusters.find(search).toArray((err, docs) => {
@@ -153,6 +155,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     Promise.all(cluster_promises).then((clusters) => {
       res.send(`Inserted ${clusters.length} clusters`)
+
     }).catch((err) => {
       console.log('error here', err)
       res.status(500).send('Something broke!')
@@ -241,8 +244,8 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       search = {spatial_entity_id: {$in: spatial_entity_ids}}
     }
 
-    if (req.query.team_id) {
-      search.team_id = req.query.team_id
+    if (req.query.demo_instance_id) {
+      search.demo_instance_id = req.query.demo_instance_id
     }
     
     Tasks.find(search).toArray((err, docs) => {
@@ -426,3 +429,26 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 }).catch((err) => console.log(err))
 
 
+function send_push(text) {
+  const data = {
+    app_id: process.env.ONESIGNAL_APP_ID,
+    contents: {
+      en: text,
+    },
+    included_segments: ['All Users']
+  }
+
+  const options = { 
+    method: 'POST', 
+    body: JSON.stringify(data), 
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": "Basic " + process.env.ONESIGNAL_API_KEY
+    } 
+  }
+
+  return fetch('https://onesignal.com/api/v1/notifications', options)
+    .then(res => res.json())
+    .then(data => console.log(data))
+    
+}
