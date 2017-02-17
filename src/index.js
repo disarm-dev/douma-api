@@ -229,9 +229,9 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       
       const results_for_client = results.reduce((output, result) => {
         if(result.hasOwnProperty('success')) {
-          return output.modified.push(result._id)
+          output.modified.push(result._id)
         } else if(result.hasOwnProperty('error')) {
-          return output.errors.push(result.error)
+          output.errors.push(result.error)
         }
         return output
       }, {modified:[], errors:[]})
