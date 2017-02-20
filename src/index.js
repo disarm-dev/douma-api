@@ -119,6 +119,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
                 },
                 task_date: new Date(),
                 task_type: "irs_record",
+                demo_instance_id: cluster.demo_instance_id,
                 spatial_entity_id
               })
             } else {
