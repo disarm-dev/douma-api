@@ -43,6 +43,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  *
  * @apiParam {Array} ids Cluster ids
  * @apiParam {Array} locationObjects Location objects {location_type: 'region', name: 'Hhohho', ...}
+ * @apiParam {Array} exclude_ids Cluster ids to exclude from query
  *
  * @apiSuccess {Array} clusters Array of cluster objects
  */
@@ -55,7 +56,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     if (req.query.ids) {
       // Find by IDs
-      const ids = JSON.parse(req.query.ids || '[]') 
+      const ids = JSON.parse(req.query.ids || '[]').map((id) => new ObjectID(id))
       search = {_id: {$in: ids}}
       
     } else if (req.query.locations) {
@@ -71,11 +72,17 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       })
 
       search = {$or: array}
+    } else if (req.query.exclude_ids) {
+      const ids_to_exclude = JSON.parse(req.query.exclude_ids || '[]').map((id) => new ObjectID(id))
+
+      search = {_id: {$nin: ids_to_exclude}}
     }
 
     if (req.query.demo_instance_id) {
       search.demo_instance_id = req.query.demo_instance_id
     }
+
+    console.log(search)
 
     Clusters.find(search).toArray((err, docs) => {
       res.send({data: docs})
