@@ -253,6 +253,17 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     })
   })
 
+  /**
+ * @api {get} /tasks/count Get tasks count
+ * @apiName GetTasksCount
+ * @apiGroup Tasks
+ *
+ * @apiParamExample {json} Sending a query: 
+                  {"properties.status": "visited_unsuccessful"}
+ *                  
+ * @apiSuccess {Number} Number of tasks
+ */
+  
 
   app.get('/tasks/count', (req, res) => {
     console.log('GET /tasks/count')
