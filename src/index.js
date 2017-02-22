@@ -276,6 +276,10 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     console.log('GET /tasks/count')
 
     let search = JSON.parse(req.query.query)
+
+    if (req.query.demo_instance_id) {
+      search.demo_instance_id = req.query.demo_instance_id
+    }
     
     Tasks.count(search).then((number) => {
       return res.send({count: number})
