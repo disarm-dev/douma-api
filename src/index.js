@@ -101,7 +101,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  */
 
   app.post('/clusters', (req, res) => {
-    console.log('POST cluster', req.body)
+    console.log('POST cluster')
     if (!Array.isArray(req.body)) {
       return res.status(400).end()
     }
@@ -120,7 +120,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       }
 
       let task_promises = cluster.properties.spatial_entity_ids.map((spatial_entity_id) => {
-        return Tasks.find({spatial_entity_id})
+        return Tasks.find({spatial_entity_id, demo_instance_id})
           .toArray()
           .then((task) => {
             if (task.length === 0)  {
@@ -141,7 +141,6 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
       return Promise.all(task_promises).then((results) => {
         let task_ids = []
-
 
         results
         .filter(r => r)
@@ -245,8 +244,8 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     
 
-    Cluster.removeMany({demo_instance_id: req.query.demo_instance_id}).then(() => {
-      res.send('Success')
+    Clusters.removeMany({demo_instance_id: req.query.demo_instance_id}).then(() => {
+      res.send({status: 'Success'})
     })
   })
 
