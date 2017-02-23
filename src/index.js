@@ -115,7 +115,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         throw new Error(`Not an array ${JSON.stringify(cluster.properties.spatial_entity_ids)}`) 
       }
 
-      let task_promises = cluster.propeties.spatial_entity_ids.map((spatial_entity_id) => {
+      let task_promises = cluster.properties.spatial_entity_ids.map((spatial_entity_id) => {
         return Tasks.find({spatial_entity_id})
           .toArray()
           .then((task) => {
@@ -226,6 +226,27 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     }).catch((error) => console.error(error))
  })
 
+  /**
+   * @api {delete} /clusters Delete clusters
+   * @apiName DeleteClusters
+   * @apiGroup Clusters
+   *
+   * @apiParamExample {json} Request-Example: 
+                    [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
+   */
+
+  app.delete('/clusters', (req, res) => {
+    console.log('DELETE Clusters', req.body)
+
+    if (!Array.isArray(req.body)) {
+      throw new Error(`Not an array ${JSON.stringify(req.body)}`) 
+    }
+    let ids = req.body.map(obj => new ObjectID(obj._id))
+
+    Cluster.removeMany(ids).then(() => {
+      res.send('Success')
+    })
+  })
 
 /**
  * @api {get} /tasks Get tasks
