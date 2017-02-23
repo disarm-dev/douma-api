@@ -162,7 +162,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     Promise.all(cluster_promises).then((clusters) => {
       res.send(`Inserted ${clusters.length} clusters`)
-      send_push(`${clusters.length} new clusters on DiSARM`)
+      // send_push(`${clusters.length} new clusters on DiSARM`)
     }).catch((err) => {
       console.log('error here', err)
       res.status(500).send('Something broke!')
