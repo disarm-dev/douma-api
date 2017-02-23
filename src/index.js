@@ -111,11 +111,11 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     
     let cluster_promises = clusters.map((cluster) => {
 
-      if (!Array.isArray(cluster.spatial_entity_ids)) {
-        throw new Error(`Not an array ${JSON.stringify(cluster.spatial_entity_ids)}`) 
+      if (!Array.isArray(cluster.properties.spatial_entity_ids)) {
+        throw new Error(`Not an array ${JSON.stringify(cluster.properties.spatial_entity_ids)}`) 
       }
 
-      let task_promises = cluster.spatial_entity_ids.map((spatial_entity_id) => {
+      let task_promises = cluster.propeties.spatial_entity_ids.map((spatial_entity_id) => {
         return Tasks.find({spatial_entity_id})
           .toArray()
           .then((task) => {
