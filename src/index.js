@@ -106,6 +106,10 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       return res.status(400).end()
     }
 
+    
+    let demo_instance_id = req.query.demo_instance_id
+    
+
     let clusters = req.body
 
     
@@ -126,7 +130,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
                 },
                 task_date: new Date(),
                 task_type: "irs_record",
-                demo_instance_id: cluster.demo_instance_id,
+                demo_instance_id: demo_instance_id,
                 spatial_entity_id
               })
             } else {
@@ -154,6 +158,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         })
 
         cluster.task_ids = task_ids
+        cluster.demo_instance_id = demo_instance_id
 
         return Clusters.insert(cluster)
       })
