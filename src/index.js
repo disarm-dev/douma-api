@@ -243,12 +243,9 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   app.delete('/clusters', (req, res) => {
     console.log('DELETE Clusters', req.body)
 
-    if (!Array.isArray(req.body)) {
-      throw new Error(`Not an array ${JSON.stringify(req.body)}`) 
-    }
-    let ids = req.body.map(obj => new ObjectID(obj._id))
+    
 
-    Cluster.removeMany(ids).then(() => {
+    Cluster.removeMany({demo_instance_id: req.query.demo_instance_id}).then(() => {
       res.send('Success')
     })
   })
