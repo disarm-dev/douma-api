@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const Raven = require('raven')
 const fetch = require('node-fetch');
 
+const {push} = require('./push.js')
+
+
 if(!process.env.MONGODB_URI) {
   console.log('\nERROR: Missing `MONGODB_URI`.\nNeed to set MONGODB_URI as an environment variable.\nSomething like `set -x MONGODB_URI "mongodb://douma-api:[secret]@mongodb.disarm.io/irs_record"`\n')
   process.exit()
@@ -486,27 +489,3 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
 }).catch((err) => console.log(err))
 
-
-function send_push(text) {
-  const data = {
-    app_id: process.env.ONESIGNAL_APP_ID,
-    contents: {
-      en: text,
-    },
-    included_segments: ['All Users']
-  }
-
-  const options = { 
-    method: 'POST', 
-    body: JSON.stringify(data), 
-    headers: {
-      'Content-Type': 'application/json',
-      "Authorization": "Basic " + process.env.ONESIGNAL_API_KEY
-    } 
-  }
-
-  return fetch('https://onesignal.com/api/v1/notifications', options)
-    .then(res => res.json())
-    .then(data => console.log(data))
-    
-}
