@@ -6,7 +6,10 @@ const bodyParser = require('body-parser');
 const Raven = require('raven')
 const fetch = require('node-fetch');
 
-
+if(!process.env.MONGODB_URI) {
+  console.log('\nERROR: Missing `MONGODB_URI`.\nNeed to set MONGODB_URI as an environment variable.\nSomething like `set -x MONGODB_URI "mongodb://douma-api:[secret]@mongodb.disarm.io/irs_record"`\n')
+  process.exit()
+}
 
 MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   console.log('Connected to db')

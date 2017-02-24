@@ -520,15 +520,6 @@
 	"buffers":
 	[
 		{
-			"file": "index.js",
-			"settings":
-			{
-				"buffer_size": 1547,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"contents": "Remote:   origin @ git@bitbucket.org:disarm-platform/douma-api.git\nLocal:    develop ~/Dv-DiSARM/Core/douma-api\nHead:     b5372d6 What we've got\n\n\nUntracked files:\n\tdouma-api.sublime-project\n\tdouma-api.sublime-workspace\n\tyarn.lock\n\n\n# Movement:\n#    r = refresh status\n#    1-5 = jump to section\n#    n = next item, N = next section\n#    p = previous item, P = previous section\n#\n# Staging:\n#    s = stage file/section, S = stage all unstaged files\n#    ctrl+shift+s = stage all unstaged and untracked files\n#    u = unstage file/section, U = unstage all files\n#    backspace = discard file/section, shift+backspace = discard everything\n#\n# Commit:\n#    c = commit, C = commit -a (add unstaged)\n#    ctrl+shift+c = commit --amend (amend previous commit)\n#\n# Other:\n#    i = ignore file, I = ignore pattern\n#    enter = open file\n#    d = view diff\n#\n# Stashes:\n#    a = apply stash, A = pop stash\n#    z = create stash, Z = create stash including untracked files\n#    backspace = discard stash",
 			"settings":
 			{
@@ -1099,6 +1090,7 @@
 	],
 	"file_history":
 	[
+		"/Users/jonathan/Dv-DiSARM/Core/douma-api/index.js",
 		"/Users/jonathan/Dv-DiSARM/Core/douma-api/package.json",
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/apps/irs_progress/clusters/search.vue",
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/apps/irs_progress/IRSProgressApplet.vue",
@@ -1225,8 +1217,7 @@
 		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/css?family=Roboto+Slab",
 		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/css/font-awesome/fonts/fontawesome-webfont.eot",
 		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/progress.html",
-		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/_includes/about.html",
-		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/_includes/css/agency.css"
+		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/_includes/about.html"
 	],
 	"find":
 	{
@@ -1569,41 +1560,11 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "index.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1547,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								645,
-								645
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 8.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1637,7 +1598,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 1,
 					"file": "douma-api.sublime-project",
 					"semi_transient": false,
 					"settings":
@@ -1655,7 +1616,9 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JSON (JavaScriptNext).tmLanguage"
+							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JSON (JavaScriptNext).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -2266,7 +2229,7 @@
 		[
 			[
 				"",
-				"~/Dv-DiSARM/Core/douma/douma-full.sublime-project"
+				"~/Dv-DiSARM/Core/douma/douma.sublime-project"
 			],
 			[
 				"full",
