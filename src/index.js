@@ -171,7 +171,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     
 
     Promise.all(cluster_promises).then((clusters) => {
-      res.send(`Inserted ${clusters.length} clusters`)
+      res.send({message: `Inserted ${clusters.length} clusters`, status: 'success'})
       // send_push(`${clusters.length} new clusters on DiSARM`)
     }).catch((err) => {
       console.log('error here', err)
