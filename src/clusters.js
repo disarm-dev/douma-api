@@ -1,5 +1,4 @@
 const get_clusters = (DB, req, res) => {
-  console.log(DB, req, res)
   console.log('GET /clusters')
 
   let search = {}
