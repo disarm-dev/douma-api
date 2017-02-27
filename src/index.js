@@ -38,7 +38,8 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   });
 
   app.get('/', (req, res) => {
-    res.send({data: "DOUMA API v0.4"})
+    setTimeout(() => res.send({data: "DOUMA API v0.4"}), 1000)
+    
   })
 
 
@@ -119,21 +120,18 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     let all_spatial_entity_ids = clusters.reduce((ids, cluster) => {
       return ids.concat(cluster.properties.spatial_entity_ids)
     }, [])
-    console.log('all_spatial_entity_ids.length')
-    console.log(all_spatial_entity_ids.length)
 
-    let not_found = []
+    let tasks_not_found = []
 
-    Tasks.find({spatial_entity_id: {$in: all_spatial_entity_ids}, demo_instance_id})
+
+    Tasks.find({'properties.spatial_entity_id': {$in: all_spatial_entity_ids}, demo_instance_id})
     .toArray()
     .then((tasks) => {
-      console.log('tasks.length')
-      console.log(tasks.length)
 
-      not_found = all_spatial_entity_ids.reduce((tasks_not_found, spatial_entity_id) => {
+      tasks_not_found = all_spatial_entity_ids.reduce((local_tasks_not_found, spatial_entity_id) => {
         if (!tasks.find(t => t.properties.spatial_entity_id === spatial_entity_id)) {
 
-          tasks_not_found.push({
+          local_tasks_not_found.push({
             _id: new ObjectID(), 
             properties: {
               status: 'unvisited'
@@ -146,22 +144,21 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
           
         }
 
-        return tasks_not_found
+        return local_tasks_not_found
       }, [])
 
-      console.log('not_found.length')
-      console.log(not_found.length)
-
-      return Tasks.insert(not_found)
-    }).then(() => {
-      // find tasks belonging to cluster
-      // add task ids to cluster
-      // insert cluster
-      let all_task = not_found
+      const all_tasks = tasks.concat(tasks_not_found)
+      
+      if (tasks_not_found.length > 0) {
+        return Tasks.insert(tasks_not_found).then(() => Promise.resolve(all_tasks))
+      } else {
+        return Promise.resolve(all_tasks)
+      }
+    }).then((all_tasks) => {
 
       clusters.forEach((cluster) => {
-        cluster.task_ids = all_task.filter((task) => {
-          cluster.demo_instance_id = demo_instance_id
+        cluster.demo_instance_id = demo_instance_id
+        cluster.task_ids = all_tasks.filter((task) => {
           return cluster.properties.spatial_entity_ids.includes(task.spatial_entity_id)
         }).reduce((ids, task) => {
           ids.push(task._id.toString())
@@ -169,14 +166,12 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         }, [])
       })
 
-      console.log('clusters.length')
-      console.log(clusters.length)
-
       return Clusters.insert(clusters)
     }).then((response) => {
-      console.log(response)
-      res.send({message: 'Success'})
-      console.log('END OF POST /clusters')
+      console.log('response', response)
+      res.send({message: 'Success', insertedCount: response.insertedCount})
+    }).catch((err) => {
+      console.log(err)
     })
 
   })
