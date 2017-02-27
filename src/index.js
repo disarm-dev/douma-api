@@ -132,6 +132,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
       not_found = all_spatial_entity_ids.reduce((tasks_not_found, spatial_entity_id) => {
         if (!tasks.find(t => t.properties.spatial_entity_id === spatial_entity_id)) {
+
           tasks_not_found.push({
             _id: new ObjectID(), 
             properties: {
@@ -142,7 +143,9 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
             demo_instance_id: demo_instance_id,
             spatial_entity_id
           })
+          
         }
+
         return tasks_not_found
       }, [])
 
@@ -150,7 +153,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       console.log(not_found.length)
 
       return Tasks.insert(not_found)
-    }).then((res) => {
+    }).then(() => {
       // find tasks belonging to cluster
       // add task ids to cluster
       // insert cluster
@@ -166,10 +169,14 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         }, [])
       })
 
+      console.log('clusters.length')
+      console.log(clusters.length)
+
       return Clusters.insert(clusters)
     }).then((response) => {
       console.log(response)
       res.send({message: 'Success'})
+      console.log('END OF POST /clusters')
     })
 
   })
