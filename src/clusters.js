@@ -60,19 +60,44 @@ const post_clusters = (DB, req, res) => {
 
   let clusters = req.body;
 
+  function concatNarrays(args) {
+    args = Array.prototype.slice.call(arguments);
+    var newArr = args.reduce( function(prev, next) {
+       return prev.concat(next) ;
+    });
+
+    return newArr;
+  }
+
+  let all_spatial_entity_ids_array_of_arrays = []
+  let quick_spatial_entity_ids = []
   clusters = clusters.map(cluster => {
     cluster._id = new ObjectID()
+    // all_spatial_entity_ids_array_of_arrays.push(cluster.properties.spatial_entity_ids)
+
+    // TODO: @refac THIS IS HORRIBLE. It's going to trip us up in many other places. For sure. It removes any Clusters without an _array_ of SEs.
+    if (Array.isArray(cluster.properties.spatial_entity_ids)) {
+      cluster.properties.spatial_entity_ids.forEach(spatial_entity_id => {
+        quick_spatial_entity_ids[spatial_entity_id] = cluster._id
+      })
+    }
+
     return cluster
   })
 
-  let all_spatial_entity_ids = clusters.reduce(
-    (ids, cluster) => {
-      return ids.concat(cluster.properties.spatial_entity_ids);
-    },
-    []
-  );
+  all_spatial_entity_ids = concatNarrays(all_spatial_entity_ids_array_of_arrays)
 
-  let tasks_not_found = [];
+  // const quick_spatial_entity_ids = clusters.reduce((output, cluster) => {
+  //   if (!Array.isArray(cluster.properties.spatial_entity_ids)) {
+  //     // TODO: @refac THIS IS HORRIBLE. It's going to trip us up in many other places. For sure.
+  //     // cluster.properties.spatial_entity_ids = [cluster.properties.spatial_entity_ids]
+  //     return output
+  //   }
+  //   cluster.properties.spatial_entity_ids.forEach(spatial_entity_id => {
+  //     output[spatial_entity_id] = cluster._id
+  //   })
+  //   return output
+  // }, {})
 
   DB.Tasks
     .find({
@@ -89,6 +114,7 @@ const post_clusters = (DB, req, res) => {
         return output
       }, {})
 
+      let tasks_to_create = []
       const all_tasks = all_spatial_entity_ids.map(spatial_entity_id => {
         let task = tasks_by_spatial_entity_id[spatial_entity_id]
         if (!task) {
@@ -102,15 +128,17 @@ const post_clusters = (DB, req, res) => {
             demo_instance_id: demo_instance_id,
             spatial_entity_id
           }
+          tasks_to_create.push(task)
         }
         return task
       })
 
       console.timeEnd('build all_tasks')
       console.log(all_tasks.length)
-      if (tasks_not_found.length > 0) {
+
+      if (tasks_to_create.length > 0) {
         return DB.Tasks
-          .insert(tasks_not_found)
+          .insert(tasks_to_create)
           .then(() => Promise.resolve(all_tasks));
       } else {
         return Promise.resolve(all_tasks);
@@ -121,17 +149,7 @@ const post_clusters = (DB, req, res) => {
       // Take all the Tasks (spatial_entity_id)
       // Take the POSTED Clusters
       // Find which Task belongs to which Cluster by checking spatial_entity_ids
-      const quick_spatial_entity_ids = clusters.reduce((output, cluster) => {
-        if (!Array.isArray(cluster.properties.spatial_entity_ids)) {
-          // TODO: @refac THIS IS HORRIBLE. It's going to trip us up in many other places. For sure.
-          // cluster.properties.spatial_entity_ids = [cluster.properties.spatial_entity_ids]
-          return output
-        }
-        cluster.properties.spatial_entity_ids.forEach(spatial_entity_id => {
-          output[spatial_entity_id] = cluster._id
-        })
-        return output
-      }, {})
+
 
       const cluster_task_ids = all_tasks.reduce((output, task) => {
         const cluster_id = quick_spatial_entity_ids[task.spatial_entity_id]
