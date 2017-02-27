@@ -5,8 +5,10 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const Raven = require('raven')
 const fetch = require('node-fetch');
+const curry = require('curry')
 
 const {push} = require('./push.js')
+const {get_clusters, post_clusters} = require('./clusters.js')
 
 
 if(!process.env.MONGODB_URI) {
@@ -25,10 +27,12 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
   app.use(cors())
   app.use(bodyParser.json({limit: '500mb'}))
 
-  let Clusters = db.collection('clusters')
-  let Tasks = db.collection('tasks')
-  let SpatialEntities = db.collection('spatial_entities')
-  let SpatialEntityPoints = db.collection('spatial_entity_points')
+  let DB = {
+    Clusters            : db.collection('clusters'),
+    Tasks               : db.collection('tasks'),
+    SpatialEntities     : db.collection('spatial_entities'),
+    SpatialEntityPoints : db.collection('spatial_entity_points')
+  }
 
   app.options("/*", function(req, res, next){
     res.header('Access-Control-Allow-Origin', '*');
@@ -55,47 +59,8 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiSuccess {Array} clusters Array of cluster objects
  */
 
-
-  app.get('/clusters', (req, res) => {
-    console.log('GET /clusters')
-
-    let search = {}
-
-    if (req.query.ids) {
-      // Find by IDs
-      const ids = JSON.parse(req.query.ids || '[]').map((id) => new ObjectID(id))
-      search = {_id: {$in: ids}}
-      
-    } else if (req.query.locations) {
-
-      // Find by locations
-      let array = []
-      const locations = JSON.parse(req.query.locations || '[]') 
-
-      locations.forEach(({location_type, name}) => {
-        let obj = {}
-        obj['location.' + location_type] = name
-        array.push(obj)
-      })
-
-      search = {$or: array}
-    } else if (req.query.exclude_ids) {
-      const ids_to_exclude = JSON.parse(req.query.exclude_ids || '[]').map((id) => new ObjectID(id))
-
-      search = {_id: {$nin: ids_to_exclude}}
-    }
-
-    if (req.query.demo_instance_id) {
-      search.demo_instance_id = req.query.demo_instance_id
-    }
-
-    console.log(search)
-
-    Clusters.find(search).toArray((err, docs) => {
-      res.send({data: docs})
-    })
-
-  })
+  const get_clusters_fn = curry(get_clusters, DB)
+  app.get('/clusters', get_clusters_fn)
 
   /**
  * @api {post} /clusters Create clusters
@@ -107,74 +72,9 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiSuccess {Array} clusters Array of cluster objects
  */
 
-  app.post('/clusters', (req, res) => {
-    console.log('POST cluster')
-    if (!Array.isArray(req.body)) {
-      return res.status(400).end()
-    }
- 
-    let demo_instance_id = req.query.demo_instance_id    
+  const post_clusters_fn = curry(post_clusters, DB)
+  app.post('/clusters', post_clusters_fn)
 
-    let clusters = req.body
-
-    let all_spatial_entity_ids = clusters.reduce((ids, cluster) => {
-      return ids.concat(cluster.properties.spatial_entity_ids)
-    }, [])
-
-    let tasks_not_found = []
-
-
-    Tasks.find({'properties.spatial_entity_id': {$in: all_spatial_entity_ids}, demo_instance_id})
-    .toArray()
-    .then((tasks) => {
-
-      tasks_not_found = all_spatial_entity_ids.reduce((local_tasks_not_found, spatial_entity_id) => {
-        if (!tasks.find(t => t.properties.spatial_entity_id === spatial_entity_id)) {
-
-          local_tasks_not_found.push({
-            _id: new ObjectID(), 
-            properties: {
-              status: 'unvisited'
-            },
-            task_date: new Date(),
-            task_type: "irs_record",
-            demo_instance_id: demo_instance_id,
-            spatial_entity_id
-          })
-          
-        }
-
-        return local_tasks_not_found
-      }, [])
-
-      const all_tasks = tasks.concat(tasks_not_found)
-      
-      if (tasks_not_found.length > 0) {
-        return Tasks.insert(tasks_not_found).then(() => Promise.resolve(all_tasks))
-      } else {
-        return Promise.resolve(all_tasks)
-      }
-    }).then((all_tasks) => {
-
-      clusters.forEach((cluster) => {
-        cluster.demo_instance_id = demo_instance_id
-        cluster.task_ids = all_tasks.filter((task) => {
-          return cluster.properties.spatial_entity_ids.includes(task.spatial_entity_id)
-        }).reduce((ids, task) => {
-          ids.push(task._id.toString())
-          return ids
-        }, [])
-      })
-
-      return Clusters.insert(clusters)
-    }).then((response) => {
-      console.log('response', response)
-      res.send({message: 'Success', insertedCount: response.insertedCount})
-    }).catch((err) => {
-      console.log(err)
-    })
-
-  })
 
     /**
  * @api {put} /clusters Update clusters
@@ -202,7 +102,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         const query = {_id: doc._id}
         const update = doc
 
-        Clusters.update(query, update, {upsert: false}, (err, response) => {
+        DB.Clusters.update(query, update, {upsert: false}, (err, response) => {
           if (err) {
             console.log(err)
             resolve({error: err})
@@ -247,7 +147,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     
 
-    Clusters.removeMany({demo_instance_id: req.query.demo_instance_id}).then(() => {
+    DB.Clusters.removeMany({demo_instance_id: req.query.demo_instance_id}).then(() => {
       res.send({status: 'Success'})
     })
   })
@@ -280,7 +180,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       search.demo_instance_id = req.query.demo_instance_id
     }
     
-    Tasks.find(search).toArray((err, docs) => {
+    DB.Tasks.find(search).toArray((err, docs) => {
       res.send({data: docs})
     })
   })
@@ -306,7 +206,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       search.demo_instance_id = req.query.demo_instance_id
     }
     
-    Tasks.count(search).then((number) => {
+    DB.Tasks.count(search).then((number) => {
       return res.send({count: number})
     })
   })
@@ -337,7 +237,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         const query = {_id: doc._id}
         const update = doc
 
-        Tasks.update(query, update, {upsert: false}, (err, response) => {
+        DB.Tasks.update(query, update, {upsert: false}, (err, response) => {
           if (err) {
             console.log(err)
             resolve({error: err})
@@ -367,7 +267,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       res.send(results_for_client)
     }).catch((error) => console.error(error))
 
-    // Tasks.insert(docs, (err, result) => {
+    // DB.Tasks.insert(docs, (err, result) => {
     //   if (err) {
     //     res.send(err)    
     //   } else {
@@ -398,7 +298,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       search = {"properties.osm_id": {$in: ids}}
     } 
      
-    SpatialEntities.find(search).toArray((err, docs) => {
+    DB.SpatialEntities.find(search).toArray((err, docs) => {
       res.send({data: docs})
     })
   })
@@ -419,7 +319,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     // TODO: @feature Set default properties
 
-    SpatialEntities.insert(req.body, (err, result) => {
+    DB.SpatialEntities.insert(req.body, (err, result) => {
       if (err) {
         res.send({data: 'Success' })    
       } else {
@@ -448,7 +348,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       search = {_id: {$in: ids}}
     } 
      
-    SpatialEntityPoints.find(search).toArray((err, docs) => {
+    DB.SpatialEntityPoints.find(search).toArray((err, docs) => {
       res.send({data: docs})
     })
   })
@@ -467,7 +367,7 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
 
     // TODO: @feature Set default properties
 
-    SpatialEntityPoints.insert(req.body, (err, result) => {
+    DB.SpatialEntityPoints.insert(req.body, (err, result) => {
       if (err) {
         res.send({data: 'Success' })    
       } else {
