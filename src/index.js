@@ -177,6 +177,43 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
       console.log('error here', err)
       res.status(500).send('Something broke!')
     })
+
+    // Newer faster way of doing things
+    return 
+
+
+    let all_spatial_entity_ids = clusters.reduce((ids, cluster) => {
+      return ids.concat(cluster.properties.spatial_entity_ids)
+    }, [])
+
+
+    Tasks.find({spatial_entity_id: {$in: all_spatial_entity_ids}, demo_instance_id})
+    .toArray()
+    .then((tasks) => {
+
+      let not_found = all_spatial_entity_ids.reduce((tasks_not_found, spatial_entity_id) => {
+        if (!tasks.find(t => t.properties.spatial_entity_id === spatial_entity_id)) {
+          return tasks_not_found.push({
+            properties: {
+              status: 'unvisited'
+            },
+            task_date: new Date(),
+            task_type: "irs_record",
+            demo_instance_id: demo_instance_id,
+            spatial_entity_id
+          })
+        }
+        return tasks_not_found
+      }, [])
+
+      return Tasks.insert(not_found)
+    }).then((res) => {
+      // find tasks belonging to cluster
+      // add task ids to cluster
+      // insert cluster
+      console.log(res)
+    })
+
   })
 
     /**
