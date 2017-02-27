@@ -111,89 +111,29 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
     if (!Array.isArray(req.body)) {
       return res.status(400).end()
     }
-
-    
-    let demo_instance_id = req.query.demo_instance_id
-    
+ 
+    let demo_instance_id = req.query.demo_instance_id    
 
     let clusters = req.body
-
-    
-    let cluster_promises = clusters.map((cluster) => {
-
-      if (!Array.isArray(cluster.properties.spatial_entity_ids)) {
-        throw new Error(`Not an array ${JSON.stringify(cluster.properties.spatial_entity_ids)}`) 
-      }
-
-      let task_promises = cluster.properties.spatial_entity_ids.map((spatial_entity_id) => {
-        return Tasks.find({spatial_entity_id, demo_instance_id})
-          .toArray()
-          .then((task) => {
-            if (task.length === 0)  {
-              return Tasks.insert({
-                properties: {
-                  status: 'unvisited'
-                },
-                task_date: new Date(),
-                task_type: "irs_record",
-                demo_instance_id: demo_instance_id,
-                spatial_entity_id
-              })
-            } else {
-              return new Promise((resolve, reject) => resolve())
-            }
-          })
-      })
-
-      return Promise.all(task_promises).then((results) => {
-        let task_ids = []
-
-        results
-        .filter(r => r)
-        .filter(({result}) => {
-          if (result) {
-            return result.ok === 1  
-          }
-          return false
-        })
-        .forEach(({insertedIds}) => {
-          if (insertedIds) {
-            insertedIds.forEach((id) => task_ids.push(id))  
-          }
-        })
-
-        cluster.task_ids = task_ids
-        cluster.demo_instance_id = demo_instance_id
-
-        return Clusters.insert(cluster)
-      })
-    })
-    
-
-    Promise.all(cluster_promises).then((clusters) => {
-      res.send({message: `Inserted ${clusters.length} clusters`, status: 'success'})
-      // send_push(`${clusters.length} new clusters on DiSARM`)
-    }).catch((err) => {
-      console.log('error here', err)
-      res.status(500).send('Something broke!')
-    })
-
-    // Newer faster way of doing things
-    return 
-
 
     let all_spatial_entity_ids = clusters.reduce((ids, cluster) => {
       return ids.concat(cluster.properties.spatial_entity_ids)
     }, [])
+    console.log('all_spatial_entity_ids.length')
+    console.log(all_spatial_entity_ids.length)
 
+    let not_found = []
 
     Tasks.find({spatial_entity_id: {$in: all_spatial_entity_ids}, demo_instance_id})
     .toArray()
     .then((tasks) => {
+      console.log('tasks.length')
+      console.log(tasks.length)
 
-      let not_found = all_spatial_entity_ids.reduce((tasks_not_found, spatial_entity_id) => {
+      not_found = all_spatial_entity_ids.reduce((tasks_not_found, spatial_entity_id) => {
         if (!tasks.find(t => t.properties.spatial_entity_id === spatial_entity_id)) {
-          return tasks_not_found.push({
+          tasks_not_found.push({
+            _id: new ObjectID(), 
             properties: {
               status: 'unvisited'
             },
@@ -206,12 +146,30 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
         return tasks_not_found
       }, [])
 
+      console.log('not_found.length')
+      console.log(not_found.length)
+
       return Tasks.insert(not_found)
     }).then((res) => {
       // find tasks belonging to cluster
       // add task ids to cluster
       // insert cluster
-      console.log(res)
+      let all_task = not_found
+
+      clusters.forEach((cluster) => {
+        cluster.task_ids = all_task.filter((task) => {
+          cluster.demo_instance_id = demo_instance_id
+          return cluster.properties.spatial_entity_ids.includes(task.spatial_entity_id)
+        }).reduce((ids, task) => {
+          ids.push(task._id.toString())
+          return ids
+        }, [])
+      })
+
+      return Clusters.insert(clusters)
+    }).then((response) => {
+      console.log(response)
+      res.send({message: 'Success'})
     })
 
   })
