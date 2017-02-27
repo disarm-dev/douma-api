@@ -69,11 +69,9 @@ const post_clusters = (DB, req, res) => {
     return newArr;
   }
 
-  let all_spatial_entity_ids_array_of_arrays = []
   let quick_spatial_entity_ids = []
   clusters = clusters.map(cluster => {
     cluster._id = new ObjectID()
-    // all_spatial_entity_ids_array_of_arrays.push(cluster.properties.spatial_entity_ids)
 
     // TODO: @refac THIS IS HORRIBLE. It's going to trip us up in many other places. For sure. It removes any Clusters without an _array_ of SEs.
     if (Array.isArray(cluster.properties.spatial_entity_ids)) {
@@ -85,19 +83,7 @@ const post_clusters = (DB, req, res) => {
     return cluster
   })
 
-  all_spatial_entity_ids = concatNarrays(all_spatial_entity_ids_array_of_arrays)
-
-  // const quick_spatial_entity_ids = clusters.reduce((output, cluster) => {
-  //   if (!Array.isArray(cluster.properties.spatial_entity_ids)) {
-  //     // TODO: @refac THIS IS HORRIBLE. It's going to trip us up in many other places. For sure.
-  //     // cluster.properties.spatial_entity_ids = [cluster.properties.spatial_entity_ids]
-  //     return output
-  //   }
-  //   cluster.properties.spatial_entity_ids.forEach(spatial_entity_id => {
-  //     output[spatial_entity_id] = cluster._id
-  //   })
-  //   return output
-  // }, {})
+  const all_spatial_entity_ids = Object.keys(quick_spatial_entity_ids)
 
   DB.Tasks
     .find({
