@@ -1,62 +1,70 @@
-const express = require('express')
-const MongoClient = require('mongodb').MongoClient
-const ObjectID = require('mongodb').ObjectID
-const cors = require('cors')
-const bodyParser = require('body-parser');
-const Raven = require('raven')
-const fetch = require('node-fetch');
-const curry = require('curry')
+const express = require("express");
+const MongoClient = require("mongodb").MongoClient;
+const ObjectID = require("mongodb").ObjectID;
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const Raven = require("raven");
+const fetch = require("node-fetch");
+const curry = require("curry");
 
-const {
-  push
-} = require('./push.js')
-const {
-  get_clusters,
-  post_clusters,
-  delete_clusters
-} = require('./clusters.js')
+const { push } = require("./push.js");
+const { get_clusters, post_clusters, put_clusters, delete_clusters } = require(
+  "./clusters.js"
+);
 
 if (!process.env.MONGODB_URI) {
-  console.log('\nERROR: Missing `MONGODB_URI`.\nNeed to set MONGODB_URI as an environment variable.\nSomething like `set -x MONGODB_URI "mongodb://douma-api:[secret]@mongodb.disarm.io/irs_record"`\n')
-  process.exit()
+  console.log(
+    '\nERROR: Missing `MONGODB_URI`.\nNeed to set MONGODB_URI as an environment variable.\nSomething like `set -x MONGODB_URI "mongodb://douma-api:[secret]@mongodb.disarm.io/irs_record"`\n'
+  );
+  process.exit();
 }
 
-MongoClient.connect(process.env.MONGODB_URI).then((db) => {
-  console.log('Connected to db')
+MongoClient.connect(process.env.MONGODB_URI)
+  .then(db => {
+    console.log("Connected to db");
 
-  Raven.config('https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843').install()
+    Raven.config(
+        "https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843"
+      )
+      .install();
 
-  const app = express()
-  app.use(Raven.requestHandler())
+    const app = express();
+    app.use(Raven.requestHandler());
 
-  app.use(cors())
-  app.use(bodyParser.json({
-    limit: '500mb'
-  }))
+    app.use(cors());
+    app.use(
+      bodyParser.json({
+        limit: "500mb"
+      })
+    );
 
-  let DB = {
-    Clusters: db.collection('clusters'),
-    Tasks: db.collection('tasks'),
-    SpatialEntities: db.collection('spatial_entities'),
-    SpatialEntityPoints: db.collection('spatial_entity_points')
-  }
+    let DB = {
+      Clusters: db.collection("clusters"),
+      Tasks: db.collection("tasks"),
+      SpatialEntities: db.collection("spatial_entities"),
+      SpatialEntityPoints: db.collection("spatial_entity_points")
+    };
 
-  app.options("/*", function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-    res.send(200);
-  });
+    app.options("/*", function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+      res.header(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization, Content-Length, X-Requested-With"
+      );
+      res.send(200);
+    });
 
-  app.get('/', (req, res) => {
-    setTimeout(() => res.send({
-      data: "DOUMA API v0.4"
-    }), 1000)
+    app.get("/", (req, res) => {
+      setTimeout(
+        () => res.send({
+          data: "DOUMA API v0.4"
+        }),
+        1000
+      );
+    });
 
-  })
-
-
-  /**
+    /**
    * @api {get} /clusters Get clusters
    * @apiName GetCluster
    * @apiGroup Clusters
@@ -68,10 +76,10 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
    * @apiSuccess {Array} clusters Array of cluster objects
    */
 
-  const get_clusters_fn = curry(get_clusters)(DB)
-  app.get('/clusters', get_clusters_fn)
+    const get_clusters_fn = curry(get_clusters)(DB);
+    app.get("/clusters", get_clusters_fn);
 
-  /**
+    /**
  * @api {post} /clusters Create clusters
  * @apiName CreateClusters
  * @apiGroup Clusters
@@ -81,11 +89,10 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiSuccess {Array} clusters Array of cluster objects
  */
 
-  const post_clusters_fn = curry(post_clusters)(DB)
-  app.post('/clusters', post_clusters_fn)
+    const post_clusters_fn = curry(post_clusters)(DB);
+    app.post("/clusters", post_clusters_fn);
 
-
-  /**
+    /**
  * @api {put} /clusters Update clusters
  * @apiName UpdateClusters
  * @apiGroup Clusters
@@ -94,10 +101,10 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
                   [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
  */
 
-  const put_clusters_fn = curry(put_clusters)(DB)
-  app.put('/clusters', put_clusters_fn)
+    const put_clusters_fn = curry(put_clusters)(DB);
+    app.put("/clusters", put_clusters_fn);
 
-  /**
+    /**
    * @api {delete} /clusters Delete clusters
    * @apiName DeleteClusters
    * @apiGroup Clusters
@@ -105,10 +112,10 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
    * @apiParamExample {json} Request-Example: 
                     [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
    */
-  const delete_clusters_fn = curry(delete_clusters)(DB)
-  app.delete('/clusters', delete_clusters_fn)
+    const delete_clusters_fn = curry(delete_clusters)(DB);
+    app.delete("/clusters", delete_clusters_fn);
 
-  /**
+    /**
    * @api {get} /tasks Get tasks
    * @apiName GetTasks
    * @apiGroup Tasks
@@ -119,39 +126,39 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
    * @apiSuccess {Array} clusters Array of task objects
    */
 
-  app.get('/tasks', (req, res) => {
-    console.log('GET /tasks')
+    app.get("/tasks", (req, res) => {
+      console.log("GET /tasks");
 
-    let search = {}
+      let search = {};
 
-    if (req.query.ids) {
-      const ids = JSON.parse(req.query.ids).map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
-      search = {
-        _id: {
-          $in: ids
-        }
+      if (req.query.ids) {
+        const ids = JSON.parse(req.query.ids).map(id => new ObjectID(id)); //TODO: @debug fix ObjectID
+        search = {
+          _id: {
+            $in: ids
+          }
+        };
+      } else if (req.query.spatial_entity_ids) {
+        const spatial_entity_ids = JSON.parse(req.query.spatial_entity_ids);
+        search = {
+          spatial_entity_id: {
+            $in: spatial_entity_ids
+          }
+        };
       }
-    } else if (req.query.spatial_entity_ids) {
-      const spatial_entity_ids = JSON.parse(req.query.spatial_entity_ids)
-      search = {
-        spatial_entity_id: {
-          $in: spatial_entity_ids
-        }
+
+      if (req.query.demo_instance_id) {
+        search.demo_instance_id = req.query.demo_instance_id;
       }
-    }
 
-    if (req.query.demo_instance_id) {
-      search.demo_instance_id = req.query.demo_instance_id
-    }
+      DB.Tasks.find(search).toArray((err, docs) => {
+        res.send({
+          data: docs
+        });
+      });
+    });
 
-    DB.Tasks.find(search).toArray((err, docs) => {
-      res.send({
-        data: docs
-      })
-    })
-  })
-
-  /**
+    /**
  * @api {get} /tasks/count Get tasks count
  * @apiName GetTasksCount
  * @apiGroup Tasks
@@ -162,24 +169,23 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  * @apiSuccess {Number} Number of tasks
  */
 
+    app.get("/tasks/count", (req, res) => {
+      console.log("GET /tasks/count");
 
-  app.get('/tasks/count', (req, res) => {
-    console.log('GET /tasks/count')
+      let search = JSON.parse(req.query.query);
 
-    let search = JSON.parse(req.query.query)
+      if (req.query.demo_instance_id) {
+        search.demo_instance_id = req.query.demo_instance_id;
+      }
 
-    if (req.query.demo_instance_id) {
-      search.demo_instance_id = req.query.demo_instance_id
-    }
+      DB.Tasks.count(search).then(number => {
+        return res.send({
+          count: number
+        });
+      });
+    });
 
-    DB.Tasks.count(search).then((number) => {
-      return res.send({
-        count: number
-      })
-    })
-  })
-
-  /**
+    /**
    * @api {put} /tasks Update tasks
    * @apiName UpdateTasks
    * @apiGroup Tasks
@@ -188,77 +194,85 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
                     [ {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}, ...]
    */
 
-  app.put('/tasks', (req, res) => {
-    console.log('PUT Tasks', req.body)
-    let docs = req.body
+    app.put("/tasks", (req, res) => {
+      console.log("PUT Tasks", req.body);
+      let docs = req.body;
 
-    if (!Array.isArray(req.body)) {
-      return res.status(400).end()
-    }
+      if (!Array.isArray(req.body)) {
+        return res.status(400).end();
+      }
 
-    console.log("Count of docs to update:", docs.length)
+      console.log("Count of docs to update:", docs.length);
       // TODO: @feature Set default properties
 
-    let task_promises = docs.map((doc) => {
-      return new Promise((resolve, reject) => {
-        doc._id = new ObjectID(doc._id)
-        const query = {
-          _id: doc._id
-        }
-        const update = doc
+      let task_promises = docs.map(doc => {
+        return new Promise((resolve, reject) => {
+          doc._id = new ObjectID(doc._id);
+          const query = {
+            _id: doc._id
+          };
+          const update = doc;
 
-        DB.Tasks.update(query, update, {
-          upsert: false
-        }, (err, response) => {
-          if (err) {
-            console.log(err)
-            resolve({
-              error: err
-            })
-          } else {
-            resolve({
-              success: response,
-              _id: doc._id
-            })
-          }
-        })
-      })
-    })
+          DB.Tasks.update(
+            query,
+            update,
+            {
+              upsert: false
+            },
+            (err, response) => {
+              if (err) {
+                console.log(err);
+                resolve({
+                  error: err
+                });
+              } else {
+                resolve({
+                  success: response,
+                  _id: doc._id
+                });
+              }
+            }
+          );
+        });
+      });
 
-    Promise.all(task_promises)
-      .then(results => {
-        global.results = results
+      Promise.all(task_promises)
+        .then(results => {
+          global.results = results;
           // res.send(results)
 
-        const results_for_client = results.reduce((output, result) => {
-          if (result.hasOwnProperty('success')) {
-            output.modified.push(result._id)
-          } else if (result.hasOwnProperty('error')) {
-            output.errors.push(result.error)
-          }
-          return output
-        }, {
-          modified: [],
-          errors: []
+          const results_for_client = results.reduce(
+            (output, result) => {
+              if (result.hasOwnProperty("success")) {
+                output.modified.push(result._id);
+              } else if (result.hasOwnProperty("error")) {
+                output.errors.push(result.error);
+              }
+              return output;
+            },
+            {
+              modified: [],
+              errors: []
+            }
+          );
+
+          console.log(results_for_client);
+
+          res.send(results_for_client);
         })
+        .catch(error => console.error(error));
 
-        console.log(results_for_client)
+      // DB.Tasks.insert(docs, (err, result) => {
+      //   if (err) {
+      //     res.send(err)
+      //   } else {
+      //     res.send(result)
+      //   }
 
-        res.send(results_for_client)
-      }).catch((error) => console.error(error))
+      // })
+    });
 
-    // DB.Tasks.insert(docs, (err, result) => {
-    //   if (err) {
-    //     res.send(err)    
-    //   } else {
-    //     res.send(result)
-    //   }
-
-    // })
-  })
-
-
-  /**
+    /**
    * @api {get} /spatial_entities Get spatial entities
    * @apiName GetSpatialEntities
    * @apiGroup SpatialEntities
@@ -268,28 +282,28 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
    *
    * @apiSuccess {Array} clusters Array of spatial entity objects
    */
-  app.get('/spatial_entities', (req, res) => {
-    console.log('GET /spatial_entities')
+    app.get("/spatial_entities", (req, res) => {
+      console.log("GET /spatial_entities");
 
-    let search = {}
+      let search = {};
 
-    if (req.query.ids) {
-      const ids = JSON.parse(req.query.ids)
-      search = {
-        "properties.osm_id": {
-          $in: ids
-        }
+      if (req.query.ids) {
+        const ids = JSON.parse(req.query.ids);
+        search = {
+          "properties.osm_id": {
+            $in: ids
+          }
+        };
       }
-    }
 
-    DB.SpatialEntities.find(search).toArray((err, docs) => {
-      res.send({
-        data: docs
-      })
-    })
-  })
+      DB.SpatialEntities.find(search).toArray((err, docs) => {
+        res.send({
+          data: docs
+        });
+      });
+    });
 
-  /**
+    /**
  * @api {post} /spatial_entities Create spatial entity
  * @apiName CreateSpatialEntities
  * @apiGroup SpatialEntities
@@ -300,24 +314,23 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
                   {"osm_id": "123123", "polygon": {...}}
  */
 
-  app.post('/spatial_entities', (req, res) => {
-    console.log('POST SE', req.body)
+    app.post("/spatial_entities", (req, res) => {
+      console.log("POST SE", req.body);
 
-    // TODO: @feature Set default properties
+      // TODO: @feature Set default properties
 
-    DB.SpatialEntities.insert(req.body, (err, result) => {
-      if (err) {
-        res.send({
-          data: 'Success'
-        })
-      } else {
-        res.send(result)
-      }
+      DB.SpatialEntities.insert(req.body, (err, result) => {
+        if (err) {
+          res.send({
+            data: "Success"
+          });
+        } else {
+          res.send(result);
+        }
+      });
+    });
 
-    })
-  })
-
-  /**
+    /**
    * @api {get} /spatial_entity_points Get spatial entity points
    * @apiName GetSpatialEntityPoints
    * @apiGroup SpatialEntityPoints
@@ -326,28 +339,28 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
    *
    * @apiSuccess {Array} points Array of spatial entity points
    */
-  app.get('/spatial_entity_points', (req, res) => {
-    console.log('GET /spatial_entity_points')
+    app.get("/spatial_entity_points", (req, res) => {
+      console.log("GET /spatial_entity_points");
 
-    let search = {}
+      let search = {};
 
-    if (req.query.ids) {
-      const ids = JSON.parse(req.query.ids) //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
-      search = {
-        _id: {
-          $in: ids
-        }
+      if (req.query.ids) {
+        const ids = JSON.parse(req.query.ids); //.map(id => new ObjectID(id)) //TODO: @debug fix ObjectID
+        search = {
+          _id: {
+            $in: ids
+          }
+        };
       }
-    }
 
-    DB.SpatialEntityPoints.find(search).toArray((err, docs) => {
-      res.send({
-        data: docs
-      })
-    })
-  })
+      DB.SpatialEntityPoints.find(search).toArray((err, docs) => {
+        res.send({
+          data: docs
+        });
+      });
+    });
 
-  /**
+    /**
  * @api {post} /spatial_entity_points Create spatial entity points
  * @apiName CreateSpatialEntityPoints
  * @apiGroup SpatialEntityPoints
@@ -356,28 +369,28 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
  *
  */
 
-  app.post('/spatial_entity_points', (req, res) => {
-    console.log('POST /spatial_entity_points', req.body)
+    app.post("/spatial_entity_points", (req, res) => {
+      console.log("POST /spatial_entity_points", req.body);
 
-    // TODO: @feature Set default properties
+      // TODO: @feature Set default properties
 
-    DB.SpatialEntityPoints.insert(req.body, (err, result) => {
-      if (err) {
-        res.send({
-          data: 'Success'
-        })
-      } else {
-        res.send(result)
-      }
+      DB.SpatialEntityPoints.insert(req.body, (err, result) => {
+        if (err) {
+          res.send({
+            data: "Success"
+          });
+        } else {
+          res.send(result);
+        }
+      });
+    });
 
-    })
+    app.use(Raven.errorHandler());
+
+    app.listen(process.env.PORT || 3000, () => {
+      console.log(
+        "[DOUMA API] Listening on port " + (process.env.PORT || 3000)
+      );
+    });
   })
-
-  app.use(Raven.errorHandler())
-
-
-  app.listen(process.env.PORT ||  3000, () => {
-    console.log('[DOUMA API] Listening on port ' + (process.env.PORT ||  3000))
-  })
-
-}).catch((err) => console.log(err))
+  .catch(err => console.log(err));
