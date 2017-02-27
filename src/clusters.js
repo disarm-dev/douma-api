@@ -1,4 +1,5 @@
 const get_clusters = (DB, req, res) => {
+  console.log(DB, req, res)
   console.log('GET /clusters')
 
   let search = {}
@@ -131,7 +132,69 @@ const post_clusters = (DB, req, res) => {
     })
 }
 
-const delete_clusters = (req, res) => {
+
+const put_clusters = (DB, req, res) => {
+  console.log('PUT Clusters', req.body)
+  let docs = req.body
+
+  if (!Array.isArray(req.body)) {
+    return res.status(400).end()
+  }
+
+  console.log("Count of docs to update:", docs.length)
+    // TODO: @feature Set default properties
+
+  let cluster_promises = docs.map((doc) => {
+    return new Promise((resolve, reject) => {
+      doc._id = new ObjectID(doc._id)
+      const query = {
+        _id: doc._id
+      }
+      const update = doc
+
+      DB.Clusters.update(query, update, {
+        upsert: false
+      }, (err, response) => {
+        if (err) {
+          console.log(err)
+          resolve({
+            error: err
+          })
+        } else {
+          resolve({
+            success: response,
+            _id: doc._id
+          })
+        }
+      })
+    })
+  })
+
+  Promise.all(cluster_promises)
+    .then(results => {
+      global.results = results
+        // res.send(results)
+
+      const results_for_client = results.reduce((output, result) => {
+        if (result.hasOwnProperty('success')) {
+          output.modified.push(result._id)
+        } else if (result.hasOwnProperty('error')) {
+          output.errors.push(result.error)
+        }
+        return output
+      }, {
+        modified: [],
+        errors: []
+      })
+
+      console.log(results_for_client)
+
+      res.send(results_for_client)
+    }).catch((error) => console.error(error))
+}
+
+
+const delete_clusters = (DB, req, res) => {
   console.log('DELETE Clusters', req.body)
 
   DB.Clusters.removeMany({
@@ -147,5 +210,6 @@ const delete_clusters = (req, res) => {
 module.exports = {
   get_clusters,
   post_clusters,
+  put_clusters,
   delete_clusters
 }
