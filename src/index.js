@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 const curry = require('curry')
 
 const {push} = require('./push.js')
-const {get_clusters, post_clusters} = require('./clusters.js')
+const {get_clusters, post_clusters, delete_clusters} = require('./clusters.js')
 
 
 if(!process.env.MONGODB_URI) {
@@ -141,16 +141,8 @@ MongoClient.connect(process.env.MONGODB_URI).then((db) => {
    * @apiParamExample {json} Request-Example: 
                     [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
    */
-
-  app.delete('/clusters', (req, res) => {
-    console.log('DELETE Clusters', req.body)
-
-    
-
-    DB.Clusters.removeMany({demo_instance_id: req.query.demo_instance_id}).then(() => {
-      res.send({status: 'Success'})
-    })
-  })
+  const delete_clusters_fn = curry(delete_clusters, DB)
+  app.delete('/clusters', delete_clusters_fn)
 
 /**
  * @api {get} /tasks Get tasks

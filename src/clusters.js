@@ -55,9 +55,10 @@ const get_clusters = (DB, req, res) => {
 
 
 const post_clusters = (DB, req, res) => {
+  console.log(res)
   console.log('POST cluster')
   if (!Array.isArray(req.body)) {
-    return res.status(400).end()
+    return res.code(400).end()
   }
 
   let demo_instance_id = req.query.demo_instance_id
@@ -130,4 +131,21 @@ const post_clusters = (DB, req, res) => {
     })
 }
 
-module.exports = {get_clusters, post_clusters}
+const delete_clusters = (req, res) => {
+  console.log('DELETE Clusters', req.body)
+
+  DB.Clusters.removeMany({
+    demo_instance_id: req.query.demo_instance_id
+  }).then(() => {
+    res.send({
+      status: 'Success'
+    })
+  })
+}
+
+
+module.exports = {
+  get_clusters,
+  post_clusters,
+  delete_clusters
+}
