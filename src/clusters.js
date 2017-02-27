@@ -83,25 +83,30 @@ const post_clusters = (DB, req, res) => {
     })
     .toArray()
     .then(tasks => {
-      tasks_not_found = all_spatial_entity_ids.reduce((local_tasks_not_found, spatial_entity_id) => {
-          if (!tasks.find(t => t.properties.spatial_entity_id === spatial_entity_id)) {
-            local_tasks_not_found.push({
-              _id: new ObjectID(),
-              properties: {
-                status: "unvisited"
-              },
-              task_date: new Date(),
-              task_type: "irs_record",
-              demo_instance_id: demo_instance_id,
-              spatial_entity_id
-            });
+      console.time('build all_tasks')
+      const tasks_by_spatial_entity_id = tasks.reduce((output, task) => {
+        output[task.spatial_entity_id] = task
+        return output
+      }, {})
+
+      const all_tasks = all_spatial_entity_ids.map(spatial_entity_id => {
+        let task = tasks_by_spatial_entity_id[spatial_entity_id]
+        if (!task) {
+          task = {
+            _id: new ObjectID(),
+            properties: {
+              status: "unvisited"
+            },
+            task_date: new Date(),
+            task_type: "irs_record",
+            demo_instance_id: demo_instance_id,
+            spatial_entity_id
           }
+        }
+        return task
+      })
 
-          return local_tasks_not_found;
-        },[]);
-
-      const all_tasks = tasks.concat(tasks_not_found);
-
+      console.timeEnd('build all_tasks')
       console.log(all_tasks.length)
       if (tasks_not_found.length > 0) {
         return DB.Tasks
