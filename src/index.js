@@ -81,7 +81,7 @@ MongoClient.connect(process.env.MONGODB_URI)
 
 
    /**
-   * @api {get} /clusters/count Get tasks count
+   * @api {get} /clusters/count Get Number of clusters
    * @apiName GetClustersCount
    * @apiGroup Clusters
    *
