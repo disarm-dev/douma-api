@@ -86,6 +86,7 @@ MongoClient.connect(process.env.MONGODB_URI)
    * @apiGroup Clusters
    *
    * @apiParam {String} demo_instance_id Demo Instance Id
+   * @apiParam {Object} query A Mongo Query to limit resuls
    *                  
    * @apiSuccess {Number} Number of Clusters
    */
