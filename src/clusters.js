@@ -61,15 +61,6 @@ const post_clusters = (DB, req, res) => {
 
   let clusters = req.body;
 
-  function concatNarrays(args) {
-    args = Array.prototype.slice.call(arguments);
-    var newArr = args.reduce( function(prev, next) {
-       return prev.concat(next) ;
-    });
-
-    return newArr;
-  }
-
   let quick_spatial_entity_ids = []
   clusters = clusters.map(cluster => {
     cluster._id = new ObjectID()
@@ -151,7 +142,7 @@ const post_clusters = (DB, req, res) => {
 
       clusters.forEach(cluster => {
         cluster.demo_instance_id = demo_instance_id;
-        cluster.task_ids = cluster_task_ids[cluster._id]
+        cluster.properties.task_ids = cluster_task_ids[cluster._id]
       });
 
       return DB.Clusters.insert(clusters);
