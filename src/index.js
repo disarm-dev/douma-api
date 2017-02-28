@@ -303,7 +303,7 @@ MongoClient.connect(process.env.MONGODB_URI)
       let search = {};
 
       if (req.query.ids) {
-        const ids = JSON.parse(req.query.ids);
+        const ids = JSON.parse(req.query.ids).map(i => new ObjectId(i));
         search = {
           "properties.osm_id": {
             $in: ids
