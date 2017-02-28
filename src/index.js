@@ -8,7 +8,7 @@ const fetch = require("node-fetch");
 const curry = require("curry");
 
 const { push } = require("./push.js");
-const { get_clusters, post_clusters, put_clusters, delete_clusters } = require(
+const { get_clusters, post_clusters, put_clusters, delete_clusters, count_clusters } = require(
   "./clusters.js"
 );
 
@@ -79,27 +79,41 @@ MongoClient.connect(process.env.MONGODB_URI)
     const get_clusters_fn = curry(get_clusters)(DB);
     app.get("/clusters", get_clusters_fn);
 
+
+   /**
+   * @api {get} /clusters/count Get tasks count
+   * @apiName GetClustersCount
+   * @apiGroup Clusters
+   *
+   * @apiParam {String} demo_instance_id Demo Instance Id
+   *                  
+   * @apiSuccess {Number} Number of Clusters
+   */
+
+   const count_clusters_fn = curry(count_clusters)(DB);
+   app.get("/clusters/count", count_clusters_fn);
+
     /**
- * @api {post} /clusters Create clusters
- * @apiName CreateClusters
- * @apiGroup Clusters
- *
- * @apiParamExample {json} Request-Example: 
-                  [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
- * @apiSuccess {Array} clusters Array of cluster objects
- */
+   * @api {post} /clusters Create clusters
+   * @apiName CreateClusters
+   * @apiGroup Clusters
+   *
+   * @apiParamExample {json} Request-Example: 
+                    [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
+   * @apiSuccess {Array} clusters Array of cluster objects
+   */
 
     const post_clusters_fn = curry(post_clusters)(DB);
     app.post("/clusters", post_clusters_fn);
 
     /**
- * @api {put} /clusters Update clusters
- * @apiName UpdateClusters
- * @apiGroup Clusters
- *
- * @apiParamExample {json} Request-Example: 
-                  [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
- */
+   * @api {put} /clusters Update clusters
+   * @apiName UpdateClusters
+   * @apiGroup Clusters
+   *
+   * @apiParamExample {json} Request-Example: 
+                    [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
+   */
 
     const put_clusters_fn = curry(put_clusters)(DB);
     app.put("/clusters", put_clusters_fn);
@@ -159,15 +173,15 @@ MongoClient.connect(process.env.MONGODB_URI)
     });
 
     /**
- * @api {get} /tasks/count Get tasks count
- * @apiName GetTasksCount
- * @apiGroup Tasks
- *
- * @apiParamExample {json} Sending a query: 
-                  {"properties.status": "visited_unsuccessful"}
- *                  
- * @apiSuccess {Number} Number of tasks
- */
+   * @api {get} /tasks/count Get tasks count
+   * @apiName GetTasksCount
+   * @apiGroup Tasks
+   *
+   * @apiParamExample {json} Sending a query: 
+                    {"properties.status": "visited_unsuccessful"}
+   *                  
+   * @apiSuccess {Number} Number of tasks
+   */
 
     app.get("/tasks/count", (req, res) => {
       console.log("GET /tasks/count");

@@ -251,9 +251,30 @@ const delete_clusters = (DB, req, res) => {
     });
 };
 
+const count_clusters = (DB, req, res) => {
+  console.log("GET /tasks/count");
+
+  let search = {}
+
+  if (req.query.query) {
+    search = JSON.parse(req.query.query)  
+  }
+
+  if (req.query.demo_instance_id) {
+    search.demo_instance_id = req.query.demo_instance_id;
+  }
+
+  DB.Clusters.count(search).then(number => {
+    return res.send({
+      count: number
+    });
+  });
+}
+
 module.exports = {
   get_clusters,
   post_clusters,
   put_clusters,
-  delete_clusters
+  delete_clusters,
+  count_clusters
 };
