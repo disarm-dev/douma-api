@@ -240,11 +240,6 @@ const delete_clusters = (DB, req, res) => {
       demo_instance_id: req.query.demo_instance_id
     })
     .then(() => {
-      return DB.Tasks.removeMany({
-        demo_instance_id: req.query.demo_instance_id
-      })
-    })
-    .then(() => {
       res.send({
         status: "Success"
       });
