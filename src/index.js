@@ -147,7 +147,7 @@ MongoClient.connect(process.env.MONGODB_URI)
       let search = {};
 
       if (req.query.ids) {
-        const ids = JSON.parse(req.query.ids).map(id => new ObjectID(id)); //TODO: @debug fix ObjectID
+        const ids = JSON.parse(req.query.ids).map(id => new ObjectID(id));
         search = {
           _id: {
             $in: ids
