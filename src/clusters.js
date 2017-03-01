@@ -230,16 +230,26 @@ const put_clusters = (DB, req, res) => {
 
 const delete_clusters = (DB, req, res) => {
   console.log("DELETE Clusters", req.body);
+
+  if (!req.query.demo_instance_id) {
+    res.status(400).end();
+  }
+
   // TODO: @feature Remove tasks
   DB.Clusters
     .removeMany({
       demo_instance_id: req.query.demo_instance_id
     })
     .then(() => {
+      return DB.Tasks.removeMany({
+        demo_instance_id: req.query.demo_instance_id
+      })
+    })
+    .then(() => {
       res.send({
         status: "Success"
       });
-    });
+    })
 };
 
 const count_clusters = (DB, req, res) => {
