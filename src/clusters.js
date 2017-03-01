@@ -230,7 +230,7 @@ const put_clusters = (DB, req, res) => {
 
 const delete_clusters = (DB, req, res) => {
   console.log("DELETE Clusters", req.body);
-
+  // TODO: @feature Remove tasks
   DB.Clusters
     .removeMany({
       demo_instance_id: req.query.demo_instance_id
