@@ -4,6 +4,58 @@
 		"selected_items":
 		[
 			[
+				"clu",
+				"cluster_task_ids"
+			],
+			[
+				"task",
+				"tasks_by_spatial_entity_id"
+			],
+			[
+				"con",
+				"concatNarrays"
+			],
+			[
+				"spat",
+				"spatial_entity_id"
+			],
+			[
+				"clus",
+				"cluster_task_ids"
+			],
+			[
+				"spati",
+				"spatial_entity_id"
+			],
+			[
+				"cluser",
+				"cluster_id"
+			],
+			[
+				"all",
+				"all_spatial_entity_ids"
+			],
+			[
+				"put",
+				"put_clusters"
+			],
+			[
+				"pu",
+				"put_clusters_fn"
+			],
+			[
+				"get",
+				"get_clusters_fn"
+			],
+			[
+				"dele",
+				"delete_clusters"
+			],
+			[
+				"post",
+				"post_clusters"
+			],
+			[
 				"search",
 				"search_definition"
 			],
@@ -36,10 +88,6 @@
 				"breadcrumb"
 			],
 			[
-				"clus",
-				"cluster_id"
-			],
-			[
 				"App",
 				"AppletContainer"
 			],
@@ -48,20 +96,12 @@
 				"ClustersList"
 			],
 			[
-				"clu",
-				"cluster_id"
-			],
-			[
 				"IRSPrgress",
 				"IRSProgressApplet"
 			],
 			[
 				"config",
 				"configureServiceWorker"
-			],
-			[
-				"task",
-				"task_id"
 			],
 			[
 				"entities",
@@ -134,10 +174,6 @@
 			[
 				"active",
 				"activeAction"
-			],
-			[
-				"get",
-				"getLayerIdForOsmId"
 			],
 			[
 				"entit",
@@ -214,10 +250,6 @@
 			[
 				"red",
 				"redrawStructure"
-			],
-			[
-				"con",
-				"console"
 			],
 			[
 				"inve",
@@ -482,64 +514,9 @@
 			[
 				"cases",
 				"cases_for_season"
-			],
-			[
-				"start",
-				"start_date"
-			],
-			[
-				"bounding",
-				"bounding_box"
-			],
-			[
-				"Stru",
-				"StructurePoints.rds"
-			],
-			[
-				"StructureSel",
-				"StructureSelectionBasket"
-			],
-			[
-				"USER",
-				"USER_DELETED"
-			],
-			[
-				"obser",
-				"observeEvent\t{shiny}"
-			],
-			[
-				"fil",
-				"filteredMenu"
-			],
-			[
-				"match",
-				"matchingDishes"
 			]
 		]
 	},
-	"buffers":
-	[
-		{
-			"contents": "Remote:   origin @ git@bitbucket.org:disarm-platform/douma-api.git\nLocal:    develop ~/Dv-DiSARM/Core/douma-api\nHead:     b5372d6 What we've got\n\n\nUntracked files:\n\tdouma-api.sublime-project\n\tdouma-api.sublime-workspace\n\tyarn.lock\n\n\n# Movement:\n#    r = refresh status\n#    1-5 = jump to section\n#    n = next item, N = next section\n#    p = previous item, P = previous section\n#\n# Staging:\n#    s = stage file/section, S = stage all unstaged files\n#    ctrl+shift+s = stage all unstaged and untracked files\n#    u = unstage file/section, U = unstage all files\n#    backspace = discard file/section, shift+backspace = discard everything\n#\n# Commit:\n#    c = commit, C = commit -a (add unstaged)\n#    ctrl+shift+c = commit --amend (amend previous commit)\n#\n# Other:\n#    i = ignore file, I = ignore pattern\n#    enter = open file\n#    d = view diff\n#\n# Stashes:\n#    a = apply stash, A = pop stash\n#    z = create stash, Z = create stash including untracked files\n#    backspace = discard stash",
-			"settings":
-			{
-				"buffer_size": 993,
-				"line_ending": "Unix",
-				"name": "*git-status*: douma-api",
-				"read_only": true,
-				"scratch": true
-			}
-		},
-		{
-			"file": "douma-api.sublime-project",
-			"settings":
-			{
-				"buffer_size": 414,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		}
-	],
 	"build_system": "",
 	"build_system_choices":
 	[
@@ -547,10 +524,50 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 271.0,
-		"last_filter": "push",
+		"height": 181.0,
+		"last_filter": "gitcheck",
 		"selected_items":
 		[
+			[
+				"gitcheck",
+				"Git: Checkout Commit"
+			],
+			[
+				"gitlog",
+				"Git: Log"
+			],
+			[
+				"gist",
+				"HaoGist: Create Public Gist"
+			],
+			[
+				"pret",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"prettier",
+				"JsPrettier: Format JavaScript"
+			],
+			[
+				"jspret",
+				"JsPrettier: Format JavaScript"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"javas",
+				"Javascript Beautify"
+			],
+			[
+				"beau",
+				"Javascript Beautify"
+			],
 			[
 				"push",
 				"Git: Push Current Branch"
@@ -582,10 +599,6 @@
 			[
 				"dele",
 				"File: Delete"
-			],
-			[
-				"beau",
-				"BeautifyRuby"
 			],
 			[
 				"form",
@@ -704,10 +717,6 @@
 				"Git: Status"
 			],
 			[
-				"remove",
-				"Package Control: Remove Package"
-			],
-			[
 				"confl",
 				"FindKeyConflicts: All Conflicts"
 			],
@@ -725,10 +734,6 @@
 			],
 			[
 				"insta",
-				"Package Control: Install Package"
-			],
-			[
-				"install",
 				"Package Control: Install Package"
 			],
 			[
@@ -804,10 +809,6 @@
 				"Pretty JSON: Format (Pretty Print) JSON"
 			],
 			[
-				"pret",
-				"Preferences: Pretty JSON Settings - Default"
-			],
-			[
 				"todore",
 				"TodoReview: Project Files"
 			],
@@ -846,10 +847,6 @@
 			[
 				"gitpul",
 				"Git: Pull"
-			],
-			[
-				"gitlog",
-				"Git: Log"
 			],
 			[
 				"git stau",
@@ -1042,26 +1039,6 @@
 			[
 				"syntax vue",
 				"Set Syntax: Vue Component"
-			],
-			[
-				"justi",
-				"CSV: Justify columns"
-			],
-			[
-				"post",
-				"Set Syntax: PostCSS"
-			],
-			[
-				"justify",
-				"CSV: Justify columns"
-			],
-			[
-				"gitchec",
-				"Git: Checkout"
-			],
-			[
-				"gchec",
-				"Git: Checkout"
 			]
 		],
 		"width": 570.0
@@ -1084,12 +1061,14 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/Users/jonathan/Dv-DiSARM/Core/douma-api"
-	],
 	"file_history":
 	[
+		"/Users/jonathan/Dv-DiSARM/Core/douma-api/swz-111-request.json",
+		"/Users/jonathan/Dv-DiSARM/Core/douma-api/zwe-24-request.json",
+		"/Users/jonathan/Library/Application Support/Sublime Text 3/Packages/Pretty JSON/Pretty JSON.sublime-settings",
+		"/Users/jonathan/Dv-DiSARM/Core/douma-api/src/index.js",
+		"/Users/jonathan/Dv-DiSARM/Core/douma-api/src/clusters.js",
+		"/Users/jonathan/Dv-DiSARM/Core/douma-api/douma-api.sublime-project",
 		"/Users/jonathan/Dv-DiSARM/Core/douma-api/index.js",
 		"/Users/jonathan/Dv-DiSARM/Core/douma-api/package.json",
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/apps/irs_progress/clusters/search.vue",
@@ -1189,7 +1168,6 @@
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/data_bootstrap/actions.json",
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/data_bootstrap/records.json",
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/apps/meta/sync/status.vue",
-		"/Users/jonathan/Library/Application Support/Sublime Text 3/Packages/Pretty JSON/Pretty JSON.sublime-settings",
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/components/irs-container.vue",
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/apps/meta/user/profile.vue",
 		"/Users/jonathan/Dv-DiSARM/Core/douma/src/apps/foci/foci.vue",
@@ -1212,12 +1190,7 @@
 		"/Users/jonathan/Dv_DiSARM/Core/douma/webpack.config.js",
 		"/Users/jonathan/Dv_DiSARM/Core/douma/src/components/Tabs.vue",
 		"/Users/jonathan/Dv_DiSARM/Core/douma/src/pages/foci/monitor/list.vue",
-		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/_includes/css/custom.css",
-		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/_includes/nav.html",
-		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/css?family=Roboto+Slab",
-		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/css/font-awesome/fonts/fontawesome-webfont.eot",
-		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/progress.html",
-		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/_includes/about.html"
+		"/Users/jonathan/Dv_DiSARM/Project/disarm-platform.github.io/_includes/css/custom.css"
 	],
 	"find":
 	{
@@ -1287,6 +1260,34 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"output",
+			"DB.",
+			"Promise.resolve(all_tasks)",
+			"concatNarrays",
+			"all_spatial_entity_ids",
+			"quick_spatial_entity_ids",
+			"clusters.reduce",
+			"clusters.map",
+			"clusters",
+			"clusters.map",
+			"tasks_not_found",
+			"geobuf",
+			"console.time",
+			"quick_spatial_entity_ids",
+			"clusters",
+			"forEach",
+			"cluster_task_ids",
+			"bodyParser",
+			"get_clusters",
+			"delete_clusters",
+			"SpatialEntityPoints.",
+			"SpatialEntityPoints",
+			"SpatialEntities.",
+			"SpatialEntities",
+			"Tasks.",
+			"Tasks",
+			"Clusters.",
+			"Clusters",
 			"remote_",
 			"get_",
 			"locationType",
@@ -1386,35 +1387,7 @@
 			"\"cluster",
 			"\"cluster\"",
 			"\"Cluster",
-			"\"cluster",
-			"\"Cluster",
-			"\"cluster",
-			"\"Cluster",
-			"\"cluster",
-			"\"Cluster",
-			"\"cluster",
-			"\"Cluster",
-			"\"cluster",
-			"\"Cluster",
-			"\"cluster",
-			"\"Cluster",
-			"\"cluster",
-			"DOUMA",
-			"Douma",
-			"router-view",
-			"visualizer",
-			"Visualizer",
-			"cluster_id/",
-			"clusters/",
-			"ClustersEdit",
-			"ClustersList",
-			"search",
-			"edit",
-			"\"/",
-			"irs_progress/",
-			"irs_progress",
-			"->",
-			"Clusters"
+			"\"cluster"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1422,6 +1395,7 @@
 		"regex": true,
 		"replace_history":
 		[
+			"DB.Clusters",
 			"lubombo",
 			"shiselweni",
 			"lubombo",
@@ -1548,8 +1522,7 @@
 			"jekyll-data",
 			",",
 			";",
-			",",
-			""
+			","
 		],
 		"reverse": false,
 		"show_context": false,
@@ -1557,79 +1530,6 @@
 		"whole_word": false,
 		"wrap": false
 	},
-	"groups":
-	[
-		{
-			"selected": 1,
-			"sheets":
-			[
-				{
-					"buffer": 0,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 993,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								80,
-								80
-							]
-						],
-						"settings":
-						{
-							"__vi_external_disable": true,
-							"draw_white_space": "none",
-							"git_repo": "/Users/jonathan/Dv-DiSARM/Core/douma-api",
-							"git_status": true,
-							"git_view": "status",
-							"syntax": "Packages/SublimeGit/syntax/SublimeGit Status.tmLanguage",
-							"translate_tabs_to_spaces": false,
-							"word_wrap": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "douma-api.sublime-project",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 414,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								414,
-								414
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JSON (JavaScriptNext).tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
-			]
-		}
-	],
 	"incremental_find":
 	{
 		"height": 26.0
@@ -1694,10 +1594,9 @@
 		"height": 116.0
 	},
 	"pinned_build_system": "",
-	"project": "douma-api.sublime-project",
 	"replace":
 	{
-		"height": 48.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1706,6 +1605,18 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"swz",
+				"swz-111-request.json"
+			],
+			[
+				"cluster",
+				"src/clusters.js"
+			],
+			[
+				"index",
+				"src/index.js"
+			],
 			[
 				"search",
 				"src/apps/irs_progress/clusters/search.vue"
@@ -1801,10 +1712,6 @@
 			[
 				"pack",
 				"package.json"
-			],
-			[
-				"index",
-				"src/index.html"
 			],
 			[
 				"webpac",
@@ -2001,10 +1908,6 @@
 			[
 				"app",
 				"src/components/applet.vue"
-			],
-			[
-				"cluster",
-				"src/apps/irs_progress/cluster/list.vue"
 			],
 			[
 				"doumavue",
@@ -2213,10 +2116,6 @@
 			[
 				"st",
 				"src/data_bootstrap/structures.json"
-			],
-			[
-				"stur",
-				"src/data_bootstrap/structures.json"
 			]
 		],
 		"width": 0.0
@@ -2229,7 +2128,7 @@
 		[
 			[
 				"",
-				"~/Dv-DiSARM/Core/douma/douma.sublime-project"
+				"~/Dv-DiSARM/Core/douma-api/douma-api.sublime-project"
 			],
 			[
 				"full",
@@ -2363,14 +2262,22 @@
 		],
 		"width": 642.0
 	},
-	"selected_group": 0,
 	"settings":
 	{
+		"last_automatic_layout":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		]
 	},
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 244.0,
 	"status_bar_visible": true,
 	"template_settings":
