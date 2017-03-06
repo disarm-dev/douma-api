@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const Raven = require("raven");
 const fetch = require("node-fetch");
 const curry = require("curry");
+const path = require('path')
 
 const { push } = require("./push.js");
 const { get_clusters, post_clusters, put_clusters, delete_clusters, count_clusters } = require(
@@ -63,6 +64,8 @@ MongoClient.connect(process.env.MONGODB_URI)
         1000
       );
     });
+
+    app.use('/local_areas', express.static(path.join(__dirname, 'local_areas')))
 
     /**
    * @api {get} /clusters Get clusters
