@@ -105,7 +105,7 @@ MongoClient.connect(process.env.MONGODB_URI)
    * @apiName GetClusterShapefile
    * @apiGroup Clusters
    *
-   * @apiParam {String} ClusterId A Cluster id
+   * @apiParam {String} cluster_id A Cluster id
    *
    * @apiSuccess {Shapefile} shapefile A shapefile for the cluster id
    */
