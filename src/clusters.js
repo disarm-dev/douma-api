@@ -268,13 +268,13 @@ const count_clusters = (DB, req, res) => {
 }
 
 const shapefile_clusters = (DB, req, res) => {
+  console.log("GET clusters shapefile");
 
   if (!req.query.cluster_id) {
     res.status(400).end();
   }
 
   let id = req.query.cluster_id
-  
 
   DB.Clusters.find({'properties.cluster_collection_id': id})
     .toArray()
