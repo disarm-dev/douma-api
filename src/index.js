@@ -78,7 +78,8 @@ MongoClient.connect(process.env.MONGODB_URI)
    */
 
     app.get('/local_areas/:country_code', function (req, res) {
-      fetch(R_SERVER_URL + '/local_areas' + req.params.country_code + '.geojson')
+      debugger
+      fetch(R_SERVER_URL + '/local_areas/' + req.params.country_code + '.geojson')
       .then((server_res) => server_res.json())
       .then((data) => {
         res.send(data)
