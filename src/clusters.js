@@ -1,5 +1,6 @@
 // IMportant
 const ObjectID = require("mongodb").ObjectID;
+const shpwrite = require('shp-write');
 
 const get_clusters = (DB, req, res) => {
   console.log("GET /clusters");
@@ -266,10 +267,35 @@ const count_clusters = (DB, req, res) => {
   });
 }
 
+const shapefile_clusters = (DB, req, res) => {
+
+  if (!req.query.cluster_id) {
+    res.status(400).end();
+  }
+
+  let id = req.query.cluster_id
+  
+
+  DB.Clusters.find({'properties.cluster_collection_id': id})
+    .toArray()
+    .then((clusters) => {
+      const collection = {
+        type: 'FeatureCollection',
+        features: clusters
+      }
+
+      let zip = shpwrite.zip(collection)
+      
+      res.set('Content-Type', 'application/zip');
+      res.send(zip)
+    })
+}
+
 module.exports = {
   get_clusters,
   post_clusters,
   put_clusters,
   delete_clusters,
-  count_clusters
+  count_clusters,
+  shapefile_clusters
 };

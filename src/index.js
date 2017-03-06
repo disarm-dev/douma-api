@@ -9,7 +9,7 @@ const curry = require("curry");
 const path = require('path')
 
 const { push } = require("./push.js");
-const { get_clusters, post_clusters, put_clusters, delete_clusters, count_clusters } = require(
+const { get_clusters, post_clusters, put_clusters, delete_clusters, count_clusters, shapefile_clusters } = require(
   "./clusters.js"
 );
 
@@ -78,7 +78,6 @@ MongoClient.connect(process.env.MONGODB_URI)
    */
 
     app.get('/local_areas/:country_code', function (req, res) {
-      debugger
       fetch(R_SERVER_URL + '/local_areas/' + req.params.country_code + '.geojson')
       .then((server_res) => server_res.json())
       .then((data) => {
@@ -100,6 +99,19 @@ MongoClient.connect(process.env.MONGODB_URI)
 
     const get_clusters_fn = curry(get_clusters)(DB);
     app.get("/clusters", get_clusters_fn);
+
+    /**
+   * @api {get} /clusters/shapefile Get clusters shapefile
+   * @apiName GetClusterShapefile
+   * @apiGroup Clusters
+   *
+   * @apiParam {String} ClusterId A Cluster id
+   *
+   * @apiSuccess {Shapefile} shapefile A shapefile for the cluster id
+   */
+
+    const shapefile_clusters_fn = curry(shapefile_clusters)(DB);
+    app.get("/clusters/shapefile", shapefile_clusters_fn);
 
 
    /**
@@ -429,5 +441,5 @@ MongoClient.connect(process.env.MONGODB_URI)
         "[DOUMA API] Listening on port " + (process.env.PORT || 3000)
       );
     });
-  })
-  .catch(err => console.log(err));
+})
+.catch(err => console.log(err));
