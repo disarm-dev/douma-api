@@ -284,8 +284,6 @@ const shapefile_clusters = (DB, req, res) => {
         features: clusters
       }
 
-      const cluster_collection_id = clusters[0].properties.cluster_collection_id
-
       const options = {
         folder: `Clusters collection ${id}`,
         types: {
@@ -294,7 +292,7 @@ const shapefile_clusters = (DB, req, res) => {
       }
       
       let zip = shpwrite.zip(collection)
-      res.set('Content-Disposition',  `attachment; filename="${cluster_collection_id}.zip"`);
+      res.set('Content-Disposition',  `attachment; filename="${id}.zip"`);
       res.set('Content-Type', 'application/zip');
       res.send(zip)
     })
