@@ -270,11 +270,11 @@ const count_clusters = (DB, req, res) => {
 const shapefile_clusters = (DB, req, res) => {
   console.log("GET clusters shapefile");
 
-  if (!req.query.cluster_id) {
+  if (!req.query.cluster_collection_id) {
     res.status(400).end();
   }
 
-  let id = req.query.cluster_id
+  let id = req.query.cluster_collection_id
 
   DB.Clusters.find({'properties.cluster_collection_id': id})
     .toArray()
@@ -284,6 +284,15 @@ const shapefile_clusters = (DB, req, res) => {
         features: clusters
       }
 
+      const cluster_collection_id = clusters[0].properties.cluster_collection_id
+
+      const options = {
+        folder: `Clusters collection ${id}`,
+        types: {
+          polygon: "cluster"
+        }
+      }
+      
       let zip = shpwrite.zip(collection)
       
       res.set('Content-Type', 'application/zip');
