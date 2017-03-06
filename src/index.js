@@ -13,6 +13,8 @@ const { get_clusters, post_clusters, put_clusters, delete_clusters, count_cluste
   "./clusters.js"
 );
 
+const R_SERVER_URL = "https://cluster.api.disarm.io"
+
 if (!process.env.MONGODB_URI) {
   console.log(
     '\nERROR: Missing `MONGODB_URI`.\nNeed to set MONGODB_URI as an environment variable.\nSomething like `set -x MONGODB_URI "mongodb://douma-api:[secret]@mongodb.disarm.io/irs_record"`\n'
@@ -65,7 +67,23 @@ MongoClient.connect(process.env.MONGODB_URI)
       );
     });
 
-    app.use('/local_areas', express.static(path.join(__dirname, 'local_areas')))
+     /**
+   * @api {get} /local_areas/:country_code Get Local Areas
+   * @apiName GetLocalAreas
+   * @apiGroup Local_Areas
+   *
+   * @apiParam {String} country_code Cluster ids
+   *
+   * @apiSuccess {Object} local_areas Geojson local areas
+   */
+
+    app.get('/local_areas/:country_code', function (req, res) {
+      fetch(R_SERVER_URL + '/local_areas' + req.params.country_code + '.geojson')
+      .then((server_res) => server_res.json())
+      .then((data) => {
+        res.send(data)
+      })
+    })
 
     /**
    * @api {get} /clusters Get clusters
