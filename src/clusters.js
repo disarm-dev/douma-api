@@ -283,10 +283,6 @@ const shapefile_clusters = (DB, req, res) => {
   DB.Clusters.find({'properties.cluster_collection_id': id})
     .toArray()
     .then((clusters) => {
-      if (clusters.length === 0) {
-        res.status(204).end();
-      }
-
       const collection = {
         type: 'FeatureCollection',
         features: clusters
