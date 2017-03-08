@@ -1,7 +1,6 @@
 // IMportant
 const ObjectID = require("mongodb").ObjectID;
 const shpwrite = require('shp-write');
-const gdal = require('gdal');
 
 const get_clusters = (DB, req, res) => {
   console.log("GET /clusters");
@@ -270,9 +269,6 @@ const count_clusters = (DB, req, res) => {
 
 const shapefile_clusters = (DB, req, res) => {
   console.log("GET clusters shapefile");
-
-  var dataset = gdal.open('./src/local_areas/swz.geojson')
-  return res.send(dataset)
 
   if (!req.query.cluster_collection_id) {
     res.status(400).end();
