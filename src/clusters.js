@@ -80,7 +80,7 @@ const post_clusters = (DB, req, res) => {
 
   DB.Tasks
     .find({
-      "properties.spatial_entity_id": {
+      spatial_entity_id: {
         $in: all_spatial_entity_ids
       },
       demo_instance_id
