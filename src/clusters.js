@@ -271,7 +271,7 @@ const count_clusters = (DB, req, res) => {
 const shapefile_clusters = (DB, req, res) => {
   console.log("GET clusters shapefile");
 
-  var dataset = gdal.open('./local_areas/swz.geojson')
+  var dataset = gdal.open('./src/local_areas/swz.geojson')
   return res.send(dataset)
 
   if (!req.query.cluster_collection_id) {
