@@ -7,6 +7,8 @@ const Raven = require("raven");
 const fetch = require("node-fetch");
 const curry = require("curry");
 const path = require('path')
+const compression = require('compression')
+
 
 const { push } = require("./push.js");
 const { get_clusters, post_clusters, put_clusters, delete_clusters, count_clusters, shapefile_clusters } = require(
@@ -35,6 +37,9 @@ MongoClient.connect(process.env.MONGODB_URI)
     app.use(Raven.requestHandler());
 
     app.use(cors());
+    
+    app.use(compression());
+
     app.use(
       bodyParser.json({
         limit: "500mb"
