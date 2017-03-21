@@ -1,6 +1,5 @@
 // IMportant
 const ObjectID = require("mongodb").ObjectID;
-const shpwrite = require('shp-write');
 
 const get_clusters = (DB, req, res) => {
   console.log("GET /clusters");
@@ -279,22 +278,16 @@ const shapefile_clusters = (DB, req, res) => {
   DB.Clusters.find({'properties.cluster_collection_id': id})
     .toArray()
     .then((clusters) => {
+      
       const collection = {
         type: 'FeatureCollection',
         features: clusters
       }
+      const geojson = JSON.stringify(collection)
 
-      const options = {
-        folder: `Clusters collection ${id}`,
-        types: {
-          polygon: "cluster"
-        }
-      }
-      
-      let zip = shpwrite.zip(collection)
-      res.set('Content-Disposition',  `attachment; filename="${id}.zip"`);
-      res.set('Content-Type', 'application/zip');
-      res.send(zip)
+      res.set('Content-Disposition',  `attachment; filename="${id}.geojson"`);
+      res.set('Content-Type', 'application/json');
+      res.send(geojson)
     })
 }
 
