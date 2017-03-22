@@ -68,10 +68,10 @@ const post_clusters = (DB, req, res) => {
     return res.status(500).end();
   }
 
-  const UniqLocCodes = req.body.cluster_ids
+  const cluster_ids = req.body.cluster_ids
 
-  let clusters = UniqLocCodes.map((code) => {
-    return Clusters.find(c => c.properties.uniqloccod == code)
+  let clusters = cluster_ids.map((code) => {
+    return Clusters.find(c => c.properties.cluster_id == code)
   })
 
   let quick_spatial_entity_ids = []
