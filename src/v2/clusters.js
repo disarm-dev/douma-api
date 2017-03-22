@@ -1,5 +1,6 @@
 // IMportant
 const ObjectID = require("mongodb").ObjectID;
+const Clusters = require('./clusters.json').features
 
 const get_clusters = (DB, req, res) => {
   console.log("GET /clusters");
@@ -53,13 +54,25 @@ const get_clusters = (DB, req, res) => {
 
 const post_clusters = (DB, req, res) => {
   console.log("POST cluster");
+  
+  const demo_instance_id = req.query.demo_instance_id;
+
   if (!Array.isArray(req.body)) {
     return res.status(400).end();
   }
 
-  let demo_instance_id = req.query.demo_instance_id;
+  const cluster_collection_id = req.body.cluster_collection_id
+  
+  if (cluster_collection_id !== '2017-03-06 08:53:09') {
+    console.log('cluster_collection_id does not match')
+    return res.status(500).end();
+  }
 
-  let clusters = req.body;
+  const UniqLocCodes = req.body.cluster_ids
+
+  let clusters = UniqLocCodes.map((code) => {
+    return Clusters.find(c => c.properties.uniqloccod == code)
+  })
 
   let quick_spatial_entity_ids = []
   clusters = clusters.map(cluster => {
