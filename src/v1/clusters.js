@@ -291,11 +291,23 @@ const shapefile_clusters = (DB, req, res) => {
     })
 }
 
+const regenerate_clusters = (DB, req, res) => {
+  console.log('regenerate')
+  res.send('Regenerate')
+}
+
+const all_clusters = (DB, req, res) => {
+  let file = path.join(__dirname, '..', 'swz.all-clusters.json')
+  res.sendFile(file)
+}
+
 module.exports = {
   get_clusters,
   post_clusters,
   put_clusters,
   delete_clusters,
   count_clusters,
-  shapefile_clusters
+  shapefile_clusters,
+  all_clusters,
+  regenerate_clusters
 };
