@@ -9,7 +9,7 @@ const { get_clusters, post_clusters, put_clusters, delete_clusters, count_cluste
 const R_SERVER_URL = "https://cluster.api.disarm.io"
 
 
-module.exports = function (app, DB) {
+module.exports = function (app, DB, version_prefix) {
 
      /**
    * @api {get} /local_areas/:country_code Get Local Areas
@@ -21,7 +21,7 @@ module.exports = function (app, DB) {
    * @apiSuccess {Object} local_areas Geojson local areas
    */
 
-    app.get('/2/local_areas/:country_code', function (req, res) {
+    app.get(version_prefix + '/local_areas/:country_code', function (req, res) {
       fetch(R_SERVER_URL + '/local_areas/' + req.params.country_code + '.geojson')
       .then((server_res) => server_res.json())
       .then((data) => {
@@ -41,8 +41,7 @@ module.exports = function (app, DB) {
    * @apiSuccess {Array} clusters Array of cluster objects
    */
 
-    const get_clusters_fn = curry(get_clusters)(DB);
-    app.get("/2/clusters", get_clusters_fn);
+    app.get(version_prefix + "/clusters", curry(get_clusters)(DB));
 
     /**
    * @api {get} /clusters/shapefile Get clusters shapefile
@@ -54,13 +53,11 @@ module.exports = function (app, DB) {
    * @apiSuccess {Shapefile} shapefile A shapefile for the cluster id
    */
 
-    const shapefile_clusters_fn = curry(shapefile_clusters)(DB);
-    app.get("/2/clusters/shapefile", shapefile_clusters_fn);
+    app.get(version_prefix + "/clusters/shapefile", curry(shapefile_clusters)(DB));
 
+    app.get(version_prefix + "/clusters/all", curry(all_clusters)(DB));
 
-    app.get("/2/clusters/all", curry(all_clusters)(DB));
-
-    app.get("/2/clusters/_regenerate", curry(regenerate_clusters)(DB));
+    app.get(version_prefix + "/clusters/_regenerate", curry(regenerate_clusters)(DB));
 
 
    /**
@@ -74,8 +71,7 @@ module.exports = function (app, DB) {
    * @apiSuccess {Number} Number of Clusters
    */
 
-   const count_clusters_fn = curry(count_clusters)(DB);
-   app.get("/2/clusters/count", count_clusters_fn);
+   app.get(version_prefix + "/clusters/count", curry(count_clusters)(DB));
 
     /**
    * @api {post} /clusters Create clusters
@@ -87,8 +83,7 @@ module.exports = function (app, DB) {
    * @apiSuccess {Array} clusters Array of cluster objects
    */
 
-    const post_clusters_fn = curry(post_clusters)(DB);
-    app.post("/2/clusters", post_clusters_fn);
+    app.post(version_prefix + "/clusters", curry(post_clusters)(DB));
 
     /**
    * @api {put} /clusters Update clusters
@@ -99,8 +94,7 @@ module.exports = function (app, DB) {
                     [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
    */
 
-    const put_clusters_fn = curry(put_clusters)(DB);
-    app.put("/2/clusters", put_clusters_fn);
+    app.put(version_prefix + "/clusters", curry(put_clusters)(DB));
 
     /**
    * @api {delete} /clusters Delete clusters
@@ -110,8 +104,7 @@ module.exports = function (app, DB) {
    * @apiParamExample {json} Request-Example: 
                     [ {"cluster_id": 1, "cluster_collection_id": "76854", "task_ids": ["7545123", "123761"], ...}]
    */
-    const delete_clusters_fn = curry(delete_clusters)(DB);
-    app.delete("/2/clusters", delete_clusters_fn);
+    app.delete(version_prefix + "/clusters", curry(delete_clusters)(DB));
 
     /**
    * @api {get} /tasks Get tasks
@@ -124,7 +117,7 @@ module.exports = function (app, DB) {
    * @apiSuccess {Array} clusters Array of task objects
    */
 
-    app.get("/2/tasks", (req, res) => {
+    app.get(version_prefix + "/tasks", (req, res) => {
       console.log("GET /tasks");
 
       let search = {};
@@ -167,7 +160,7 @@ module.exports = function (app, DB) {
    * @apiSuccess {Number} Number of tasks
    */
 
-    app.get("/2/tasks/count", (req, res) => {
+    app.get(version_prefix + "/tasks/count", (req, res) => {
       console.log("GET /tasks/count");
 
       let search = JSON.parse(req.query.query);
@@ -192,7 +185,7 @@ module.exports = function (app, DB) {
                     [ {"task_date": "14th February 2017", "task_type": "irs_record", "spatial_entity_id": "768152631"}, ...]
    */
 
-    app.put("/2/tasks", (req, res) => {
+    app.put(version_prefix + "/tasks", (req, res) => {
       console.log("PUT Tasks", req.body);
       let docs = req.body;
 
@@ -280,7 +273,7 @@ module.exports = function (app, DB) {
    *
    * @apiSuccess {Array} clusters Array of spatial entity objects
    */
-    app.get("/2/spatial_entities", (req, res) => {
+    app.get(version_prefix + "/spatial_entities", (req, res) => {
       console.log("GET /spatial_entities");
 
       let search = {};
@@ -312,7 +305,7 @@ module.exports = function (app, DB) {
                   {"osm_id": "123123", "polygon": {...}}
  */
 
-    app.post("/2/spatial_entities", (req, res) => {
+    app.post(version_prefix + "/spatial_entities", (req, res) => {
       console.log("POST SE", req.body);
 
       // TODO: @feature Set default properties
@@ -337,7 +330,7 @@ module.exports = function (app, DB) {
    *
    * @apiSuccess {Array} points Array of spatial entity points
    */
-    app.get("/2/spatial_entity_points", (req, res) => {
+    app.get(version_prefix + "/spatial_entity_points", (req, res) => {
       console.log("GET /spatial_entity_points");
 
       let search = {};
@@ -367,7 +360,7 @@ module.exports = function (app, DB) {
  *
  */
 
-    app.post("/2/spatial_entity_points", (req, res) => {
+    app.post(version_prefix + "/spatial_entity_points", (req, res) => {
       console.log("POST /spatial_entity_points", req.body);
 
       // TODO: @feature Set default properties

@@ -69,7 +69,7 @@ MongoClient.connect(process.env.MONGODB_URI)
 
     // do stuff
     Version1(app, DB)
-    Version2(app, DB)
+    Version2(app, DB, 'v2')
 
 
     app.use(Raven.errorHandler());
