@@ -9,7 +9,8 @@ const { get_clusters, post_clusters, put_clusters, delete_clusters, count_cluste
 const R_SERVER_URL = "https://cluster.api.disarm.io"
 
 
-module.exports = function (app, DB, version_prefix) {
+module.exports = function (app, DB, version) {
+    const version_prefix = "/" + version
 
      /**
    * @api {get} /local_areas/:country_code Get Local Areas
