@@ -6,10 +6,6 @@ const bodyParser = require("body-parser");
 const Raven = require("raven");
 const compression = require('compression')
 
-const Version1 = require('./v1/index')
-const Version2 = require('./v2/index')
-
-
 
 if (!process.env.MONGODB_URI) {
   console.log(
@@ -46,7 +42,15 @@ MongoClient.connect(process.env.MONGODB_URI)
       SpatialEntities: db.collection("spatial_entities"),
       SpatialEntityPoints: db.collection("spatial_entity_points")
     };
+    
+    const versions = ['v1', 'v2']
 
+    versions.map(v => {
+      let func = require(`./${v}/index`)
+      return func(app, DB, v)
+    })
+
+    // TODO: @refac Move into the versioned API
     app.options("/*", function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -65,12 +69,6 @@ MongoClient.connect(process.env.MONGODB_URI)
         1000
       );
     });
-
-
-    // do stuff
-    Version1(app, DB)
-    Version2(app, DB, 'v2')
-
 
     app.use(Raven.errorHandler());
 
