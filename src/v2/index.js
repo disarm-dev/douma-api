@@ -23,11 +23,14 @@ module.exports = function (app, DB, version) {
    */
 
     app.get(version_prefix + '/local_areas/:country_code', function (req, res) {
-      fetch(R_SERVER_URL + '/local_areas/' + req.params.country_code + '.geojson')
-      .then((server_res) => server_res.json())
-      .then((data) => {
-        res.send(data)
-      })
+      let path = './local_areas/' + req.params.country_code + '.json'
+      let json = require(path)
+      res.send(json)
+      // fetch(R_SERVER_URL + )
+      // .then((server_res) => server_res.json())
+      // .then((data) => {
+      //   res.send(data)
+      // })
     })
 
     /**
