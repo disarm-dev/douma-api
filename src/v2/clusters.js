@@ -1,6 +1,7 @@
 // IMportant
 const ObjectID = require("mongodb").ObjectID;
 const Clusters = require('./clusters.json').features
+const path = require('path')
 
 const get_clusters = (DB, req, res) => {
   console.log("GET /clusters");
@@ -310,7 +311,13 @@ const regenerate_clusters = (DB, req, res) => {
 }
 
 const all_clusters = (DB, req, res) => {
-  let file = path.join(__dirname, '..', 'swz.all-clusters.json')
+  let slug = req.params.country
+  if (!slug) {
+    res.status(400).end()
+  }
+  // TODO @feature Get + cache these files from a real server
+  // TODO @debug Add Zim clusters 
+  let file = path.join(__dirname, slug + '.clusters.json')
   res.sendFile(file)
 }
 

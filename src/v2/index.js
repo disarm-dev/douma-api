@@ -59,7 +59,7 @@ module.exports = function (app, DB, version) {
 
     app.get(version_prefix + "/clusters/shapefile", curry(shapefile_clusters)(DB));
 
-    app.get(version_prefix + "/clusters/all", curry(all_clusters)(DB));
+    app.get(version_prefix + "/clusters/all/:country", curry(all_clusters)(DB));
 
     app.get(version_prefix + "/clusters/_regenerate", curry(regenerate_clusters)(DB));
 
