@@ -1,6 +1,7 @@
 // IMportant
 const ObjectID = require("mongodb").ObjectID;
-const Clusters = require('./clusters.json').features
+// TODO @deubg Require clusters for correct country
+const Clusters = require('./swz.clusters.json').features
 const path = require('path')
 
 const get_clusters = (DB, req, res) => {
