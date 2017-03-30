@@ -59,10 +59,6 @@ const post_clusters = (DB, req, res) => {
   
   const demo_instance_id = req.query.demo_instance_id;
 
-  if (!Array.isArray(req.body)) {
-    return res.status(400).end();
-  }
-
   const cluster_collection_id = req.body.cluster_collection_id
   
   if (cluster_collection_id !== '2017-03-06 08:53:09') {
