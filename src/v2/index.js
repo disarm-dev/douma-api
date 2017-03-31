@@ -283,7 +283,7 @@ module.exports = function (app, DB, version) {
       let search = {};
 
       if (req.query.ids) {
-        const ids = JSON.parse(req.query.ids).map(i => i.toString());
+        const ids = JSON.parse(req.query.ids)
         search = {
           "properties.osm_id": {
             $in: ids
