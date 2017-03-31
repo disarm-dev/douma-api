@@ -68,8 +68,8 @@ const post_clusters = (DB, req, res) => {
 
   const cluster_ids = req.body.cluster_ids
 
-  let clusters = cluster_ids.map((code) => {
-    return Clusters.find(c => c.properties.cluster_id == code)
+  let clusters = cluster_ids.map((cluster_id) => {
+    return Clusters.find(c => c.properties.cluster_id == cluster_id)
   })
 
   let quick_spatial_entity_ids = []
