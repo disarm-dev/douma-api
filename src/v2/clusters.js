@@ -1,7 +1,7 @@
 // IMportant
 const ObjectID = require("mongodb").ObjectID;
 // TODO @deubg Require clusters for correct country
-const Clusters = require('./swz.clusters.json').features
+
 const path = require('path')
 
 const get_clusters = (DB, req, res) => {
@@ -59,6 +59,8 @@ const post_clusters = (DB, req, res) => {
   
   const demo_instance_id = req.query.demo_instance_id;
 
+  const country_code = req.query.country_code;
+
   const cluster_collection_id = req.body.cluster_collection_id
   
   if (cluster_collection_id !== '2017-03-06 08:53:09') {
@@ -68,8 +70,10 @@ const post_clusters = (DB, req, res) => {
 
   const cluster_ids = req.body.cluster_ids
 
+  let static_clusters = require(`./${country_code.toLowerCase()}.clusters.json`).features
+
   let clusters = cluster_ids.map((cluster_id) => {
-    return Clusters.find(c => c.properties.cluster_id == cluster_id)
+    return static_clusters.find(c => c.properties.cluster_id == cluster_id)
   })
 
   let quick_spatial_entity_ids = []
