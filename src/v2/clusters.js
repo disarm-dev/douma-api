@@ -59,7 +59,7 @@ const post_clusters = (DB, req, res) => {
   
   const demo_instance_id = req.query.demo_instance_id;
 
-  const country_code = req.query.country_code;
+  const country_code = req.body.country_code;
 
   const cluster_collection_id = req.body.cluster_collection_id
   
