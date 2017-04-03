@@ -328,14 +328,18 @@ const get_task_ids_for_cluster = (DB, req, res) => {
   let cluster_ids = req.body.cluster_ids
   let demo_instance_id = req.query.demo_instance_id
 
-  DB.Clusters.find(
-    {demo_instance_id, 'properties.cluster_id': {$in: cluster_ids}}, 
-    {'properties.task_ids': 1, 'properties.cluster_id': 1, _id: 0}
-  )
+  DB.Clusters.find({
+    demo_instance_id: demo_instance_id, 
+    'properties.cluster_id': {$in: cluster_ids}
+  },{
+    'properties.task_ids': 1, 
+    'properties.cluster_id': 1, 
+    _id: 0
+  })
   .toArray()
   .then((clusters) => {
     
-    let clusters_to_send = clusters.map((c) => Object.assign({}, {_id: c._id}, c.properties))
+    let clusters_to_send = clusters.map((c) => c.properties)
 
     res.send(clusters_to_send)
   })
