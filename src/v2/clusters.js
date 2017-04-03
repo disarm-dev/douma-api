@@ -63,9 +63,11 @@ const post_clusters = (DB, req, res) => {
 
   const cluster_collection_id = req.body.cluster_collection_id
   
-  if (cluster_collection_id !== '2017-03-06 08:53:09') {
-    console.log('cluster_collection_id does not match')
-    return res.status(500).end();
+  // TODO: @debug Definitely stop checking cluster_collection_id by hand!
+  if (cluster_collection_id !== '2017-03-06 08:53:09' || cluster_collection_id !== '96a3fd1e-80b0-4dcf-bd67-6f40ce4bf568') {
+    const message = 'cluster_collection_id does not match'
+    console.log(message)
+    return res.status(500).send({message});
   }
 
   const cluster_ids = req.body.cluster_ids
@@ -317,8 +319,7 @@ const all_clusters = (DB, req, res) => {
     res.status(400).end()
   }
   // TODO @feature Get + cache these files from a real server
-  // TODO @debug Add Zim clusters 
-  let file = path.join(__dirname, slug + '.clusters.json')
+  let file = path.join(__dirname, 'static_clusters', slug + '.clusters.json')
   res.sendFile(file)
 }
 
