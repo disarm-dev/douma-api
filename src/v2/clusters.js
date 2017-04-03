@@ -64,7 +64,7 @@ const post_clusters = (DB, req, res) => {
   const cluster_collection_id = req.body.cluster_collection_id
   
   // TODO: @debug Definitely stop checking cluster_collection_id by hand!
-  if (cluster_collection_id !== '2017-03-06 08:53:09' || cluster_collection_id !== '96a3fd1e-80b0-4dcf-bd67-6f40ce4bf568') {
+  if (!['2017-03-06 08:53:09', '96a3fd1e-80b0-4dcf-bd67-6f40ce4bf568'].includes(cluster_collection_id)) {
     const message = 'cluster_collection_id does not match'
     console.log(message)
     return res.status(500).send({message});
