@@ -324,6 +324,27 @@ const all_clusters = (DB, req, res) => {
   res.sendFile(file)
 }
 
+const get_task_ids_for_cluster = (DB, req, res) => {
+  let cluster_ids = req.body.cluster_ids
+  let demo_instance_id = req.query.demo_instance_id
+
+  DB.Clusters.find(
+    {demo_instance_id, 'properties.cluster_id': {$in: cluster_ids}}, 
+    {'properties.task_ids': 1, 'properties.cluster_id': 1}
+  )
+  .toArray()
+  .then((clusters) => {
+    
+    let clusters_to_send = clusters.map((c) => {
+      let obj = Object.assign({}, {_id: c._id}, c.properties)
+      delete obj._id
+      return obj
+    })
+    
+    res.send(clusters_to_send)
+  })
+}
+
 module.exports = {
   get_clusters,
   post_clusters,
@@ -332,5 +353,6 @@ module.exports = {
   count_clusters,
   shapefile_clusters,
   all_clusters,
-  regenerate_clusters
+  regenerate_clusters,
+  get_task_ids_for_cluster
 };

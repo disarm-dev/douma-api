@@ -2,7 +2,7 @@ const curry = require("curry");
 const ObjectID = require("mongodb").ObjectID;
 const fetch = require("node-fetch");
 
-const { get_clusters, post_clusters, put_clusters, delete_clusters, count_clusters, shapefile_clusters, all_clusters, regenerate_clusters } = require(
+const { get_clusters, post_clusters, put_clusters, delete_clusters, count_clusters, shapefile_clusters, all_clusters, regenerate_clusters, get_task_ids_for_cluster } = require(
   "./clusters.js"
 );
 
@@ -63,6 +63,7 @@ module.exports = function (app, DB, version) {
 
     app.get(version_prefix + "/clusters/_regenerate", curry(regenerate_clusters)(DB));
 
+    app.get(version_prefix + "/clusters/tasks", curry(get_task_ids_for_cluster)(DB));
 
    /**
    * @api {get} /clusters/count Get Number of clusters
