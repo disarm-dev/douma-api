@@ -63,7 +63,7 @@ module.exports = function (app, DB, version) {
 
     app.get(version_prefix + "/clusters/_regenerate", curry(regenerate_clusters)(DB));
 
-    app.get(version_prefix + "/clusters/tasks", curry(get_task_ids_for_cluster)(DB));
+    app.post(version_prefix + "/clusters/tasks", curry(get_task_ids_for_cluster)(DB));
 
    /**
    * @api {get} /clusters/count Get Number of clusters
