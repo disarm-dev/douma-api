@@ -72,7 +72,8 @@ const post_clusters = (DB, req, res) => {
 
   const cluster_ids = req.body.cluster_ids
 
-  let static_clusters = require(`./${country_code.toLowerCase()}.clusters.json`).features
+  // TODO: @debug Stop using static_clusters
+  let static_clusters = require(`./static_clusters/${country_code.toLowerCase()}.clusters.json`).features
 
   let clusters = cluster_ids.map((cluster_id) => {
     return static_clusters.find(c => c.properties.cluster_id == cluster_id)
@@ -318,7 +319,7 @@ const all_clusters = (DB, req, res) => {
   if (!slug) {
     res.status(400).end()
   }
-  // TODO @feature Get + cache these files from a real server
+  // TODO @debug Stop using static_clusters: get + cache these files from a real server
   let file = path.join(__dirname, 'static_clusters', slug + '.clusters.json')
   res.sendFile(file)
 }
