@@ -93,7 +93,7 @@ const post_clusters = (DB, req, res) => {
     return cluster
   })
 
-  const all_spatial_entity_ids = Object.keys(quick_spatial_entity_ids)
+  const all_spatial_entity_ids = Object.keys(quick_spatial_entity_ids).map(id => parseInt(id, 10))
 
   DB.Tasks
     .find({
