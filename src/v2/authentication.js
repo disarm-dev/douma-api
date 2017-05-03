@@ -97,14 +97,14 @@ function getRowData(auth) {
     sheets.spreadsheets.values.get({
       auth: auth,
       spreadsheetId: '1t2nV4B9I7TR8FUPA1d-sEN7K0hAP0DpTJJuSkW5Hym4',
-      range: 'A2:C',
+      range: 'A2:D',
     }, function(err, response) {
       if (err) {
         console.log('The API returned an error: ' + err);
         return;
       }
       var rows = response.values;
-      let keys = ['_id', 'username', 'password']
+      let keys = ['_id', 'username', 'password', 'permissions']
       let users = response.values.map(row => {
         let user = {}
         row.map((v, i) => user[keys[i]] = v)
