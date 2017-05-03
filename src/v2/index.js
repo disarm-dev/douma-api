@@ -2,15 +2,20 @@ const curry = require("curry");
 const ObjectID = require("mongodb").ObjectID;
 const fetch = require("node-fetch");
 
+
 const { get_clusters, post_clusters, put_clusters, delete_clusters, count_clusters, shapefile_clusters, all_clusters, regenerate_clusters, get_task_ids_for_cluster } = require(
   "./clusters.js"
 );
+
+const authenticate = require('./authentication')
 
 const R_SERVER_URL = "https://cluster.api.disarm.io"
 
 
 module.exports = function (app, DB, version) {
     const version_prefix = "/" + version
+
+    app.post(version_prefix + '/auth', authenticate )
 
      /**
    * @api {get} /local_areas/:country_code Get Local Areas
