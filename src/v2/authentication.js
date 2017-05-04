@@ -106,30 +106,27 @@ function getRowData(auth) {
       var rows = response.values;
       let keys = ['_id', 'username', 'password', 'permissions', 'IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
       let applets = ['IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
+      
       let users = response.values.map(row => {
         let user = {allowed_apps: {read: [], write: []}}
 
-        row.map((v, i) => user[keys[i]] = v)
-
-        Object.keys(user).map((key, i) => {
-          if (applets.includes(key)) {
-            switch (user[key]) {
+        row.map((v, i) => {
+          if (applets.includes(keys[i])) {
+            switch (v) {
               case 'R':
-                user.allowed_apps.read.push(key.toLowerCase())
-                return
+                user.allowed_apps.read.push(keys[i].toLowerCase())
+                break
               case 'W':
-                user.allowed_apps.write.push(key.toLowerCase())
-                return
+                user.allowed_apps.write.push(keys[i].toLowerCase())
+                break
               case 'RW':
-                user.allowed_apps.read.push(key.toLowerCase())
-                user.allowed_apps.write.push(key.toLowerCase())
-                return
+                user.allowed_apps.read.push(keys[i].toLowerCase())
+                user.allowed_apps.write.push(keys[i].toLowerCase())
+                break
             }
+          } else {
+            user[keys[i]] = v
           }
-        })
-
-        applets.forEach(a => {
-          delete user[a]
         })
 
         return user
