@@ -97,17 +97,41 @@ function getRowData(auth) {
     sheets.spreadsheets.values.get({
       auth: auth,
       spreadsheetId: '1t2nV4B9I7TR8FUPA1d-sEN7K0hAP0DpTJJuSkW5Hym4',
-      range: 'A2:D',
+      range: 'A2:J',
     }, function(err, response) {
       if (err) {
         console.log('The API returned an error: ' + err);
         return;
       }
       var rows = response.values;
-      let keys = ['_id', 'username', 'password', 'permissions']
+      let keys = ['_id', 'username', 'password', 'permissions', 'IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
+      let applets = ['IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
       let users = response.values.map(row => {
-        let user = {}
+        let user = {allowed_apps: {read: [], write: []}}
+
         row.map((v, i) => user[keys[i]] = v)
+
+        Object.keys(user).map((key, i) => {
+          if (applets.includes(key)) {
+            switch (user[key]) {
+              case 'R':
+                user.allowed_apps.read.push(key.toLowerCase())
+                return
+              case 'W':
+                user.allowed_apps.write.push(key.toLowerCase())
+                return
+              case 'RW':
+                user.allowed_apps.read.push(key.toLowerCase())
+                user.allowed_apps.write.push(key.toLowerCase())
+                return
+            }
+          }
+        })
+
+        applets.forEach(a => {
+          delete user[a]
+        })
+
         return user
       })
       resolve(users)
@@ -117,7 +141,7 @@ function getRowData(auth) {
 
 module.exports = function authenticate (req, res) {
   let requesting_user = req.body.user
-  console.log(requesting_user)
+  
   start().then(users => {
     let found_user = users.find((user) => {
       return user.username == requesting_user.username
