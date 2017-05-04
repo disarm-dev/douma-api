@@ -111,6 +111,8 @@ function getRowData(auth) {
         let user = {allowed_apps: {read: [], write: []}}
 
         row.map((v, i) => {
+          // if the current value is an applet i.e 'IRS_RECORD'
+          // then create our allowed_apps object
           if (applets.includes(keys[i])) {
             switch (v) {
               case 'R':
