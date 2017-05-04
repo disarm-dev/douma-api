@@ -104,9 +104,9 @@ function getRowData(auth) {
         return;
       }
       var rows = response.values;
-      let keys = ['_id', 'username', 'password', 'permissions', 'IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
+      let keys = ['_id', 'username', 'password', 'email', 'permissions', 'IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
       let applets = ['IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
-      
+
       let users = response.values.map(row => {
         let user = {allowed_apps: {read: [], write: []}}
 
