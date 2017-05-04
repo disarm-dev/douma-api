@@ -104,28 +104,14 @@ function getRowData(auth) {
         return;
       }
       var rows = response.values;
-      let keys = ['_id', 'name', 'password', 'email', 'permissions', 'IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
-      let applets = ['IRS_MONITOR', 'IRS_PLAN', 'IRS_TASKER', 'IRS_RECORD', 'FOCI', 'RASTERS']
+      let keys = ['_id', 'name', 'password', 'email', 'read', 'write']
 
       let users = response.values.map(row => {
         let user = {allowed_apps: {read: [], write: []}}
 
         row.map((v, i) => {
-          // if the current value is an applet i.e 'IRS_RECORD'
-          // then create our allowed_apps object
-          if (applets.includes(keys[i])) {
-            switch (v) {
-              case 'R':
-                user.allowed_apps.read.push(keys[i].toLowerCase())
-                break
-              case 'W':
-                user.allowed_apps.write.push(keys[i].toLowerCase())
-                break
-              case 'RW':
-                user.allowed_apps.read.push(keys[i].toLowerCase())
-                user.allowed_apps.write.push(keys[i].toLowerCase())
-                break
-            }
+          if (['read', 'write'].includes(keys[i])) {
+            user.allowed_apps[keys[i]].push(v.toLowerCase())
           } else {
             user[keys[i]] = v
           }
