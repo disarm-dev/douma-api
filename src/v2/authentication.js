@@ -143,11 +143,11 @@ module.exports = function authenticate (req, res) {
   
   start().then(users => {
     let found_user = users.find((user) => {
-      return user.username == requesting_user.username
+      return user.email == requesting_user.email
     })
 
     if (!found_user) {
-      res.status(500).send({error: 'Incorrect username'});
+      res.status(500).send({error: 'Incorrect email'});
     }
 
     if (found_user.password === requesting_user.password) {
