@@ -22,19 +22,18 @@ module.exports = function authenticate (req, res) {
   let requesting_user = req.body.user
   
   getUserData().then(users => {
-    console.log(users)
     let found_user = users.find((user) => {
-      return user.email == requesting_user.email
+      return user.username == requesting_user.username
     })
 
     if (!found_user) {
-      res.status(500).send({error: 'Incorrect email'});
+      res.status(404).send({error: 'Unknown user', username: requesting_user.username});
     }
 
     if (found_user.password === requesting_user.password) {
       res.send(found_user)
     } else {
-      res.status(500).send({error: 'Incorrect password'});
+      res.status(404).send({error: 'Unknown user', username: requesting_user.username});
     }
   })
 }
