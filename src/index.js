@@ -43,7 +43,7 @@ MongoClient.connect(process.env.MONGODB_URI)
       SpatialEntityPoints: db.collection("spatial_entity_points")
     };
     
-    const versions = ['v1', 'v2']
+    const versions = ['v1', 'v2', 'v3']
 
     versions.map(v => {
       let func = require(`./${v}/index`)
