@@ -27,13 +27,13 @@ module.exports = function authenticate (req, res) {
     })
 
     if (!found_user) {
-      res.status(500).send({error: 'Unknown user'});
+      res.status(401).send({error: 'Unknown user'});
     }
 
     if (found_user.password === requesting_user.password) {
       res.send(found_user)
     } else {
-      res.status(500).send({error: 'Unknown user'});
+      res.status(401).send({error: 'Unknown user'});
     }
   })
 }
