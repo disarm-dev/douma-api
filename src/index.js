@@ -14,6 +14,7 @@ if (!process.env.MONGODB_URI) {
   process.exit();
 }
 
+// TODO: @refac to remove need to connect to MongoDB for API versions >3
 MongoClient.connect(process.env.MONGODB_URI)
   .then(db => {
     console.log("Connected to db");
@@ -51,6 +52,8 @@ MongoClient.connect(process.env.MONGODB_URI)
     })
 
     // TODO: @refac Move into the versioned API
+    // CORS config
+    // TODO: @refac Do we need this as well as the `cors` package?
     app.options("/*", function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -62,12 +65,8 @@ MongoClient.connect(process.env.MONGODB_URI)
     });
 
     app.get("/", (req, res) => {
-      setTimeout(
-        () => res.send({
-          data: "DOUMA API v0.4"
-        }),
-        1000
-      );
+      const data = "DOUMA API"
+      res.send({data});
     });
 
     app.use(Raven.errorHandler());
