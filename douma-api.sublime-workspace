@@ -517,9 +517,6 @@
 			]
 		]
 	},
-	"buffers":
-	[
-	],
 	"build_system": "",
 	"build_system_choices":
 	[
@@ -1064,10 +1061,6 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/Users/jonathan/Dv-DiSARM/Core/douma.api"
-	],
 	"file_history":
 	[
 		"/Users/jonathan/Dv-DiSARM/Core/douma-api/swz-111-request.json",
@@ -1537,14 +1530,6 @@
 		"whole_word": false,
 		"wrap": false
 	},
-	"groups":
-	[
-		{
-			"sheets":
-			[
-			]
-		}
-	],
 	"incremental_find":
 	{
 		"height": 26.0
@@ -1609,7 +1594,6 @@
 		"height": 116.0
 	},
 	"pinned_build_system": "",
-	"project": "douma-api.sublime-project",
 	"replace":
 	{
 		"height": 64.0
@@ -2278,7 +2262,6 @@
 		],
 		"width": 642.0
 	},
-	"selected_group": 0,
 	"settings":
 	{
 		"last_automatic_layout":
@@ -2294,7 +2277,7 @@
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": false,
+	"side_bar_visible": true,
 	"side_bar_width": 244.0,
 	"status_bar_visible": true,
 	"template_settings":
