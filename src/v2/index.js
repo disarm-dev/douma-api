@@ -12,10 +12,17 @@ const authenticate = require('./authentication')
 const R_SERVER_URL = "https://cluster.api.disarm.io"
 
 
-module.exports = function (app, DB, version) {
+module.exports = function (app, db, version) {
     const version_prefix = "/" + version
 
-    app.post(version_prefix + '/auth', authenticate )
+    const DB = {
+      Clusters: db.collection("clusters"),
+      Tasks: db.collection("tasks"),
+      SpatialEntities: db.collection("spatial_entities"),
+      SpatialEntityPoints: db.collection("spatial_entity_points")
+    };
+
+  app.post(version_prefix + '/auth', authenticate )
 
      /**
    * @api {get} /local_areas/:country_code Get Local Areas

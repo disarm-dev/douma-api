@@ -26,11 +26,7 @@ module.exports = function authenticate (req, res) {
       return user.username == requesting_user.username
     })
 
-    if (!found_user) {
-      res.status(401).send({error: 'Unknown user'});
-    }
-
-    if (found_user.password === requesting_user.password) {
+    if (found_user && (found_user.password === requesting_user.password)) {
       res.send(found_user)
     } else {
       res.status(401).send({error: 'Unknown user'});
