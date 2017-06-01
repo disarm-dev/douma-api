@@ -2,8 +2,10 @@ module.exports = {
   get_current(db, req, res) {
     const plans = db.collection("plans")
 
+    let country = req.query.country
+
     plans
-      .find()
+      .find({country: country})
       .sort({planned_at: -1})
       .limit(1)
       .toArray((err, docs) => {
