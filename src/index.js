@@ -38,7 +38,7 @@ MongoClient.connect(process.env.MONGODB_URI)
 
     API_VERSIONS.map(v => {
       const version_routes = require(`./${v}/index`)
-      return version_routes(app, DB, v)
+      return version_routes(app, db, v)
     })
 
     // TODO: @refac Move into the versioned API
