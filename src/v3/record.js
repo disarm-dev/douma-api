@@ -1,5 +1,5 @@
 module.exports = {
-  post(db, req, res) {
+  create(db, req, res) {
 
   },
 
