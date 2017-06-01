@@ -4,8 +4,6 @@ module.exports = {
 
     let doc = req.body
     
-    doc.recorded_at = new Date()
-
     records.insertOne(doc).then((result) => {
       res.send({'status': "success"})
     })
@@ -19,7 +17,10 @@ module.exports = {
 
     let country = req.query.country
 
-    records.find({country: country}).toArray((err, docs) => {
+    records.find({country: country}).sort({recorded_at: -1}).toArray((err, docs) => {
+      if (err) {
+        res.status(403).send(err)
+      }
       res.send(docs)
     })
   }
