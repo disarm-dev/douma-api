@@ -2,7 +2,9 @@ module.exports = {
   get_current(db, req, res) {
     const plans = db.collection("plans")
 
+    // TODO: @feature Need to add this to every request. Some auth or scoping middleware needed.
     let country = req.query.country
+    if (!country) res.status(400).send('Country parameter missing')
 
     plans
       .find({country: country})
@@ -12,7 +14,7 @@ module.exports = {
         if (err) {
           res.status(403).send(err)
         }
-        let doc = docs[0]
+        let doc = docs[0] || {}
         res.send(doc)
       });
   },
