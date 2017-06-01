@@ -1,5 +1,8 @@
 # DOUMA API
 
+## Dev
+
+Install `rerun` Gem, using `gem install rerun`, or pick another way to reload server.
 
 ## Documentation
 

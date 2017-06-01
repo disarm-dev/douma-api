@@ -8,12 +8,12 @@ const compression = require('compression')
 
 const API_VERSIONS = ['v1', 'v2', 'v3']
 
-Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843")
-  .install();
+// Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843")
+//   .install();
 
 const app = express();
 
-app.use(Raven.requestHandler());
+// app.use(Raven.requestHandler());
 app.use(cors());
 app.use(compression());
 
@@ -59,7 +59,7 @@ MongoClient.connect(process.env.MONGODB_URI)
       res.send({data});
     });
 
-    app.use(Raven.errorHandler());
+    // app.use(Raven.errorHandler());
 
     app.listen(process.env.PORT || 3000, () => {
       console.log(
