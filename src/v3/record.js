@@ -1,6 +1,6 @@
 module.exports = {
-  get_all(db, req, res) {
-    const records = db.collection("records")
+  get_all(req, res) {
+    const records = req.db.collection("records")
 
     let country = req.query.country
 
@@ -14,8 +14,8 @@ module.exports = {
         res.send(docs)
       })
   },
-  create(db, req, res) {
-    const records = db.collection("records")
+  create(req, res) {
+    const records = req.db.collection("records")
 
     let doc = req.body
     

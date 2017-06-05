@@ -45,6 +45,7 @@ MongoClient.connect(process.env.MONGODB_URI)
 
     API_VERSIONS.map(v => {
       const version_routes = require(`./${v}/index`)
+      // NOTE: v3 no longer requires db injection
       return version_routes(app, db, v)
     })
 

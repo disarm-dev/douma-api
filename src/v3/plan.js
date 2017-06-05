@@ -1,6 +1,6 @@
 module.exports = {
-  get_current(db, req, res) {
-    const plans = db.collection("plans")
+  get_current(req, res) {
+    const plans = req.db.collection("plans")
 
     // TODO: @feature Need to add this to every request. Some auth or scoping middleware needed.
     let country = req.query.country
@@ -19,8 +19,8 @@ module.exports = {
       });
   },
 
-  create(db, req, res) {
-    const plans = db.collection("plans")
+  create(req, res) {
+    const plans = req.db.collection("plans")
     
     let doc = req.body
     
