@@ -23,6 +23,7 @@
     "google-auth-library": "^0.10.0",
     "googleapis": "^19.0.0",
     "mongodb": "^2.2.22",
+    "morgan": "^1.8.2",
     "node-fetch": "^1.6.3",
     "raven": "^1.1.2",
     "shp-write": "^0.3.2"
