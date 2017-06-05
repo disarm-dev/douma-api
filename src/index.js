@@ -1,12 +1,18 @@
+const fs = require('fs');
 const express = require("express");
 const MongoClient = require("mongodb").MongoClient;
 const ObjectID = require("mongodb").ObjectID;
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const Raven = require("raven");
-const compression = require('compression')
+const compression = require('compression');
 
-const API_VERSIONS = ['v1', 'v2', 'v3']
+// Logging
+const morgan = require('morgan');
+const path = require('path');
+const accessLogStream = fs.createWriteStream(path.join(__dirname, '..', 'log', 'access.log'), {flags: 'a'});
+
+const API_VERSIONS = ['v1', 'v2', 'v3'];
 
 // Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843")
 //   .install();
@@ -16,6 +22,7 @@ const app = express();
 // app.use(Raven.requestHandler());
 app.use(cors());
 app.use(compression());
+app.use(morgan('combined', {stream: accessLogStream}))
 
 app.use(
   bodyParser.json({
