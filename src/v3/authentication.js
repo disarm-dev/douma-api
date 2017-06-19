@@ -27,6 +27,7 @@ module.exports = function authenticate (req, res) {
     })
 
     if (found_user && (found_user.password === requesting_user.password)) {
+      delete found_user.password
       res.send(found_user)
     } else {
       res.status(401).send({error: 'Unknown user'});
