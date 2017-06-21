@@ -17,4 +17,5 @@ module.exports = function (app, db, version) {
   // Records
   app.get(version_prefix + '/record/all', curry(record.get_all)(db))
   app.post(version_prefix + '/record/create', curry(record.create)(db))
+  app.post(version_prefix + '/record/create_multiple', curry(record.create_multiple)(db))
 }
