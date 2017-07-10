@@ -7,10 +7,8 @@
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rerun 'node src/index.js' './src/*.js'",
-    "docs": "apidoc -i src/ -o docs/",
-    "deploy-docs": "npm run docs; surge docs douma-api-docs.disarm.io",
-    "build_deploy_prod": "git push heroku master; git push origin master; npm run deploy-docs",
-    "build_deploy_stage": "git push heroku-stage master; git push origin master; npm run deploy-docs",
+    "build_deploy_prod": "git push heroku master; git push origin master",
+    "build_deploy_stage": "git push heroku-stage master; git push origin master",
     "deploy_all": "npm run build_deploy_stage; npm run build_deploy_prod"
   },
   "author": "",
@@ -21,6 +19,7 @@
     "cors": "^2.8.1",
     "curry": "^1.2.0",
     "express": "^4.14.1",
+    "express-mongo-db": "^2.0.3",
     "get-csv": "^3.0.3",
     "google-auth-library": "^0.10.0",
     "googleapis": "^19.0.0",
@@ -31,7 +30,6 @@
     "shp-write": "^0.3.2"
   },
   "devDependencies": {
-    "apidoc": "^0.17.5",
     "surge": "^0.18.0"
   }
 }

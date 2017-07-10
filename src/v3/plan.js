@@ -1,35 +1,32 @@
 module.exports = {
-  get_current(db, req, res) {
-    const plans = db.collection("plans")
+  get_current(req, res) {
+    const plans = req.db.collection("plans")
 
-    // TODO: @feature Need to add this to every request. Some auth or scoping middleware needed.
-    let country = req.query.country
-    if (!country) res.status(400).send('Country parameter missing')
+    const country = req.country
+    const personalised_instance_id = req.personalised_instance_id
+    console.log('personalised_instance_id, country:', personalised_instance_id, country)
 
     plans
-      .find({country: country})
+      .find({country, personalised_instance_id})
       .sort({planned_at: -1})
       .limit(1)
       .toArray((err, docs) => {
-        if (err) {
-          res.status(403).send(err)
-        }
+        if (err) res.status(403).send(err)
+        console.log('docs', docs)
         let doc = docs[0] || {}
         res.send(doc)
       });
   },
 
-  create(db, req, res) {
-    const plans = db.collection("plans")
+  create(req, res) {
+    const plans = req.db.collection("plans")
     
     let doc = req.body
-    
+    doc.personalised_instance_id = req.personalised_instance_id
+
     plans
       .insertOne(doc)
-      .then((result, err) => {
-        res.send(result.ops)
-      }).catch(err => {
-        res.status(403).send(err)
-      }) 
+      .then((result, err) => res.send(result.ops))
+      .catch(err => res.status(403).send(err))
   }
 }
