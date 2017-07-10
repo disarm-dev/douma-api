@@ -7,9 +7,7 @@
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rerun 'node src/index.js' './src/*.js'",
-    "docs": "apidoc -i src/ -o docs/",
-    "deploy-docs": "npm run docs; surge docs douma-api-docs.disarm.io",
-    "build_deploy_prod": "git push heroku master; git push origin master; npm run deploy-docs"
+    "build_deploy_prod": "git push heroku master; git push origin master"
   },
   "author": "",
   "license": "ISC",
@@ -30,7 +28,6 @@
     "shp-write": "^0.3.2"
   },
   "devDependencies": {
-    "apidoc": "^0.17.5",
     "surge": "^0.18.0"
   }
 }
