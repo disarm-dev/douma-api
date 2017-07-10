@@ -27,5 +27,19 @@ module.exports = {
       .catch(err => {
         res.status(403).send(err)
       }) 
+  },
+  create_multiple(db, req, res) {
+    const records = db.collection("records")
+
+    let docs = req.body
+    
+    records
+      .insertMany(docs)
+      .then((result) => {
+        res.send(result.ops)
+      })
+      .catch(err => {
+        res.status(403).send(err)
+      }) 
   }
 }
