@@ -4,7 +4,14 @@ const fetch = require('node-fetch');
 // Get instance_config from cache or from remote
 // Get geodata from cache or remote
 
-const root_url = process.env['CLIENT_APP_URL'] || 'localhost:8080'
+
+const root_url = (instance_slug) => {
+  if (process.env['CLIENT_APP_URL']) {
+    return `https://${instance_slug}.${process.env['CLIENT_APP_URL']}`
+  } else {
+    return 'localhost:8080'
+  }
+}
 
 const get_instance_config = async (instance_slug) => {
   const url = `http://${root_url}/static/instances/${instance_slug}.instance.json`
@@ -36,13 +43,13 @@ const get_geodata = async (instance_slug) => {
 }
 
 // // Test
-console.log('root_url', root_url)
-const fn = async () => {
-  const instance_slug = 'bwa'
-  const result = await get_geodata(instance_slug)
-  console.log('geodata', Object.keys(result))
-}
-
-fn()
+// console.log('root_url', root_url)
+// const fn = async () => {
+//   const instance_slug = 'bwa'
+//   const result = await get_geodata(instance_slug)
+//   console.log('geodata', Object.keys(result))
+// }
+//
+// fn()
 
 module.exports = {get_geodata}
