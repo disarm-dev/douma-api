@@ -31,8 +31,6 @@ module.exports = {
       incoming_plan = await filter_plan_targets_for_focus_area(req, incoming_plan)
     }
 
-    return res.send(incoming_plan)
-
     plans
       .insertOne(incoming_plan)
       .then((result, err) => res.send(result.ops))
@@ -53,7 +51,12 @@ const find_latest_plan = (req) => {
     .limit(1)
 }
 
-
+/**
+ * Mutates the incoming_plan
+ * @param req
+ * @param incoming_plan
+ * @returns {Promise.<*>}
+ */
 const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
   // Get instance_config (from cache or remote)
   const instance_config = await get_instance_config(req.country)
@@ -62,6 +65,11 @@ const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
   const result = await find_latest_plan(req)
   let current_plan = await result.toArray()
   current_plan = current_plan[0]
+
+  if (!current_plan) {
+    // No current plan, so no change to the targets
+    return incoming_plan
+  }
 
   // Bunch of ID fields
   const selection_level = get_next_level_up_from_planning_level(instance_config)
