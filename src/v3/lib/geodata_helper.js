@@ -9,12 +9,12 @@ const root_url = (instance_slug) => {
   if (process.env['CLIENT_APP_URL']) {
     return `https://${instance_slug}.${process.env['CLIENT_APP_URL']}`
   } else {
-    return 'localhost:8080'
+    return 'http://localhost:8080'
   }
 }
 
 const get_instance_config = async (instance_slug) => {
-  const url = `http://${root_url}/static/instances/${instance_slug}.instance.json`
+  const url = `${root_url()}/static/instances/${instance_slug}.instance.json`
 
   try {
     const res = await fetch(url)
@@ -32,7 +32,7 @@ const get_geodata = async (instance_slug) => {
   const levels = instance_config.spatial_hierarchy.levels
 
   for (level of levels) {
-    const url = `http://${root_url}/static/geo/${instance_slug}/spatial_hierarchy/${instance_slug}.${level.name}.geojson`
+    const url = `${root_url()}/static/geo/${instance_slug}/spatial_hierarchy/${instance_slug}.${level.name}.geojson`
 
     const response = await fetch(url)
     const response_json = await response.json()
@@ -52,4 +52,4 @@ const get_geodata = async (instance_slug) => {
 //
 // fn()
 
-module.exports = {get_geodata}
+module.exports = {get_geodata, get_instance_config}
