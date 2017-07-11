@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@turf/centroid": "^4.5.2",
+    "@turf/inside": "^4.5.2",
     "body-parser": "^1.16.1",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
@@ -22,5 +24,8 @@
     "morgan": "^1.8.2",
     "node-fetch": "^1.6.3",
     "raven": "^1.1.2"
+  },
+  "engines": {
+    "node": "7.6.x"
   }
 }
