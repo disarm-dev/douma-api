@@ -4,7 +4,6 @@ module.exports = {
 
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
-    console.log('personalised_instance_id, country:', personalised_instance_id, country)
 
     plans
       .find({country, personalised_instance_id})

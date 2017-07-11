@@ -23,7 +23,7 @@ module.exports = function authenticate (req, res) {
   
   getUserData().then(users => {
     let found_user = users.find((user) => {
-      return user.username == requesting_user.username
+      return user.username === requesting_user.username
     })
 
     if (found_user && (found_user.password === requesting_user.password)) {

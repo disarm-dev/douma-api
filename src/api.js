@@ -2,7 +2,7 @@ const fs = require('fs');
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const Raven = require("raven");
+// const Raven = require("raven");
 const compression = require('compression');
 
 // Logging
