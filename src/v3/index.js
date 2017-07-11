@@ -1,8 +1,9 @@
 const expressMongoDb = require('express-mongo-db')
 
-const authenticate = require('./authentication')
-const plan = require('./plan')
-const record = require('./record')
+const {force_refresh_geodata_cache} = require('./routes/meta')
+const authenticate = require('./routes/authentication')
+const plan = require('./routes/plan')
+const record = require('./routes/record')
 
 module.exports = function (app, version) {
   const version_prefix = "/" + version
@@ -22,6 +23,8 @@ module.exports = function (app, version) {
     next()
   })
 
+  // Meta
+  app.get(version_prefix + '/meta/force_refresh_geodata_cache', force_refresh_geodata_cache)
 
   // Auth
   app.post(version_prefix + '/auth', authenticate)

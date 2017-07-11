@@ -1,12 +1,12 @@
 {
-  "name": "douma-proxy",
+  "name": "douma-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/api.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/api.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "rerun 'node src/index.js' './src/*.js'",
+    "dev": "rerun 'node src/api.js' './src/*.js'",
     "build_deploy_prod": "git push heroku master; git push origin master",
     "build_deploy_stage": "git push heroku-stage master; git push origin master",
     "deploy_all": "npm run build_deploy_stage; npm run build_deploy_prod"
@@ -14,22 +14,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@turf/centroid": "^4.5.2",
+    "@turf/inside": "^4.5.2",
     "body-parser": "^1.16.1",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
-    "curry": "^1.2.0",
     "express": "^4.14.1",
     "express-mongo-db": "^2.0.3",
     "get-csv": "^3.0.3",
-    "google-auth-library": "^0.10.0",
-    "googleapis": "^19.0.0",
     "mongodb": "^2.2.22",
     "morgan": "^1.8.2",
     "node-fetch": "^1.6.3",
-    "raven": "^1.1.2",
-    "shp-write": "^0.3.2"
+    "raven": "^1.1.2"
   },
-  "devDependencies": {
-    "surge": "^0.18.0"
+  "engines": {
+    "node": "7.6.x"
   }
 }
