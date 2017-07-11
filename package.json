@@ -22,5 +22,8 @@
     "morgan": "^1.8.2",
     "node-fetch": "^1.6.3",
     "raven": "^1.1.2"
+  },
+  "engines": {
+    "node": "7.6.x"
   }
 }
