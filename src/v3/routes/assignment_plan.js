@@ -27,10 +27,15 @@ module.exports = {
     let incoming_assignment_plan = req.body
     // TODO: @refac Move this assignment into the client
     incoming_assignment_plan.personalised_instance_id = req.personalised_instance_id
+    incoming_assignment_plan.planned_at = + new Date()
 
     assignment_plan
       .insertOne(incoming_assignment_plan)
-      .then((result, err) => res.send(result.ops))
+      .then(result => {
+        const first = result.ops[0]
+        console.log('id', first._id)
+        res.send(result.ops)
+      })
       .catch(err => res.status(403).send(err))
   }
 }
