@@ -42,14 +42,5 @@ const get_geodata = async (instance_slug) => {
   return geodata
 }
 
-// // Test
-// console.log('root_url', root_url)
-// const fn = async () => {
-//   const instance_slug = 'bwa'
-//   const result = await get_geodata(instance_slug)
-//   console.log('geodata', Object.keys(result))
-// }
-//
-// fn()
 
 module.exports = {get_geodata, get_instance_config}

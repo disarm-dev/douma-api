@@ -4,6 +4,7 @@ const {force_refresh_geodata_cache} = require('./routes/meta')
 const authenticate = require('./routes/authentication')
 const plan = require('./routes/plan')
 const record = require('./routes/record')
+const assignment_plan = require('./routes/assignment_plan')
 
 module.exports = function (app, version) {
   const version_prefix = "/" + version
@@ -33,9 +34,12 @@ module.exports = function (app, version) {
   app.get(version_prefix + '/plan/current', plan.get_current)
   app.post(version_prefix + '/plan/create', plan.create)
 
-  // Records
+  // Record
   app.get(version_prefix + '/record/all', record.get_all)
   app.post(version_prefix + '/record/create', record.create)
 
+  // AssignmentPlan
+  app.get(version_prefix + '/assignment_plan/current', assignment_plan.read)
+  app.post(version_prefix + '/assignment_plan/create', assignment_plan.create)
 
 }
