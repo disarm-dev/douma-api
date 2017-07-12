@@ -11,10 +11,6 @@ const path = require('path');
 const accessLogStream = fs.createWriteStream(path.join(__dirname, '..', 'log', 'access.log'), {flags: 'a'});
 
 const API_VERSIONS = ['v3'];
-const COMMIT_HASH_SHORT = require('child_process')
-  .execSync('git rev-parse HEAD')
-  .toString().trim().slice(0,6)
-
 
 Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843")
   .install();
@@ -47,7 +43,7 @@ app.use(
 
 // Ping route
 app.get("/", (req, res) => {
-  res.send({version: COMMIT_HASH_SHORT});
+  res.send({DOUMA_API: 'live'});
 });
 
 
