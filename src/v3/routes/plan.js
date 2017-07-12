@@ -22,6 +22,7 @@ module.exports = {
     const plans = req.db.collection("plans")
     let incoming_plan = req.body
     incoming_plan.personalised_instance_id = req.personalised_instance_id
+    incoming_plan.planned_at = + new Date()
 
     if (incoming_plan.focus_filter_area) {
       incoming_plan = await filter_plan_targets_for_focus_area(req, incoming_plan)
