@@ -1,7 +1,7 @@
 const inside = require('@turf/inside')
 const centroid = require('@turf/centroid')
 
-const {get_geodata, get_instance_config} = require('../lib/geodata_helper')
+const {get_geodata, get_instance_config} = require('../lib/remote_data_helper')
 const {get_next_level_up_from_planning_level, get_planning_level_id_field, get_planning_level_name} = require('../lib/spatial_hierarchy_helper')
 
 const find_latest_plan = (req) => {
