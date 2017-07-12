@@ -1,6 +1,6 @@
 module.exports = {
-  read_assignment_plan(req, res) {
-    const assignment_plan = req.db.collections('assignment_plan')
+  read(req, res) {
+    const assignment_plan = req.db.collection('assignment_plan')
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
@@ -21,8 +21,8 @@ module.exports = {
         if (err) res.status(403).send(err)
       })
   },
-  create_assignment_plan(req, res) {
-    const assignment_plan = req.db.collections('assignment_plan')
+  create(req, res) {
+    const assignment_plan = req.db.collection('assignment_plan')
 
     let incoming_assignment_plan = req.body
     // TODO: @refac Move this assignment into the client
