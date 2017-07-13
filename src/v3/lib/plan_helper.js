@@ -11,7 +11,7 @@ const find_latest_plan = (req) => {
 
   return plans
     .find({country, personalised_instance_id})
-    .sort({planned_at: -1})
+    .sort({updated_at: -1})
     .limit(1)
 }
 
@@ -22,6 +22,8 @@ const find_latest_plan = (req) => {
  * @returns {Promise.<*>}
  */
 const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
+  // If no focus_filter_area
+
   // Get instance_config (from cache or remote)
   const instance_config = await get_instance_config(req.country)
 

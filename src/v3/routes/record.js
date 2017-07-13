@@ -1,3 +1,5 @@
+const {decorate_incoming_document} = require('../lib/decorate_incoming_document')
+
 module.exports = {
   get_all(req, res) {
     const records = req.db.collection("records")
@@ -20,8 +22,7 @@ module.exports = {
     let docs = req.body
 
     docs = docs.map((doc) => {
-      doc.personalised_instance_id = req.personalised_instance_id
-      return doc
+      return decorate_incoming_document({doc, req})
     })
     
     records

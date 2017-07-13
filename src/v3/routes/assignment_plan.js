@@ -1,3 +1,6 @@
+const {decorate_incoming_document} = require('../lib/decorate_incoming_document')
+
+
 module.exports = {
   read(req, res) {
     const assignment_plan = req.db.collection('assignment_plan')
@@ -6,7 +9,7 @@ module.exports = {
 
     assignment_plan
       .find({country, personalised_instance_id})
-      .sort({planned_at: -1})
+      .sort({updated_at: -1})
       .limit(1)
       .toArray()
       .then(docs => {
@@ -23,11 +26,7 @@ module.exports = {
   },
   create(req, res) {
     const assignment_plan = req.db.collection('assignment_plan')
-
-    let incoming_assignment_plan = req.body
-    // TODO: @refac Move this assignment into the client
-    incoming_assignment_plan.personalised_instance_id = req.personalised_instance_id
-    incoming_assignment_plan.planned_at = + new Date()
+    let incoming_assignment_plan = decorate_incoming_document({doc: req.body, req})
 
     assignment_plan
       .insertOne(incoming_assignment_plan)
