@@ -32,7 +32,7 @@ const get_geodata = async (instance_slug) => {
   const levels = instance_config.spatial_hierarchy.levels
 
   for (level of levels) {
-    const url = `${root_url(instance_slug)}/static/instance/${instance_slug}/spatial_hierarchy/${instance_slug}.${level.name}.geojson`
+    const url = `${root_url(instance_slug)}/static/instances/${instance_slug}/spatial_hierarchy/${instance_slug}.${level.name}.geojson`
 
     const response = await fetch(url)
     const response_json = await response.json()
