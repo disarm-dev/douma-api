@@ -4,6 +4,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const Raven = require("raven");
 const compression = require('compression');
+const GitRevisionPlugin = require('git-revision-webpack-plugin')
+const gitRevisionPlugin = new GitRevisionPlugin()
 
 // Logging
 const morgan = require('morgan');
@@ -12,8 +14,9 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, '..', 'log', '
 
 const API_VERSIONS = ['v3'];
 
-Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843")
-  .install();
+Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843",{
+  release: gitRevisionPlugin.version()
+}).install();
 
 
 // Need a DB or not point trying to boot the app
@@ -43,7 +46,7 @@ app.use(
 
 // Ping route
 app.get("/", (req, res) => {
-  res.send({DOUMA_API: 'live'});
+  res.send({DOUMA_API: gitRevisionPlugin.version()});
 });
 
 

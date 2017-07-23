@@ -22,6 +22,7 @@
     "express": "^4.14.1",
     "express-mongo-db": "^2.0.3",
     "get-csv": "^3.0.3",
+    "git-revision-webpack-plugin": "^2.5.1",
     "mongodb": "^2.2.22",
     "morgan": "^1.8.2",
     "node-fetch": "^1.6.3",
