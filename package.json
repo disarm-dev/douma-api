@@ -1,6 +1,6 @@
 {
   "name": "douma-api",
-  "version": "177.13.0",
+  "version": "177.23.0",
   "description": "",
   "main": "src/api.js",
   "scripts": {
