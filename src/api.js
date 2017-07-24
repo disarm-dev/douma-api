@@ -19,7 +19,7 @@ Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302
 }).install();
 
 
-// Need a DB or not point trying to boot the app
+// Need a DB or no point trying to boot the app
 if (!process.env.MONGODB_URI) {
   console.log(
     '\nERROR: Missing `MONGODB_URI`.\nNeed to set MONGODB_URI as an environment variable.\nSomething like `set -x MONGODB_URI "mongodb://douma-api:[secret]@mongodb.disarm.io/irs_record"`\n'
