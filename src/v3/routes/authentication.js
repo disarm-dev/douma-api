@@ -1,7 +1,7 @@
 const getCSV = require('get-csv');
 
 function getUserData() {
-  return getCSV('https://docs.google.com/spreadsheets/d/1t2nV4B9I7TR8FUPA1d-sEN7K0hAP0DpTJJuSkW5Hym4/pub?gid=0&single=true&output=csv').then((users) => {
+  return getCSV(process.env.SHEETS_URL).then((users) => {
     return formatUserPermissions(users)
   })
 }
