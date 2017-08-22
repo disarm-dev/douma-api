@@ -13,6 +13,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, '..', 'log', '
 const API_VERSIONS = ['v3'];
 
 Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843",{
+  release: process.env.SOURCE_VERSION || 'DEV'
 }).install();
 
 
@@ -43,7 +44,7 @@ app.use(
 
 // Ping route
 app.get("/", (req, res) => {
-  res.send({DOUMA_API: 'alive'});
+  res.send({DOUMA_API: process.env.SOURCE_VERSION || 'DEV'});
 });
 
 
