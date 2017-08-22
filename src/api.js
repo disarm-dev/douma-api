@@ -4,8 +4,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const Raven = require("raven");
 const compression = require('compression');
-const GitRevisionPlugin = require('git-revision-webpack-plugin')
-const gitRevisionPlugin = new GitRevisionPlugin()
 
 // Logging
 const morgan = require('morgan');
@@ -46,7 +44,7 @@ app.use(
 
 // Ping route
 app.get("/", (req, res) => {
-  res.send({DOUMA_API: gitRevisionPlugin.version()});
+  res.send({DOUMA_API: 'alive'});
 });
 
 
