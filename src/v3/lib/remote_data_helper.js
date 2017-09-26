@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const stripComments = require('strip-json-comments');
 
 // Get country from req
 // Get instance_config from cache or from remote
@@ -18,7 +19,9 @@ const get_instance_config = async (instance_slug) => {
 
   try {
     const res = await fetch(url)
-    const instance_config = await res.json()
+    const instance_text = await res.text()
+    const instance_config = JSON.parse(stripComments(instance_text))
+    
     return instance_config
   } catch(e) {
     console.error(e)
