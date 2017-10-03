@@ -1,147 +1,138 @@
 import test from 'ava'
+import sinon from 'sinon'
+import mockery from 'mockery'
 
+let authenticate
 
-import {_authenticate_user} from '../../../../src/v3/routes/authentication'
+// mocking the get-csv library, to return some users
+// must require authenticate _after_ this, so that the mock of get-csv is used
+test.beforeEach(() => {
+  mockery.enable()
 
-test('can find a user in users array', t => {
-  const requesting_user = {
-    username: 'user',
-    password: '123',
-  }
-  const instance_slug = 'abc'
+  process.env.SHEETS_URL = 'abcdef'
+  mockery.registerMock('get-csv', () => {
+    return Promise.resolve([
+      {
+        username: 'user',
+        password: '123',
+        instance_slug: 'abc',
+        read: '1,2,3',
+        write: '4,5,6'
+      },
+      {
+        username: 'dev',
+        password: '123',
+        instance_slug: 'all',
+        read: '1,2,3',
+        write: '4,5,6'
+      }
+    ])
+  })
 
-  const users = [
-    {
-      username: 'user',
-      password: '123',
-      instance_slug: 'abc'
-    }
-  ]
-
-  const actual = _authenticate_user({users, requesting_user, instance_slug})
-
-  t.truthy(actual)
+  const path = '../../../../src/v3/routes/authentication'
+  mockery.registerAllowable(path)
+  authenticate = require(path).authenticate
 })
 
-test('removes password from returned user object', t => {
-  const requesting_user = {
-    username: 'user',
-    password: '123',
-  }
-  const instance_slug = 'abc'
+test.afterEach(() => mockery.disable())
 
-  const users = [
-    {
-      username: 'user',
-      password: '123',
-      instance_slug: 'abc'
-    }
-  ]
+test('mock ', t => {
+  process.env.SHEETS_URL = 'abcdef'
+  mockery.registerMock('get-csv', () => {
+    return Promise.resolve([
+      {
+        username: 'user',
+        password: '123',
+        instance_slug: 'abc'
+      }
+    ])
+  })
 
-  const auth_result = _authenticate_user({users, requesting_user, instance_slug})
-  const password = auth_result.password
+  const fn = require('get-csv')
+  const actual = fn()
 
-  t.is(password, undefined)
+  t.true(actual instanceof Promise)
 })
 
-test('returns false if user not exist', t => {
-  const requesting_user = {
-    username: 'not_a_user',
-    password: '123',
+test('user can login with right credentials', async t => {
+  const req = {
+    body: {user: {username: 'user', password: '123'}},
+    country: 'abc'
   }
-  const instance_slug = 'abc'
+  const res = {
+    send: sinon.spy()
+  }
 
-  const users = [
-    {
-      username: 'user',
-      password: '123',
-      instance_slug: 'abc'
-    }
-  ]
+  await authenticate(req, res)
 
-  const auth_result = _authenticate_user({users, requesting_user, instance_slug})
-
-  t.false(auth_result)
-
+  t.true(res.send.calledOnce)
 })
 
-test('returns false with invalid requesting user (no username)', t => {
-  const requesting_user = {
-    password: '123'
+test('user cannot login with wrong credentials', async t => {
+  const req = {
+    body: {user: {username: 'user', password: '456'}},
+    country: 'abc'
   }
-  const instance_slug = 'abc'
+  const spy = sinon.spy()
 
-  const users = [
-    {
-      username: 'user',
-      password: '123',
-      instance_slug: 'all'
+  const res = {
+    status: () => {
+      return {
+        send: spy
+      }
     }
-  ]
+  }
 
-  const auth_result = _authenticate_user({users, requesting_user, instance_slug})
+  await authenticate(req, res)
 
-  t.false(auth_result)
-
+  t.true(spy.calledOnce)
 })
 
-test('returns false with invalid requesting user (no password)', t => {
-  const requesting_user = {
-    username: 'user'
+test('unauth user results in status called with 401', async t => {
+  const req = {
+    body: {user: {username: 'user', password: '456'}},
+    country: 'abc'
   }
-  const instance_slug = 'abc'
 
-  const users = [
-    {
-      username: 'user',
-      password: '123',
-      instance_slug: 'abc'
-    }
-  ]
+  const res = {
+    status: sinon.stub().returns({send: () => {}})
+  }
 
-  const auth_result = _authenticate_user({users, requesting_user, instance_slug})
+  await authenticate(req, res)
 
-  t.false(auth_result)
+  t.is(res.status.getCall(0).args[0], 401)
 })
 
-test('returns false if cannot find user with password', t => {
-  const requesting_user = {
-    username: 'user',
-    password: '123'
+test('unauth user results in `Unknown user` message', async t => {
+  const req = {
+    body: {user: {username: 'user', password: '456'}},
+    country: 'abc'
   }
-  const instance_slug = 'abc'
 
-  const users = [
-    {
-      username: 'user',
-      password: '456',
-      instance_slug: 'abc'
+  const spy = sinon.spy()
+  const res = {
+    status: () => {
+      return {
+        send: spy
+      }
     }
-  ]
+  }
 
-  const auth_result = _authenticate_user({users, requesting_user, instance_slug})
+  await authenticate(req, res)
 
-  t.false(auth_result)
+  t.deepEqual(spy.getCall(0).args[0], {error: 'Unknown user'})
 })
 
-test('handles a dev user with access to all instances', t => {
-  const requesting_user = {
-    username: 'user',
-    password: '123',
+test('dev user can login to any instance', async t => {
+  const req = {
+    body: {user: {username: 'dev', password: '123'}},
+    country: 'abc'
   }
-  const instance_slug = 'abc'
 
-  const users = [
-    {
-      username: 'user',
-      password: '123',
-      instance_slug: 'all'
-    }
-  ]
+  const res = {
+    send: sinon.spy()
+  }
 
-  const auth_result = _authenticate_user({users, requesting_user, instance_slug})
-
-  t.truthy(auth_result)
+  await authenticate(req, res)
+  t.true(res.send.calledOnce)
 })
-
-
