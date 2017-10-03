@@ -19,6 +19,7 @@ function formatUserPermissions (users) {
 }
 
 module.exports = function authenticate (req, res) {
+  debugger
   const requesting_user = req.body.user
   const instance = req.country
   
