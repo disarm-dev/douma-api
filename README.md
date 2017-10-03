@@ -1,5 +1,7 @@
 # DOUMA API
 
+[![coverage report](https://gitlab.com/disarm/douma.api/badges/master/coverage.svg)](https://gitlab.com/disarm/douma.api/commits/master)
+
 ## Dev
 
 Install `rerun` Gem, using `gem install rerun`, or pick another way to reload server.
