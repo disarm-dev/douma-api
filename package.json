@@ -40,7 +40,7 @@
   },
   "ava": {
     "files": [
-      "./test/unit/**/*.test.js"
+      "./test/**/*.test.js"
     ],
     "source": [
       "./src/**/*"
