@@ -20,21 +20,21 @@ function formatUserPermissions(users) {
 
 function _authenticate_user({users, requesting_user, instance_slug}) {
   const auth_instance_user = users.find((user) => {
-    const auth_user = (user.username === requesting_user.username) && (user.password === requesting_user.password)
+    const found_user = (user.username === requesting_user.username) && (user.password === requesting_user.password)
 
     // username and password don't match
-    if (!auth_user) return false
+    if (!found_user) return false
 
-    // a dev user is authenticated against 'all' instances
+    // check if found_user is a dev user who is authenticated against 'all' instances
     if (user.instance_slug === 'all') return true
 
-    // user is authenticated for the instance
+    // check if found_user is authenticated for the instance
     if (user.instance_slug === instance_slug) return true
   })
 
-  delete auth_instance_user.password
+  if (auth_instance_user) delete auth_instance_user.password
 
-  return auth_instance_user
+  return auth_instance_user || false
 }
 
 
@@ -56,5 +56,6 @@ function authenticate(req, res) {
 
 module.exports = {
   authenticate,
-  _authenticate_user
+  _authenticate_user,
+  formatUserPermissions
 }
