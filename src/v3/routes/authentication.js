@@ -2,20 +2,20 @@ const getCSV = require('get-csv');
 
 function getUserData() {
   return getCSV(process.env.SHEETS_URL).then((users) => {
-    return formatUserPermissions(users)
+    return users.map(u => formatUserPermissions(u))
   })
 }
 
-function formatUserPermissions(users) {
-  return users.map((user) => {
-    user.allowed_apps = {
-      read: user.read.split(',').map(t => t.toLowerCase().trim()),
-      write: user.write.split(',').map(t => t.toLowerCase().trim())
-    }
-    delete user.write
-    delete user.read
-    return user
-  })
+function formatUserPermissions(user) {
+  if (!user.hasOwnProperty('read') || !user.hasOwnProperty('write')) return {}
+
+  user.allowed_apps = {
+    read: user.read.split(',').map(t => t.toLowerCase().trim()),
+    write: user.write.split(',').map(t => t.toLowerCase().trim())
+  }
+  delete user.write
+  delete user.read
+  return user
 }
 
 function _authenticate_user({users, requesting_user, instance_slug}) {
