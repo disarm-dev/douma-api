@@ -1,7 +1,7 @@
 const expressMongoDb = require('express-mongo-db')
 
 const {force_refresh_geodata_cache} = require('./routes/meta')
-const authenticate = require('./routes/authentication')
+const authenticate = require('./routes/authentication').authenticate
 const plan = require('./routes/plan')
 const record = require('./routes/record')
 const assignment_plan = require('./routes/assignment_plan')
