@@ -25,6 +25,13 @@ if (!process.env.MONGODB_URI) {
   process.exit();
 }
 
+if (!process.env.SHEETS_URL) {
+  console.log(
+    '\nERROR: Missing `SHEETS_URL`.\nNeed to set SHEETS_URL as an environment variable.\nSomething like `set -x SHEETS_URL "https://docs.google.com/spreadsheets/d/...."`\n'
+  );
+  process.exit();
+}
+
 
 // Create application
 const app = express();
