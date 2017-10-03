@@ -19,16 +19,26 @@ function formatUserPermissions (users) {
 }
 
 module.exports = function authenticate (req, res) {
-  let requesting_user = req.body.user
+  const requesting_user = req.body.user
+  const instance = req.country
   
   getUserData().then(users => {
-    let found_user = users.find((user) => {
-      return user.username === requesting_user.username
+    const auth_instance_user = users.find((user) => {
+      const auth_user = (user.username === requesting_user.username) && (user.password === requesting_user.password)
+
+      // username and password don't match
+      if (!auth_user) return false
+
+      // a dev user is authenticated against 'all' instances
+      if (user.instance_slug === 'all') return true
+
+      // user is authenticated for the instance
+      if (user.instance_slug === req.country) return true
     })
 
-    if (found_user && (found_user.password === requesting_user.password)) {
-      delete found_user.password
-      res.send(found_user)
+    if (auth_instance_user) {
+      delete auth_instance_user.password
+      res.send(auth_instance_user)
     } else {
       res.status(401).send({error: 'Unknown user'});
     }
