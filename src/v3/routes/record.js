@@ -24,10 +24,10 @@ module.exports = {
     docs = docs.map((doc) => {
       return decorate_incoming_document({doc, req})
     })
-    
+
     records
       .insertMany(docs)
-      .then((result) => res.send(result.ops))
+      .then((result) => res.status(201).send(result.ops))
       .catch(err => res.status(403).send(err))
   }
 }
