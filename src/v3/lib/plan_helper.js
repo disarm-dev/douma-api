@@ -48,7 +48,7 @@ const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
     return feature.properties[selection_level.field_name] === incoming_plan.focus_filter_area.id
   })
 
-  if(!focus_filter_area) throw new Error(`Cannot find focus_filter_area for ${incoming_plan.focus_filter_area.id} - check instance config?`)
+  if(!focus_filter_area_polygon) throw new Error(`Cannot find focus_filter_area for ${incoming_plan.focus_filter_area.id} - check instance config?`)
 
   // Filter out all current_plan.targets within focus_filter_area
   const targets_outside_focus_filter_area = current_plan.targets.filter(target => {
