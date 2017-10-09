@@ -26,7 +26,11 @@ module.exports = {
 
     // If there is focus_filter_area
     if (incoming_plan.focus_filter_area) {
-      incoming_plan = await filter_plan_targets_for_focus_area(req, incoming_plan)
+      try {
+        incoming_plan = await filter_plan_targets_for_focus_area(req, incoming_plan)
+      } catch(e) {
+        return res.status(400).send({message: e.message})
+      }
     }
 
     plans
