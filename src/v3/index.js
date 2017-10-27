@@ -1,45 +1,52 @@
 const expressMongoDb = require('express-mongo-db')
 
+const User = require('./lib/user')
+const addPermission = User.addPermission
+
 const {force_refresh_geodata_cache} = require('./routes/meta')
-const authenticate = require('./routes/authentication').authenticate
-const plan = require('./routes/plan')
-const record = require('./routes/record')
-const assignment_plan = require('./routes/assignment_plan')
+const authenticate                  = require('./routes/authentication').authenticate
+const login                         = require('./routes/login')
+const plan                          = require('./routes/plan')
+const record                        = require('./routes/record')
+const assignment_plan               = require('./routes/assignment_plan')
+
+User.updateUserList()
 
 module.exports = function (app, version) {
-  const version_prefix = "/" + version
+    const version_prefix = '/' + version
 
-  app.use(expressMongoDb(process.env.MONGODB_URI))
+    function v(url) {
+        return version_prefix + url
+    }
 
-  app.use((req, res, next) => {
-    console.log("🚨 Check if user is authenticated, authorised, or has ANY permissions to do ANYTHING")
+    app.use(expressMongoDb(process.env.MONGODB_URI))
+    app.use(User.authMiddleware)
+    app.use(User.endpointPermissionsMiddleware)
+    app.use(User.optionsMiddleware)
 
-    // Must have a country (though need to TODO: @refac Rename to instance_slug or similar)
-    if (!req.query.country) res.status(400).send('Country parameter missing')
-    req.country = req.query.country
+    // Meta
+    app.get(v('/meta/force_refresh_geodata_cache'), force_refresh_geodata_cache)
 
-    // check if personalised_instance_id or set to default
-    req.personalised_instance_id = req.query.personalised_instance_id || 'default'
+    // Auth
+    addPermission('post', v('/login'), ['*'])
+    app.post(v('/login'), login.login)
 
-    next()
-  })
+    addPermission('post', v('/auth'), ['*'])
+    app.post(v('/auth'), authenticate)
 
-  // Meta
-  app.get(version_prefix + '/meta/force_refresh_geodata_cache', force_refresh_geodata_cache)
+    // Plan
+    addPermission('get', v('/plan/current'), ['read:irs_plan'])
+    app.get(v('/plan/current'), plan.get_current)
 
-  // Auth
-  app.post(version_prefix + '/auth', authenticate)
+    addPermission('post', v('/plan/current'), ['write:irs_plan'])
+    app.post(v('/plan/create'), plan.create)
 
-  // Plan
-  app.get(version_prefix + '/plan/current', plan.get_current)
-  app.post(version_prefix + '/plan/create', plan.create)
+    // Record
+    app.get(v('/record/all'), record.get_all)
+    app.post(v('/record/create'), record.create)
 
-  // Record
-  app.get(version_prefix + '/record/all', record.get_all)
-  app.post(version_prefix + '/record/create', record.create)
-
-  // AssignmentPlan
-  app.get(version_prefix + '/assignment_plan/current', assignment_plan.read)
-  app.post(version_prefix + '/assignment_plan/create', assignment_plan.create)
+    // AssignmentPlan
+    app.get(v('/assignment_plan/current'), assignment_plan.read)
+    app.post(v('/assignment_plan/create'), assignment_plan.create)
 
 }

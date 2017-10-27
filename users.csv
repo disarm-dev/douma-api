@@ -1,0 +1,3 @@
+_id,name,password,username,read,write,instance_slug,key
+u1,Test User 1,password,user1,"irs_plan, irs_tasker","irs_tasker",swz,apikey1
+u2,Test User 2,password,user2,,,swz,apikey2

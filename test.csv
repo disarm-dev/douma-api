@@ -1,0 +1,4 @@
+_id,name,password,username,read,write,instance_slug,key
+u1,Admin,password,admin,"irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug","irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug",swz,apikeyadmin
+u1,Power,password,admin,"irs_plan, irs_tasker","irs_tasker",swz,apikeypower
+u2,Novice,password,novice,,,swz,apikeynovice
