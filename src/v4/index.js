@@ -1,11 +1,16 @@
 const expressMongoDb = require('express-mongo-db')
 
 const User = require('./lib/user')
+const addPermission = User.addPermission
+
 const {force_refresh_geodata_cache} = require('./routes/meta')
 const authenticate                  = require('./routes/authentication').authenticate
+const login                         = require('./routes/login')
 const plan                          = require('./routes/plan')
 const record                        = require('./routes/record')
 const assignment_plan               = require('./routes/assignment_plan')
+
+User.updateUserList()
 
 module.exports = function (app, version) {
     const version_prefix = '/' + version
@@ -15,24 +20,37 @@ module.exports = function (app, version) {
     }
 
     app.use(expressMongoDb(process.env.MONGODB_URI))
+    app.use(User.authMiddleware)
+    app.use(User.endpointPermissionsMiddleware)
     app.use(User.optionsMiddleware)
 
     // Meta
     app.get(v('/meta/force_refresh_geodata_cache'), force_refresh_geodata_cache)
 
     // Auth
+    addPermission('post', v('/login'), ['*'])
+    app.post(v('/login'), login.login)
+
+    addPermission('post', v('/auth'), ['*'])
     app.post(v('/auth'), authenticate)
 
     // Plan
+    addPermission('get', v('/plan/current'), ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'])
     app.get(v('/plan/current'), plan.get_current)
 
+    addPermission('post', v('/plan/current'), ['write:irs_plan'])
     app.post(v('/plan/create'), plan.create)
 
     // Record
+    addPermission('get', v('/record/all'), ['read:irs_record_point', 'read:irs_monitor'])
     app.get(v('/record/all'), record.get_all)
+    addPermission('post', v('/record/create'), ['write:irs_record_point'])
     app.post(v('/record/create'), record.create)
 
     // AssignmentPlan
+    addPermission('get', v('/assignment_plan/current'), ['read:irs_tasker'])
     app.get(v('/assignment_plan/current'), assignment_plan.read)
+    addPermission('post', v('/assignment_plan/create'), ['write:irs_tasker'])
     app.post(v('/assignment_plan/create'), assignment_plan.create)
+
 }

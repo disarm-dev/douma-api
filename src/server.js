@@ -1,3 +1,5 @@
+const MongoClient = require('mongodb').MongoClient
+
 // Need a DB or no point trying to boot the app
 if (!process.env.MONGODB_URI) {
     console.log(

@@ -5,7 +5,7 @@ import {
     updateUserList,
     findByApiKey,
     findByUsernamePassword
-} from '../../../src/v3/lib/user'
+} from '../../../src/v4/lib/user'
 
 test ('addPermission', async t => {
     t.plan(5)
