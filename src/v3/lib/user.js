@@ -1,6 +1,4 @@
 function optionsMiddleware(req, res, next) {
-    console.log('🚨 Check if user is authenticated, authorised, or has ANY permissions to do ANYTHING')
-
     // Must have a country (though need to TODO: @refac Rename to instance_slug or similar)
     if (!req.query.country) {
         res.status(400).send('Country parameter missing')
