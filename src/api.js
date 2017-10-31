@@ -1,85 +1,71 @@
-const fs = require('fs');
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const Raven = require("raven");
-const compression = require('compression');
+const fs = require('fs')
+const express = require('express')
+const cors = require('cors')
+const bodyParser = require('body-parser')
+const Raven = require('raven')
+const compression = require('compression')
 
 // Logging
-const morgan = require('morgan');
-const path = require('path');
-const accessLogStream = fs.createWriteStream(path.join(__dirname, '..', 'log', 'access.log'), {flags: 'a'});
+const morgan = require('morgan')
+const path = require('path')
+const accessLogStream = fs.createWriteStream(path.join(__dirname, '..', 'log', 'access.log'), {flags: 'a'})
 
-const API_VERSIONS = ['v3'];
+const API_VERSIONS = ['v3', 'v4']
 
-Raven.config("https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843",{
-  release: process.env.SOURCE_VERSION || 'DEV'
-}).install();
-
-
-// Need a DB or no point trying to boot the app
-if (!process.env.MONGODB_URI) {
-  console.log(
-    '\nERROR: Missing `MONGODB_URI`.\nNeed to set MONGODB_URI as an environment variable.\nSomething like `set -x MONGODB_URI "mongodb://douma-api:[secret]@mongodb.disarm.io/irs_record"`\n'
-  );
-  process.exit();
+if (process.env.NODE_ENV === 'production') {
+    Raven.config('https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843',{
+        release: process.env.SOURCE_VERSION || 'DEV'
+    }).install()
 }
-
-if (!process.env.SHEETS_URL) {
-  console.log(
-    '\nERROR: Missing `SHEETS_URL`.\nNeed to set SHEETS_URL as an environment variable.\nSomething like `set -x SHEETS_URL "https://docs.google.com/spreadsheets/d/...."`\n'
-  );
-  process.exit();
-}
-
 
 // Create application
-const app = express();
+const app = express()
 
 // Configure middleware
-app.use(Raven.requestHandler());
-app.use(cors());
-app.use(compression());
+if (process.env.NODE_ENV === 'production') {
+    app.use(Raven.requestHandler())
+}
+app.use(cors())
+app.use(compression())
 app.use(morgan('combined', {stream: accessLogStream}))
 
 app.use(
-  bodyParser.json({
-    limit: "500mb"
-  })
-);
-
+    bodyParser.json({
+        limit: '500mb'
+    })
+)
 
 // Ping route
-app.get("/", (req, res) => {
-  res.send({
-    DOUMA_API: process.env.SOURCE_VERSION || 'DEV'
-  });
-});
-
+app.get('/', (req, res) => {
+    res.send({
+        DOUMA_API: process.env.SOURCE_VERSION || 'DEV'
+    })
+})
 
 // Add version-specific routes
 API_VERSIONS.map(v => {
-  const version_routes = require(`./${v}/index`)
-  return version_routes(app, v)
+    const version_routes = require(`./${v}/index`)
+    return version_routes(app, v)
 })
-
 
 // CORS config
 // TODO: @refac Do we need this as well as the `cors` package?
-app.options("/*", function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, Content-Length, X-Requested-With"
-  );
-  res.send(200);
-});
+app.options('/*', function(req, res) {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization, Content-Length, X-Requested-With'
+    )
+    res.send(200)
+})
 // TODO: @refac Might be able to replace above with this:
 // app.options('*', cors())
 
-app.use(Raven.errorHandler());
-const port = process.env.PORT || 3000
-app.listen(port, () => {
-  console.log("[DOUMA API] Listening on port " + port);
-});
+if (process.env.NODE_ENV === 'production') {
+    app.use(Raven.errorHandler())
+}
+
+module.exports = {
+    app,
+}
