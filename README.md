@@ -38,7 +38,7 @@ npm run start
 
 ## Managing users
 
-By default, users are configured in the `users.csv` file. Please restart after 
+By default, users are configured in the `users.csv` file. Please restart after changing this file.
 
 ### Required columns and types
 The following are required:
@@ -55,7 +55,10 @@ The following are required:
 - `irs_plan` (planning tool)
 - `irs_tasker` (tasking and team assignment)
 - `irs_record_point` (data collection)
+- `debug` (debugging features)
 
 ## Development
 
-Need the same configuration as for production (see above). Install `rerun` Gem, using `gem install rerun`, or pick another way to reload server.
+Need the same configuration as for production (see above). 
+
+Install `rerun` Gem, using `gem install rerun`, or pick another way to reload server.
