@@ -4,16 +4,16 @@ import {app} from '../../../../src/api'
 
 const admin_key  = '8df6ce92381895e6df89e033f65031aa'
 
-test('POST /v4/login without credentials => 400', async t => {
+test('POST /v4/login without credentials => 401', async t => {
     t.plan(2)
 
     const res = await request(app).post('/v4/login?country=swz').send({})
 
-    t.is(res.status, 400)
+    t.is(res.status, 401)
     t.true(res.text.startsWith('{"message":'))
 })
 
-test('POST /v4/login with wrong credentials => 404', async t => {
+test('POST /v4/login with wrong credentials => 401', async t => {
     t.plan(2)
 
     const creds = {
@@ -22,7 +22,7 @@ test('POST /v4/login with wrong credentials => 404', async t => {
     }
     const res = await request(app).post('/v4/login?country=swz').send(creds)
 
-    t.is(res.status, 404)
+    t.is(res.status, 401)
     t.true(res.text.startsWith('{"message":'))
 })
 

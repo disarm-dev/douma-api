@@ -76,6 +76,13 @@ function updateUserList() {
             }, [])
             user.permissions = uniquePermissions
 
+
+            // Generate allowed apps
+            user.allowed_apps = {
+                read: user.read.split(',').map(t => t.toLowerCase().trim()),
+                write: user.write.split(',').map(t => t.toLowerCase().trim())
+            }
+
             // Generate key
             user.key = md5(user.username + user.password + user.read + user.write + user.instance_slug)
             console.log('Created user', user.username, user.key)

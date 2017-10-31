@@ -4,7 +4,6 @@ const User = require('./lib/user')
 const addPermission = User.addPermission
 
 const {force_refresh_geodata_cache} = require('./routes/meta')
-const authenticate                  = require('./routes/authentication').authenticate
 const login                         = require('./routes/login')
 const plan                          = require('./routes/plan')
 const record                        = require('./routes/record')
@@ -30,9 +29,6 @@ module.exports = function (app, version) {
     // Auth
     addPermission('post', v('/login'), ['*'])
     app.post(v('/login'), login.login)
-
-    addPermission('post', v('/auth'), ['*'])
-    app.post(v('/auth'), authenticate)
 
     // Plan
     addPermission('get', v('/plan/current'), ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'])
