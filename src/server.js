@@ -1,5 +1,13 @@
 const MongoClient = require('mongodb').MongoClient
 
+// Need a SECRET for a bit of extra safety
+if (!process.env.SECRET) {
+    console.log(
+        '\nERROR: Missing `SECRET`.\nNeed to set SECRET as an environment variable.\nSomething like `set -x SECRET "mysecret"`\n'
+    )
+    process.exit()
+}
+
 // Need a DB or no point trying to boot the app
 if (!process.env.MONGODB_URI) {
     console.log(

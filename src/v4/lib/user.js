@@ -84,7 +84,7 @@ function updateUserList() {
             }
 
             // Generate key
-            user.key = md5(user.username + user.password + user.read + user.write + user.instance_slug)
+            user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
             console.log('Created user', user.username, user.key)
 
             return user

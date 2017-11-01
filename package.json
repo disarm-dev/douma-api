@@ -2,13 +2,13 @@
   "name": "douma-api",
   "version": "1710.31.0",
   "description": "",
-  "main": "src/api.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "env NODE_ENV=production node src/server.js",
-    "unit": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv ava",
+    "start": "env NODE_ENV=production MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose node src/server.js",
+    "unit": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose ava",
     "unit-cov": "nyc ava --verbose",
     "unit-watch": "ava --watch",
-    "dev": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv rerun 'node src/server.js' './src/*.js'",
+    "dev": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose rerun 'node src/server.js' './src/*.js'",
     "build_deploy_prod": "git push heroku master; git push origin master",
     "build_deploy_stage": "git push heroku-stage master; git push origin master",
     "deploy_all": "npm run build_deploy_stage; npm run build_deploy_prod"

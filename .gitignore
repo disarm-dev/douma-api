@@ -4,4 +4,4 @@ node_modules
 test_requests/
 .idea
 log
-*.tern-port
+**/*.tern-port

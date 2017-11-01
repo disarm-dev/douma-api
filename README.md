@@ -15,18 +15,20 @@ This is the server for DiSARM. Users will require access to a configured and dep
 
 ### Configuration
 
-1. Set `MONGODB_URI` environment variable to URI of your mongodb installation.
+1. Go to douma-api directory and install node packages:
+```
+npm install
+```
+
+2. Set `SECRET` environment variable to any string. It will be used for user API keys generation.
+
+3. Set `MONGODB_URI` environment variable to URI of your mongodb installation.
 For local installation that could be:
 ```
 mongodb://localhost/douma
 ```
-2. Set `SHEETS_URL` environment variable to URI of your users CSV file if you store it remotely.
+4. Set `SHEETS_URL` environment variable to URI of your users CSV file if you store it remotely.
 Alternatively use `SHEETS_PATH` environment variable to point to CSV file in your local filesystem.
-
-3. Go to douma-api directory and install node packages:
-```
-npm install
-```
 
 
 ### Starting the server
@@ -38,7 +40,8 @@ npm run start
 
 ## Managing users
 
-By default, users are configured in the `users.csv` file. Please restart after changing this file.
+You will need to create `users.csv` file with all your users. Make sure to set either SHEETS_URL or SHEETS_PATH environment variable.
+Make sure to restart the server after changing the `users.csv` file.
 
 ### Required columns and types
 The following are required:
