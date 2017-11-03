@@ -1,7 +1,6 @@
 const expressMongoDb = require('express-mongo-db')
 
 const User = require('./lib/user')
-const {force_refresh_geodata_cache} = require('./routes/meta')
 const authenticate                  = require('./routes/authentication').authenticate
 const plan                          = require('./routes/plan')
 const record                        = require('./routes/record')
@@ -18,7 +17,6 @@ module.exports = function (app, version) {
     app.use(User.optionsMiddleware)
 
     // Meta
-    app.get(v('/meta/force_refresh_geodata_cache'), force_refresh_geodata_cache)
 
     // Auth
     app.post(v('/auth'), authenticate)
