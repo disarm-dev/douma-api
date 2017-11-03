@@ -38,7 +38,8 @@ app.use(
 // Ping route
 app.get('/', (req, res) => {
     res.send({
-        DOUMA_API: process.env.SOURCE_VERSION || 'DEV'
+      DOUMA_API: process.env.SOURCE_VERSION || 'DEV',
+      route: 'root'
     })
 })
 
