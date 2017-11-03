@@ -24,6 +24,11 @@ module.exports = function (app, version) {
     app.use(User.optionsMiddleware)
 
     // Meta
+    // No permissions required - these are openPaths
+    app.get(v('/'), (req, res) => res.send({
+        DOUMA_API: process.env.SOURCE_VERSION || 'DEV',
+        version: version
+    }))
 
     // Auth
     addPermission('post', v('/login'), ['*'])
