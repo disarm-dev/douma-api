@@ -24,7 +24,6 @@ module.exports = function (app, version) {
     app.use(User.optionsMiddleware)
 
     // Meta
-    app.get(v('/meta/force_refresh_geodata_cache'), force_refresh_geodata_cache)
 
     // Auth
     addPermission('post', v('/login'), ['*'])
