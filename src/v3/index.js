@@ -17,6 +17,10 @@ module.exports = function (app, version) {
     app.use(User.optionsMiddleware)
 
     // Meta
+    app.get(v('/'), (req, res) => res.send({
+      DOUMA_API: process.env.SOURCE_VERSION || 'DEV',
+      version: version
+    }))
 
     // Auth
     app.post(v('/auth'), authenticate)
