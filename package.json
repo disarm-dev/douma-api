@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "env NODE_ENV=production MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose node src/server.js",
+    "start": "env NODE_ENV=production node src/server.js",
     "unit": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose ava",
     "unit-cov": "nyc ava --verbose",
     "unit-watch": "ava --watch",
