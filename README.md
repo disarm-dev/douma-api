@@ -65,3 +65,12 @@ The following are required:
 Need the same configuration as for production (see above). 
 
 Install `rerun` Gem, using `gem install rerun`, or pick another way to reload server.
+
+
+## Public paths
+
+Need to
+
+1. Include in `openPaths` array
+2. Ensure the path is referenced in an `addPermissions` call, with a wildcard permission: e.g. `addPermission('get', v(''), ['*'])` 
+
