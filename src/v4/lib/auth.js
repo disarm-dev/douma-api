@@ -133,13 +133,13 @@ function findByUsernamePassword(username, password) {
  */
 function authMiddleware(req, res, next) {
   const openPaths = ['/v4/login', '/v4', '/v4/refresh_users']
-  if (openPaths.includes(req.path)) next()
+  if (openPaths.includes(req.path)) return next()
 
   const key = req.get('API-Key')
-  if (!key) res.status(401).send({message: 'Please provide API-Key header with this request.'})
+  if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
 
   const user = findByApiKey(key)
-  if (!user) res.status(401).send({message: 'Current API key is not valid. Please log out and try to login again.'})
+  if (!user) return res.status(401).send({message: 'Current API key is not valid. Please log out and try to login again.'})
 
   // In case everything succeeds
   req.user = user
