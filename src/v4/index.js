@@ -30,6 +30,9 @@ module.exports = function (app, version) {
     DOUMA_API: process.env.SOURCE_VERSION || 'DEV',
     version: version
   }))
+
+  addPermission('get', v('/refresh_users'), ['*'])
+  app.get(v('/refresh_users'), User.forceUpdateUserList)
     
 
   // Auth

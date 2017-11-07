@@ -132,7 +132,7 @@ function findByUsernamePassword(username, password) {
  * will have access to user object in the request.
  */
 function authMiddleware(req, res, next) {
-  const openPaths = ['/v4/login', '/v4']
+  const openPaths = ['/v4/login', '/v4', '/v4/refresh_users']
   if (!openPaths.includes(req.path)) {
     const key = req.get('API-Key')
     if (key) {
@@ -179,6 +179,13 @@ function optionsMiddleware(req, res, next) {
   }
 }
 
+function forceUpdateUserList(req, res) {
+  updateUserList().then(() => {
+    const message = 'Successful update of userList'
+    res.send(message)
+  })
+}
+
 module.exports = {
   addPermission,
   checkPermission,
@@ -188,4 +195,5 @@ module.exports = {
   authMiddleware,
   endpointPermissionsMiddleware,
   optionsMiddleware,
+  forceUpdateUserList
 }
