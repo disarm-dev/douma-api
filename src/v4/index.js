@@ -42,7 +42,7 @@ module.exports = function (app, version) {
   Auth.addPermission('get', v('/plan/current'), ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'])
   app.get(v('/plan/current'), plan.get_current)
 
-  Auth.addPermission('post', v('/plan/current'), ['write:irs_plan'])
+  Auth.addPermission('post', v('/plan/create'), ['write:irs_plan'])
   app.post(v('/plan/create'), plan.create)
 
   // Record
