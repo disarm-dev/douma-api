@@ -1,4 +1,4 @@
-const User = require('../lib/user')
+const User = require('../lib/auth')
 
 module.exports = {
   login: function (req, res) {
