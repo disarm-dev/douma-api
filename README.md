@@ -71,6 +71,10 @@ The following are required:
 - `irs_record_point` (data collection)
 - `debug` (debugging features)
 
+## Database admin and backups
+
+Please ensure sound practices are in place for backing up data.
+
 ## Development
 
 Need the same configuration as for production (see above). 
