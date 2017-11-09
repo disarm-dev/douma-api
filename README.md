@@ -2,6 +2,10 @@
 
 [![coverage report](https://gitlab.com/disarm/douma.api/badges/master/coverage.svg)](https://gitlab.com/disarm/douma.api/commits/master)
 
+## Issues
+
+Please create a [new issue](https://gitlab.com/disarm/douma.api/issues/new) if you encounter any bugs.
+
 ## Deployment
 
 This is the server for DiSARM. Users will require access to a configured and deployed [client application](https://gitlab.com/disarm/douma-app).
@@ -12,7 +16,6 @@ This is the server for DiSARM. Users will require access to a configured and dep
 2. Download and install mongodb (https://docs.mongodb.com/manual/installation/)
 3. Start mongodb server process
 4. Clone this repository (`git clone https://gitlab.com/disarm/douma.api douma-api`)
-5. 
 
 ### Required domain
 
