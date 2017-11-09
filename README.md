@@ -12,6 +12,17 @@ This is the server for DiSARM. Users will require access to a configured and dep
 2. Download and install mongodb (https://docs.mongodb.com/manual/installation/)
 3. Start mongodb server process
 4. Clone this repository (`git clone https://gitlab.com/disarm/douma.api douma-api`)
+5. 
+
+### Required domain
+
+The client application is served over HTTPS, so any requests made (e.g. to this API) must also be served from a domain using HTTPS. 
+For core instance servers, DiSARM can make a proxy server available.
+
+The domain name needs to be provided to the client application. 
+
+It's possible to automatically configure it via a URL parameter, something like `https://zwe-mats.api.disarm.io#api_url=https://zwe.api.disarm.io`. 
+This assumes the API server is available through `https://zwe.api.disarm.io`
 
 ### Configuration
 
