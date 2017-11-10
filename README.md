@@ -55,7 +55,10 @@ npm run start
 ## Managing users
 
 You will need to create `users.csv` file with all your users. Make sure to set either SHEETS_URL or SHEETS_PATH environment variable.
-Make sure to restart the server after changing the `users.csv` file.
+
+### Updating the server after editing users 
+
+Make a call to the `/v4/refresh_users` route. You should get a success message back.
 
 ### Required columns and types
 The following are required:
