@@ -34,7 +34,7 @@ module.exports = {
     records
       .find(query)
       .sort({_id: 1})
-      .limit(500)
+      .limit(1000)
       .toArray((err, docs) => {
         if (err) res.status(403).send(err)
         res.send(docs)
