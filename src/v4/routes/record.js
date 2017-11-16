@@ -1,3 +1,4 @@
+const ObjectID = require('mongodb').ObjectID
 const {decorate_incoming_document} = require('../lib/decorate_incoming_document')
 
 module.exports = {
@@ -17,19 +18,30 @@ module.exports = {
   },
 
   get_updates(req, res) {
+    let query
     const records = req.db.collection('records')
 
     const country = req.country
-    const known_ids = req.body.known_ids
-    console.log('known ids', known_ids)
     const personalised_instance_id = req.personalised_instance_id
+    const last_id = req.body.last_id
+    if (last_id) {
+    } else {
+      query = {country, personalised_instance_id}
+    }
 
     records
-      .find({ id: { $nin: known_ids }, country, personalised_instance_id})
-      .sort({recorded_at: -1})
+      .find(query)
+      .sort({_id: 1})
+      .limit(100)
       .toArray((err, docs) => {
         if (err) res.status(403).send(err)
-        res.send(docs)
+        res.send(docs.map(d => {
+          return {
+            _id: d._id,
+            updated_at: d.updated_at,
+            data: d.form_data.number_structures_total
+          }
+        }))
       })
   },
 
