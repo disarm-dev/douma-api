@@ -31,7 +31,7 @@ module.exports = function (app, version) {
   }))
 
   addPermission('get', v('/refresh_users'), ['*'])
-  app.get(v('/meta/force_refresh_geodata_cache'), force_refresh_geodata_cache)
+  app.get(v('/refresh_users'), User.forceUpdateUserList)
 
   // Auth
   addPermission('post', v('/login'), ['*'])
