@@ -16,6 +16,23 @@ module.exports = {
       })
   },
 
+  get_updates(req, res) {
+    const records = req.db.collection('records')
+
+    const country = req.country
+    const known_ids = req.body.known_ids
+    console.log('known ids', known_ids)
+    const personalised_instance_id = req.personalised_instance_id
+
+    records
+      .find({ id: { $nin: known_ids }, country, personalised_instance_id})
+      .sort({recorded_at: -1})
+      .toArray((err, docs) => {
+        if (err) res.status(403).send(err)
+        res.send(docs)
+      })
+  },
+
   create(req, res) {
     const records = req.db.collection('records')
 

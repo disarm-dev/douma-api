@@ -2,7 +2,7 @@ import test from 'ava'
 import request from 'supertest'
 import {app} from '../../../../src/api'
 
-const admin_key  = '8df6ce92381895e6df89e033f65031aa'
+const admin_key  = '58134d20b78c8b3c17cc7f811c2332a0'
 
 test('POST /v4/login without credentials => 401', async t => {
     t.plan(2)

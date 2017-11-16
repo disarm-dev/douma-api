@@ -1,0 +1,20 @@
+{
+    "search.exclude": {
+        ".nyc_output": true,
+        "node_modules": true,
+        "*.sublime-workspace": true,
+        "test_requests/": true,
+        ".idea": true,
+        "log": true,
+        "**/*.tern-port": true
+    },
+    "files.exclude": {
+        ".nyc_output": true,
+        "node_modules": true,
+        "*.sublime-workspace": true,
+        "test_requests/": true,
+        ".idea": true,
+        "log": true,
+        "**/*.tern-port": true
+    }
+}

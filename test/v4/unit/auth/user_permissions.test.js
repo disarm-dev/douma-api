@@ -2,9 +2,9 @@ import test from 'ava'
 import request from 'supertest'
 import {app} from '../../../../src/api'
 
-const admin_key  = '8df6ce92381895e6df89e033f65031aa'
-const power_key  = 'bca6d3224f8daf8f8b454824817163db'
-const novice_key = 'f9f907e87f477f3ab62e603de8880b7c'
+const admin_key  = '58134d20b78c8b3c17cc7f811c2332a0'
+const power_key  = '820ea90b279df4da0a2cf9dc8ece3856'
+const novice_key = '04a184f1adf9b44a065d287a5d377284'
 
 test('GET /v4/plan/current without api token => 401', async t => {
     t.plan(2)

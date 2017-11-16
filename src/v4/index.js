@@ -1,60 +1,54 @@
 const expressMongoDb = require('express-mongo-db')
 
-const Auth = require('./lib/auth')
+const User = require('./lib/auth')
+const addPermission = User.addPermission
 
 const {force_refresh_geodata_cache} = require('./routes/meta')
-const login = require('./routes/login')
-const plan = require('./routes/plan')
-const record = require('./routes/record')
-const assignment_plan = require('./routes/assignment_plan')
+const login                         = require('./routes/login')
+const plan                          = require('./routes/plan')
+const record                        = require('./routes/record')
+const assignment_plan               = require('./routes/assignment_plan')
 
-Auth.updateUserList()
+User.updateUserList()
 
 module.exports = function (app, version) {
-  const version_prefix = '/' + version
+    const version_prefix = '/' + version
 
-  function v(url) {
-    return version_prefix + url
-  }
+    function v(url) {
+        return version_prefix + url
+    }
 
-  app.use(expressMongoDb(process.env.MONGODB_URI))
-  app.use(Auth.authMiddleware)
-  app.use(Auth.endpointPermissionsMiddleware)
-  app.use(Auth.optionsMiddleware)
+    app.use(expressMongoDb(process.env.MONGODB_URI))
+    app.use(User.authMiddleware)
+    app.use(User.endpointPermissionsMiddleware)
+    app.use(User.optionsMiddleware)
 
-  // Meta
-  // This is also in openPaths
-  Auth.addPermission('get', v(''), ['*'])
-  app.get(v(''), (req, res) => res.send({
-    DOUMA_API: process.env.SOURCE_VERSION || 'DEV',
-    version: version
-  }))
+    // Meta
+    app.get(v('/meta/force_refresh_geodata_cache'), force_refresh_geodata_cache)
 
-  Auth.addPermission('get', v('/refresh_users'), ['*'])
-  app.get(v('/refresh_users'), Auth.forceUpdateUserList)
-    
+    // Auth
+    addPermission('post', v('/login'), ['*'])
+    app.post(v('/login'), login.login)
 
-  // Auth
-  Auth.addPermission('post', v('/login'), ['*'])
-  app.post(v('/login'), login.login)
+    // Plan
+    addPermission('get', v('/plan/current'), ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'])
+    app.get(v('/plan/current'), plan.get_current)
 
-  // Plan
-  Auth.addPermission('get', v('/plan/current'), ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'])
-  app.get(v('/plan/current'), plan.get_current)
+    addPermission('post', v('/plan/current'), ['write:irs_plan'])
+    app.post(v('/plan/create'), plan.create)
 
-  Auth.addPermission('post', v('/plan/create'), ['write:irs_plan'])
-  app.post(v('/plan/create'), plan.create)
+    // Record
+    addPermission('get', v('/record/all'), ['read:irs_record_point', 'read:irs_monitor'])
+    app.get(v('/record/all'), record.get_all)
+    addPermission('post', v('/record/updates'), ['read:irs_record_point', 'read:irs_monitor'])
+    app.post(v('/record/updates'), record.get_updates)
+    addPermission('post', v('/record/create'), ['write:irs_record_point'])
+    app.post(v('/record/create'), record.create)
 
-  // Record
-  Auth.addPermission('get', v('/record/all'), ['read:irs_record_point', 'read:irs_monitor'])
-  app.get(v('/record/all'), record.get_all)
-  Auth.addPermission('post', v('/record/create'), ['write:irs_record_point'])
-  app.post(v('/record/create'), record.create)
-
-  // AssignmentPlan
-  Auth.addPermission('get', v('/assignment_plan/current'), ['read:irs_tasker'])
-  app.get(v('/assignment_plan/current'), assignment_plan.read)
-  Auth.addPermission('post', v('/assignment_plan/create'), ['write:irs_tasker'])
-  app.post(v('/assignment_plan/create'), assignment_plan.create)
+    // AssignmentPlan
+    addPermission('get', v('/assignment_plan/current'), ['read:irs_tasker'])
+    app.get(v('/assignment_plan/current'), assignment_plan.read)
+    addPermission('post', v('/assignment_plan/create'), ['write:irs_tasker'])
+    app.post(v('/assignment_plan/create'), assignment_plan.create)
 
 }
