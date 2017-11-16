@@ -18,13 +18,15 @@ module.exports = {
   },
 
   get_updates(req, res) {
-    let query
     const records = req.db.collection('records')
 
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
     const last_id = req.body.last_id
+
+    let query
     if (last_id) {
+      query = {country, personalised_instance_id, _id: {$gt: new ObjectID(last_id)}}
     } else {
       query = {country, personalised_instance_id}
     }
@@ -35,13 +37,7 @@ module.exports = {
       .limit(100)
       .toArray((err, docs) => {
         if (err) res.status(403).send(err)
-        res.send(docs.map(d => {
-          return {
-            _id: d._id,
-            updated_at: d.updated_at,
-            data: d.form_data.number_structures_total
-          }
-        }))
+        res.send(docs)
       })
   },
 
