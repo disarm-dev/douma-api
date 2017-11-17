@@ -24,6 +24,7 @@
     "express": "^4.14.1",
     "express-mongo-db": "^2.0.3",
     "get-csv": "^3.0.3",
+    "lodash": "^4.17.4",
     "md5": "^2.2.1",
     "mongodb": "^2.2.33",
     "morgan": "^1.8.2",
