@@ -44,18 +44,24 @@ module.exports = {
       })
   },
 
-  create(req, res) {
+  async create(req, res) {
     const records = req.db.collection('records')
 
     let docs = req.body
 
-    docs = docs.map((doc) => {
-      return decorate_incoming_document({doc, req})
-    })
+    const ids = []
+    const failed = []
 
-    records
-      .insertMany(docs)
-      .then((result) => res.status(201).send(result.ops))
-      .catch(err => res.status(403).send(err))
+    for (const doc of docs) {
+      const decorated = decorate_incoming_document({doc, req})
+      try {
+        const {insertedId} = await records.insertOne(decorated)
+        ids.push(insertedId)
+      } catch (e) {
+        failed.push(doc)
+      }
+    }
+
+    return res.status(201).send(ids)
   }
 }
