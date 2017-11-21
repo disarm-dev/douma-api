@@ -24,6 +24,19 @@ if (!process.env.SHEETS_URL && !process.env.SHEETS_PATH) {
   process.exit()
 }
 
+MongoClient.connect(process.env.MONGODB_URI)
+  .then(db => {
+    db.collection('records').ensureIndex({ "id": 1 }, { unique: true, background: true } ).then(() => {
+      console.log('created index')
+    }).catch((e) => {
+      console.log('failed in created index', e)
+    })
+  })
+  .catch(e => {
+    console.log('Failed to connect to mongo and create index', e)
+  })
+
+
 const api = require('./api').app
 
 const port = process.env.PORT || 3000
