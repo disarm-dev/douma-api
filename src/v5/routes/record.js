@@ -58,7 +58,9 @@ module.exports = {
         await records.insertOne(decorated)
         ids.push(decorated.id)
       } catch (e) {
-        ids.push(doc.id)
+        if (e.code === 11000) { // 11000 is an index violation
+          ids.push(doc.id)
+        }
       }
     }
 
