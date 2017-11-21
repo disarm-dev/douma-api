@@ -55,8 +55,8 @@ module.exports = {
     for (const doc of docs) {
       const decorated = decorate_incoming_document({doc, req})
       try {
-        const {insertedId} = await records.insertOne(decorated)
-        ids.push(insertedId)
+        await records.insertOne(decorated)
+        ids.push(decorated.id)
       } catch (e) {
         failed.push(doc)
       }
