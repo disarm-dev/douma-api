@@ -52,6 +52,7 @@ module.exports = {
     const ids = []
 
     for (const doc of docs) {
+      if (!doc) continue
       const decorated = decorate_incoming_document({doc, req})
       try {
         await records.insertOne(decorated)
