@@ -50,7 +50,6 @@ module.exports = {
     let docs = req.body
 
     const ids = []
-    const failed = []
 
     for (const doc of docs) {
       const decorated = decorate_incoming_document({doc, req})
@@ -58,7 +57,7 @@ module.exports = {
         await records.insertOne(decorated)
         ids.push(decorated.id)
       } catch (e) {
-        failed.push(doc)
+        ids.push(doc.id)
       }
     }
 
