@@ -3,7 +3,6 @@ const expressMongoDb = require('express-mongo-db')
 const User = require('./lib/auth')
 const addPermission = User.addPermission
 
-const {force_refresh_geodata_cache} = require('./routes/meta')
 const login = require('./routes/login')
 const plan = require('./routes/plan')
 const record = require('./routes/record')
