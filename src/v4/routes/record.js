@@ -60,6 +60,8 @@ module.exports = {
       } catch (e) {
         if (e.code === 11000) { // 11000 is an index violation
           records_to_return.push(doc)
+        } else {
+          console.error(e)
         }
       }
     }
