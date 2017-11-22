@@ -132,7 +132,7 @@ function findByUsernamePassword(username, password) {
  * will have access to user object in the request.
  */
 function authMiddleware(req, res, next) {
-  const openPaths = ['/v5/login', '/v5', '/v5/refresh_users']
+  const openPaths = ['/login', '/', '/refresh_users']
   if (openPaths.includes(req.path)) return next()
 
   const key = req.get('API-Key')
