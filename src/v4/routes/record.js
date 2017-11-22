@@ -44,18 +44,26 @@ module.exports = {
       })
   },
 
-  create(req, res) {
+  async create(req, res) {
     const records = req.db.collection('records')
 
     let docs = req.body
 
-    docs = docs.map((doc) => {
-      return decorate_incoming_document({doc, req})
-    })
+    let records_to_return = []
 
-    records
-      .insertMany(docs)
-      .then((result) => res.status(201).send(result.ops))
-      .catch(err => res.status(403).send(err))
+    for (const doc of docs) {
+      if (!doc) continue
+      const decorated = decorate_incoming_document({doc, req})
+      try {
+        await records.insertOne(decorated)
+        records_to_return.push(decorated)
+      } catch (e) {
+        if (e.code === 11000) { // 11000 is an index violation
+          records_to_return.push(doc)
+        }
+      }
+    }
+
+    return res.status(201).send(records_to_return)
   }
 }
