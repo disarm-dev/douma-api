@@ -1,5 +1,3 @@
-const expressMongoDb = require('express-mongo-db')
-
 const User = require('./lib/user')
 const authenticate = require('./routes/authentication').authenticate
 const plan = require('./routes/plan')
@@ -13,7 +11,6 @@ module.exports = function (app, version) {
     return version_prefix + url
   }
 
-  app.use(/v3/, expressMongoDb(process.env.MONGODB_URI))
   app.use(/v3/, User.optionsMiddleware)
 
   // Meta

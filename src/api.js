@@ -4,6 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const Raven = require('raven')
 const compression = require('compression')
+const expressMongoDb = require('express-mongo-db')
 
 // Logging
 const morgan = require('morgan')
@@ -28,6 +29,8 @@ if (process.env.NODE_ENV === 'production') {
 app.use(cors())
 app.use(compression())
 app.use(morgan('combined', {stream: accessLogStream}))
+
+app.use(expressMongoDb(process.env.MONGODB_URI))
 
 app.use(
   bodyParser.json({

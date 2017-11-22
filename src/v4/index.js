@@ -1,5 +1,3 @@
-const expressMongoDb = require('express-mongo-db')
-
 const User = require('./lib/auth')
 const addPermission = User.addPermission
 
@@ -18,7 +16,6 @@ module.exports = function (app, version) {
     return version_prefix + url
   }
 
-  app.use(/v4/, expressMongoDb(process.env.MONGODB_URI))
   app.use(/v4/, User.authMiddleware)
   app.use(/v4/, User.endpointPermissionsMiddleware)
   app.use(/v4/, User.optionsMiddleware)
