@@ -27,7 +27,8 @@ if (!process.env.SHEETS_URL && !process.env.SHEETS_PATH) {
 // MongoClient.connect(process.env.MONGODB_URI)
 //   .then(db => {
 //     db.collection('records').ensureIndex({ "id": 1 }, { unique: true, background: true } ).then(() => {
-//       console.log('created index')
+//      console.log('created index')
+//      launch()
 //     }).catch((e) => {
 //       console.log('failed in created index', e)
 //     })
@@ -39,7 +40,11 @@ if (!process.env.SHEETS_URL && !process.env.SHEETS_PATH) {
 
 const api = require('./api').app
 
-const port = process.env.PORT || 3000
-api.listen(port, () => {
+function launch() {
+  const port = process.env.PORT || 3000
+  api.listen(port, () => {
   console.log('[DOUMA API] Listening on port ' + port)
-})
+  })
+}
+
+launch()
