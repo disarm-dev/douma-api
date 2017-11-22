@@ -13,8 +13,8 @@ module.exports = function (app, version) {
     return version_prefix + url
   }
 
-  app.use(expressMongoDb(process.env.MONGODB_URI))
-  app.use(User.optionsMiddleware)
+  app.use(/v3/, expressMongoDb(process.env.MONGODB_URI))
+  app.use(/v3/, User.optionsMiddleware)
 
   // Meta
   app.get(v('/'), (req, res) => res.send({

@@ -18,10 +18,10 @@ module.exports = function (app, version) {
     return version_prefix + url
   }
 
-  app.use(expressMongoDb(process.env.MONGODB_URI))
-  app.use(User.authMiddleware)
-  app.use(User.endpointPermissionsMiddleware)
-  app.use(User.optionsMiddleware)
+  app.use(/v5/, expressMongoDb(process.env.MONGODB_URI))
+  app.use(/v5/, User.authMiddleware)
+  app.use(/v5/, User.endpointPermissionsMiddleware)
+  app.use(/v5/, User.optionsMiddleware)
 
   // Meta
   addPermission('get', v(''), ['*'])
