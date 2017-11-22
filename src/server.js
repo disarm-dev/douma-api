@@ -43,7 +43,7 @@ const api = require('./api').app
 function launch() {
   const port = process.env.PORT || 3000
   api.listen(port, () => {
-  console.log('[DOUMA API] Listening on port ' + port)
+    console.log('[DOUMA API] Listening on port ' + port)
   })
 }
 
