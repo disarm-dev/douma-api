@@ -15,9 +15,9 @@ module.exports = function (app, version) {
     return version_prefix + url
   }
 
-  app.use(/v5/, User.authMiddleware)
-  app.use(/v5/, User.endpointPermissionsMiddleware)
-  app.use(/v5/, User.optionsMiddleware)
+  app.use(/\/v5/, User.authMiddleware)
+  app.use(/\/v5/, User.endpointPermissionsMiddleware)
+  app.use(/\/v5/, User.optionsMiddleware)
 
   // Meta
   addPermission('get', v(''), ['*'])
