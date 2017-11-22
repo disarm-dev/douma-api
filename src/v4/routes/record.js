@@ -52,9 +52,12 @@ module.exports = {
     let records_to_return = []
 
     for (const doc of docs) {
-      if (!doc) continue
-      const decorated = decorate_incoming_document({doc, req})
+      if (!doc) {
+        console.log('no doc, continue')
+        continue
+      }
       try {
+        const decorated = decorate_incoming_document({doc, req})
         await records.insertOne(decorated)
         records_to_return.push(decorated)
       } catch (e) {
