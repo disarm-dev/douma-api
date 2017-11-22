@@ -11,7 +11,7 @@ module.exports = function (app, version) {
     return version_prefix + url
   }
 
-  app.use(/\/v3/, User.optionsMiddleware)
+  app.use(User.optionsMiddleware)
 
   // Meta
   app.get(v('/'), (req, res) => res.send({
