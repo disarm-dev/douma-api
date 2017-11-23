@@ -134,7 +134,7 @@ function findByUsernamePassword(username, password) {
 function authMiddleware(req, res, next) {
   const openPaths = ['/login', '/', '/refresh_users']
   if (openPaths.includes(req.path)) return next()
-  console.log('v5 authMiddleware', req.path)
+
   const key = req.get('API-Key')
   if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
 
