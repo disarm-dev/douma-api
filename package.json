@@ -1,0 +1,60 @@
+{
+  "name": "douma-api",
+  "version": "1711.21.4",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "env NODE_ENV=production node src/server.js",
+    "unit": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose ava",
+    "unit-cov": "env NODE_ENV=development SHEETS_PATH=test.csv SECRET=goldengoose nyc ava --verbose",
+    "unit-watch": "ava --watch",
+    "dev": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose rerun 'node src/server.js' './src/*.js'",
+    "build_deploy_prod": "git push heroku master; git push origin master",
+    "build_deploy_stage": "git push heroku-stage master; git push origin master",
+    "deploy_all": "npm run build_deploy_stage; npm run build_deploy_prod"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@turf/centroid": "^4.5.2",
+    "@turf/inside": "^4.5.2",
+    "body-parser": "^1.16.1",
+    "compression": "^1.6.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.1",
+    "express-mongo-db": "^2.0.3",
+    "get-csv": "^3.0.3",
+    "lodash": "^4.17.4",
+    "md5": "^2.2.1",
+    "mongodb": "^2.2.33",
+    "morgan": "^1.8.2",
+    "node-fetch": "^1.6.3",
+    "raven": "^1.1.2",
+    "strip-json-comments": "^2.0.1"
+  },
+  "engines": {
+    "node": "8.1.4"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "babel-core": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "mockery": "^2.1.0",
+    "nyc": "^11.2.1",
+    "sinon": "^4.0.0",
+    "supertest": "^3.0.0"
+  },
+  "ava": {
+    "files": [
+      "./test/**/*.test.js"
+    ],
+    "source": [
+      "./src/**/*"
+    ],
+    "failFast": true
+  }
+}
