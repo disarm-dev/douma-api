@@ -36,12 +36,31 @@ The format can be url_encoded
 
 ```json
 [
-  {
-    ...
-    lat,
-    lng,
-    cluster_id
-  }
+{
+       "id": "2949c6b9-b388-43aa-9a5b-2ea2ea899c00",
+       "cases": "94",
+       "status": "investigated",
+       "geometry": {
+         "type": "Polygon",
+         "coordinates": [
+           [
+             [
+               31.43463134765625,
+               -25.89134949832312
+             ],
+             [
+               31.451110839843746,
+               -25.869109390999295
+             ],
+             [
+               31.43463134765625,
+               -25.84439325019513
+             ]
+
+           ]
+         ]
+       }
+     }
 ]
 ```
 
