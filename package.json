@@ -8,7 +8,7 @@
     "unit": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose ava",
     "unit-cov": "env NODE_ENV=development SHEETS_PATH=test.csv SECRET=goldengoose nyc ava --verbose",
     "unit-watch": "ava --watch",
-    "dev": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose rerun 'node src/server.js' './src/*.js'",
+    "dev": "env NODE_ENV=development MONGODB_URI=mongodb://localhost/douma SHEETS_PATH=test.csv SECRET=goldengoose  nodemon src/server.js './src/*.js'",
     "build_deploy_prod": "git push heroku master; git push origin master",
     "build_deploy_stage": "git push heroku-stage master; git push origin master",
     "deploy_all": "npm run build_deploy_stage; npm run build_deploy_prod"
