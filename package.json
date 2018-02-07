@@ -29,6 +29,7 @@
     "mongodb": "^2.2.33",
     "morgan": "^1.8.2",
     "node-fetch": "^1.6.3",
+    "parse-server": "^2.7.2",
     "raven": "^1.1.2",
     "strip-json-comments": "^2.0.1"
   },
