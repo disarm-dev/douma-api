@@ -37,6 +37,8 @@ async function update(req, res) {
     let _id = doc._id
     delete doc._id
 
+    console.log('Dolcument _id',_id)
+
     const decorated = decorate_incoming_document({doc, req})
 
     try {
