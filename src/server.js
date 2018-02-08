@@ -41,6 +41,7 @@ MongoClient.connect(process.env.MONGODB_URI)
 
 const api = require('./api').app
 
+console.log('api',api)
 
 function launch() {
     const port = process.env.PORT || 3000
