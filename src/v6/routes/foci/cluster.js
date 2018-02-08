@@ -34,7 +34,7 @@ async function get_all(req, res) {
 async function update(req, res) {
     const cluster = req.db.collection('cluster')
     let doc = req.body
-    let _id = doc._id
+    let _id = ObjectID(doc._id)
     delete doc._id
 
     console.log('Document _id',_id)
