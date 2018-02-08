@@ -42,7 +42,7 @@ async function update(req, res) {
     const decorated = decorate_incoming_document({doc, req})
 
     try {
-        let _doc = await cluster.updateOne({_id}, {$set:{...decorated}})
+        let _doc = await cluster.updateOne({_id}, {$set:{decorated}})
         res.status(200).send(_doc)
     } catch (e) {
         console.log(e)
