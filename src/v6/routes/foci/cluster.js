@@ -34,12 +34,13 @@ async function get_all(req, res) {
 async function update(req, res) {
     const cluster = req.db.collection('cluster')
     let doc = req.body
-    let id = doc.id
+    let _id = doc._id
+    delete doc._id
 
     const decorated = decorate_incoming_document({doc, req})
 
     try {
-        let _doc = await cluster.updateOne({id}, decorated)
+        let _doc = await cluster.updateOne({_id}, decorated)
         res.status(200).send(_doc)
     } catch (e) {
         console.log(e)
