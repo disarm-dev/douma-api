@@ -39,11 +39,12 @@ MongoClient.connect(process.env.MONGODB_URI)
     })
 
 
-const api = require('./api').app
-
-console.log('api',api)
-
 function launch() {
+
+    const api = require('./api').app
+
+    console.log('api',api)
+
     const port = process.env.PORT || 3000
     api.listen(port, () => {
         console.log('[DOUMA API] Listening on port ' + port)
