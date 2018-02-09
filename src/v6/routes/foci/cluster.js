@@ -53,6 +53,14 @@ async function update(req, res) {
 
 async function delete_cluster(req,res){
     console.log('Delete cluster')
+    const cluster = req.db.collection('cluster')
+    let query = req.body;
+    try {
+        const result = cluster.removeMany(query)
+        res.send(result)
+    }catch (e){
+        res.status(500).send(e)
+    }
 }
 
 module.exports = {
