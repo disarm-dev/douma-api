@@ -59,7 +59,7 @@ async function delete_cluster(req,res){
         const result = cluster.removeMany(query)
         res.send(result)
     }catch (e){
-        res.status(500).send(e)
+        res.status(500).send(e.toString())
     }
 }
 
