@@ -366,3 +366,89 @@ The format can be json
 
 ## Notes
 
+
+
+# Case cluster count
+
+**URL** : `/v6/foci/number_of_clusters`
+
+**Status** : DONE
+
+To get the number of clusters in the backend
+
+**Method** : `GET`
+
+**Auth required** : YES
+
+**Permissions required** : read:foci
+
+**Data constraints**
+
+url-encoded data
+
+`country=<country>`
+
+## Success Responses
+
+**Condition** : If the provided `country`  and case data is valid .
+
+**Code** : `200 Success`
+
+**Response Content**
+
+```json
+{
+    "count":1
+}
+```
+
+## Error Response
+
+**Condition** : If there was an internal error.
+
+**Code** : `501 INTERNAL ERROR`
+
+## Notes
+
+# Case count
+
+**URL** : `/v6/foci/number_of_cases`
+
+**Status** : DONE
+
+To get the number of clusters in the backend
+
+**Method** : `GET`
+
+**Auth required** : YES
+
+**Permissions required** : read:foci
+
+**Data constraints**
+
+url-encoded data
+
+`country=<country>`
+
+## Success Responses
+
+**Condition** : If the provided `country`  and case data is valid .
+
+**Code** : `200 Success`
+
+**Response Content**
+
+```json
+{
+    "count":1
+}
+```
+
+## Error Response
+
+**Condition** : If there was an internal error.
+
+**Code** : `501 INTERNAL ERROR`
+
+## Notes
+
