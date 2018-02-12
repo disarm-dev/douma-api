@@ -39,6 +39,7 @@ MongoClient.connect(process.env.MONGODB_URI)
     })
 
 
+
 function launch() {
 
     const api = require('./api').app
@@ -46,18 +47,23 @@ function launch() {
     console.log('api',api)
 
     const port = process.env.PORT || 3000
+
+  /*  const p_api = new ParseServer({
+        databaseURI: 'mongodb://localhost:27017/dev', // Connection string for your MongoDB database
+        cloud: './cloud/main.js', // Absolute path to your Cloud Code
+        appId: 'myAppId',
+        masterKey: 'myMasterKey', // Keep this key secret!
+        fileKey: 'optionalFileKey',
+        serverURL: `http://localhost:${port}/parse` // Don't forget to change to https if needed
+    });
+
+    api.use('/parse',p_api)*/
+
     api.listen(port, () => {
         console.log('[DOUMA API] Listening on port ' + port)
     })
 }
 
 
-/*var p_api = new ParseServer({
-    databaseURI: 'mongodb://localhost:27017/dev', // Connection string for your MongoDB database
-    cloud: '/home/myApp/cloud/main.js', // Absolute path to your Cloud Code
-    appId: 'myAppId',
-    masterKey: 'myMasterKey', // Keep this key secret!
-    fileKey: 'optionalFileKey',
-    serverURL: 'http://localhost:1337/parse' // Don't forget to change to https if needed
-});*/
+
 

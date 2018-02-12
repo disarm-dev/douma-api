@@ -31,6 +31,20 @@ async function get_all(req, res) {
         })
 }
 
+async function count(req, res) {
+    const case_point = req.db.collection('case_point')
+    const country = req.country
+    const personalised_instance_id = req.personalised_instance_id
+
+    case_point
+        .find({personalised_instance_id})
+        .sort({recorded_at: -1})
+        .toArray((err, docs) => {
+            if (err) res.status(403).send(err)
+            res.status(200).send({count:docs.length})
+        })
+}
+
 async function update(req, res) {
     const case_point = req.db.collection('case_point')
     let doc = req.body
@@ -57,5 +71,6 @@ module.exports = {
     create,
     get_all,
     update,
-    delete_case_point
+    delete_case_point,
+    count
 }

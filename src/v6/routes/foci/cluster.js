@@ -33,6 +33,20 @@ async function get_all(req, res) {
         })
 }
 
+async function count(req, res) {
+    const cluster = req.db.collection('cluster')
+    const country = req.country
+    const personalised_instance_id = req.personalised_instance_id
+
+    cluster
+        .find({personalised_instance_id})
+        .sort({recorded_at: -1})
+        .toArray((err, docs) => {
+            if (err) res.status(403).send(err)
+            res.status(200).send({count:docs.length})
+        })
+}
+
 async function update(req, res) {
     const cluster = req.db.collection('cluster')
     let doc = req.body
@@ -69,5 +83,6 @@ module.exports = {
     create,
     get_all,
     update,
-    delete_cluster
+    delete_cluster,
+    count
 }
