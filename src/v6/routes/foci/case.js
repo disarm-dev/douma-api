@@ -17,6 +17,24 @@ async function create(req, res) {
     }
 }
 
+async function create_bulk(req, res) {
+    const case_point = req.db.collection('case_point')
+    let docs = req.body
+
+    const decorated = [];
+    for(doc of docs){
+        decorated.push( decorate_incoming_document({doc, req}))
+    }
+
+    try {
+        let inserted = await case_point.insertMany(decorated)
+        res.status(201).send(inserted)
+    } catch (e) {
+        console.log(e)
+        res.status(500).send(e)
+    }
+}
+
 async function get_all(req, res) {
     const case_point = req.db.collection('case_point')
     const country = req.country
@@ -72,5 +90,6 @@ module.exports = {
     get_all,
     update,
     delete_case_point,
-    count
+    count,
+    create_bulk
 }

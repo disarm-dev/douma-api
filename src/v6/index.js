@@ -72,11 +72,13 @@ module.exports = function (app, version) {
     // Case points CRUD
     addPermission('get', '/foci/case', ['read:foci'])
     addPermission('post','/foci/case',['write:foci'])
+    addPermission('post','/foci/case/bulk',['write:foci'])
     addPermission('put','/foci/case',['write:foci'])
     addPermission('delete','/foci/case',['write:foci'])
     addPermission('get','/foci/number_of_cases',['read:foci'])
     app.get(v('/foci/number_of_cases'),case_point.count)
     app.post(v('/foci/case'), case_point.create)
+    app.post(v('/foci/case/bulk'), case_point.create_bulk)
     app.get(v('/foci/case'), case_point.get_all)
     app.put(v('/foci/case'), case_point.update)
     app.delete(v('/foci/case'), case_point.delete_case_point)
