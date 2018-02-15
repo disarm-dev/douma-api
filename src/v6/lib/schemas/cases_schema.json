@@ -1,0 +1,45 @@
+{
+  "title": "cases",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "geometry": {
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "oneOf": [
+          {
+            "title": "Point",
+            "properties": {
+              "type": {
+                "enum": [
+                  "Point"
+                ]
+              },
+              "coordinates": {
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "additionalItems": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+

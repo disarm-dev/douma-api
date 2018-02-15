@@ -74,7 +74,7 @@ module.exports = function (app, version) {
     addPermission('post','/foci/case',['write:foci'])
     addPermission('post','/foci/case/bulk',['write:foci'])
     addPermission('put','/foci/case',['write:foci'])
-    addPermission('delete','/foci/case',['write:foci'])
+    addPermission('delete','/foci/case',['wrmodelite:foci'])
     addPermission('get','/foci/number_of_cases',['read:foci'])
     app.get(v('/foci/number_of_cases'),case_point.count)
     app.post(v('/foci/case'), case_point.create)
