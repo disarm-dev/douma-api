@@ -1,13 +1,13 @@
 const model = require('./model')
-module.exports =  {
+module.exports = {
     input: {
         "title": "cases",
         "type": "array",
         "items": {
             "type": "object",
-            "required":["geometry"],
+            "required": ["geometry"],
             "properties": {
-                "id": {
+                "_id": {
                     "type": "string"
                 },
                 "geometry": {

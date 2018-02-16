@@ -82,7 +82,15 @@ async function update(req, res) {
 }
 
 async function delete_case_point(req,res){
-    console.log('Delete case_point')
+    console.log('Delete case points')
+    const cluster = req.db.collection('case_point')
+    let query = req.body;
+    try {
+        const result = await cluster.removeMany(query)
+        res.send(result)
+    } catch (e) {
+        res.status(500).send(e.toString())
+    }
 }
 
 module.exports = {

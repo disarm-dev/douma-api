@@ -7,6 +7,7 @@ const record = require('./routes/record')
 const assignment_plan = require('./routes/assignment_plan')
 const cluster = require('./routes/foci/cluster')
 const case_point = require('./routes/foci/case')
+const maas = require('./maas')
 
 User_v5.updateUserList()
 
@@ -74,7 +75,7 @@ module.exports = function (app, version) {
     addPermission('post','/foci/case',['write:foci'])
     addPermission('post','/foci/case/bulk',['write:foci'])
     addPermission('put','/foci/case',['write:foci'])
-    addPermission('delete','/foci/case',['wrmodelite:foci'])
+    addPermission('delete','/foci/case',['write:foci'])
     addPermission('get','/foci/number_of_cases',['read:foci'])
     app.get(v('/foci/number_of_cases'),case_point.count)
     app.post(v('/foci/case'), case_point.create)
@@ -82,4 +83,8 @@ module.exports = function (app, version) {
     app.get(v('/foci/case'), case_point.get_all)
     app.put(v('/foci/case'), case_point.update)
     app.delete(v('/foci/case'), case_point.delete_case_point)
+
+    //Foci Generation
+    addPermission('post','/foci/model/run',['write:foci'])
+    app.post(v('/foci/model/run'),maas.generate_foci)
 }
