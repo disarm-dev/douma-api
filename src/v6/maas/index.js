@@ -16,28 +16,28 @@ async function generate_foci(req, res) {
     case_point
         .find({personalised_instance_id})
         .sort({recorded_at: -1})
-        .toArray( async (err, docs) => {
+        .toArray(async (err, docs) => {
             if (err) res.status(403).send(err)
             console.log(docs.length)
             try {
                 let input = JSON.parse(JSON.stringify(docs))
-                let result = await run_model({input,config})
-                for(doc of result.cluster){
+                let result = await run_model({input, config})
+                for (doc of result.cluster) {
                     doc.investigation_status = 'suggested'
                     doc.status = 'active'
                     try {
-                        const decorated = decorate_incoming_document({doc , req})
-                        validate_case_cluster(decorated)
-                        let inserted = await cluster.insertOne(decorated)
-                        console.log('Saved Cluster',inserted)
+                       // const decorated = decorate_incoming_document({doc, req})
+                        validate_case_cluster(doc)
+                        let inserted = await cluster.insertOne(doc)
+                        console.log('Saved Cluster', inserted)
                     } catch (e) {
-                        console.log('Failed to insert cluster',e)
+                        console.log('Failed to insert cluster', e)
                     }
                 }
-                res.send({result:'success'})
-            }catch(e){
-                console.log('Error',e)
-                res.status(5000).send({result:'success'})
+                res.send({result: 'success'})
+            } catch (e) {
+                console.log('Error', e)
+                res.status(5000).send({result: 'success'})
             }
         })
 }

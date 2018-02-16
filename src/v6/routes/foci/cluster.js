@@ -25,11 +25,20 @@ async function get_all(req, res) {
     const personalised_instance_id = req.personalised_instance_id
 
     cluster
-        .find({personalised_instance_id})
+        .find()
         .sort({recorded_at: -1})
         .toArray((err, docs) => {
             if (err) res.status(403).send(err)
-            res.send(docs)
+            try {
+                docs.map(doc => JSON.parse(JSON.stringify(doc)))
+                    .forEach(cluster => validate_case_cluster(cluster))
+                res.send(docs)
+            }
+            catch (e){
+                console.log(e)
+                res.status(500).send(e.toString())
+            }
+
         })
 }
 
