@@ -1,15 +1,15 @@
 const ObjectID = require('mongodb').ObjectID
 const get = require('lodash').get
 const {decorate_incoming_document} = require('../../lib/decorate_incoming_document')
+//const {validate_case_location,validate_case_locations} = require('../../lib/schema_validation')
 
 
 async function create(req, res) {
     const case_locations = req.db.collection('case_location')
     let doc = req.body
-
-    const decorated = decorate_incoming_document({doc, req})
     try {
-        let inserted = await case_location.insertOne(decorated)
+       // validate_case_locations(doc)
+        let inserted = await case_location.insertOne(doc)
         res.status(201).send(inserted)
     } catch (e) {
         console.log(e)
@@ -20,14 +20,9 @@ async function create(req, res) {
 async function create_bulk(req, res) {
     const case_location = req.db.collection('case_location')
     let docs = req.body
-
-    const decorated = [];
-    for(doc of docs){
-        decorated.push( decorate_incoming_document({doc, req}))
-    }
-
     try {
-        let inserted = await case_location.insertMany(decorated)
+      //  validate_case_locations(docs)
+        let inserted = await case_location.insertMany(docs)
         res.status(201).send(inserted)
     } catch (e) {
         console.log(e)
@@ -44,6 +39,7 @@ async function get_all(req, res) {
         .find({personalised_instance_id})
         .sort({recorded_at: -1})
         .toArray((err, docs) => {
+           // validate_case_locations(docs)
             if (err) res.status(403).send(err)
             res.send(docs)
         })
@@ -69,10 +65,9 @@ async function update(req, res) {
     let _id = doc._id
     delete doc._id
 
-    const decorated = decorate_incoming_document({doc, req})
-
     try {
-        let _doc = await case_location.updateOne({_id}, decorated)
+       // validate_case_location(doc)
+        let _doc = await case_location.updateOne({_id}, doc)
         res.status(200).send(_doc)
     } catch (e) {
         console.log(e)

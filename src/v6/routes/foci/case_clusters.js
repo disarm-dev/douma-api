@@ -48,7 +48,7 @@ async function count(req, res) {
     const personalised_instance_id = req.personalised_instance_id
 
     cluster
-        .find({personalised_instance_id})
+        .find()
         .sort({recorded_at: -1})
         .toArray((err, docs) => {
             if (err) res.status(403).send(err)

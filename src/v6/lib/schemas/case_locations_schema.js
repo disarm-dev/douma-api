@@ -1,4 +1,4 @@
-export const case_location_schema = {
+module.exports = {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://disarm.io/schemas/case_location.json",
   "title": "Case location",

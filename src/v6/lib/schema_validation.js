@@ -1,7 +1,9 @@
 const Ajv = require('ajv')
 const case_cluster_schema = require('./schemas/case_cluster_schema')
+const case_location_schema = require('./schemas/case_locations_schema')
 
 const ajv = new Ajv()
+
 
 
 function validate_case_clusters(case_clusters) {
@@ -21,9 +23,31 @@ function validate_case_cluster(case_cluster) {
     }
 }
 
+
+
+function validate_case_locations(case_locations) {
+    for (const case_location of case_locations) {
+        validate_case_location(case_location)
+    }
+}
+
+function validate_case_location(case_location) {
+    const validation = ajv.validate(case_location_schema, case_location)
+    if (!validation) {
+        throw ajv.errors
+    } else {
+        return validation
+    }
+}
+
+
+
+
 module.exports = {
     validate_case_cluster,
-    validate_case_clusters
+    validate_case_clusters,
+    validate_case_location,
+    validate_case_locations
 }
 
 
