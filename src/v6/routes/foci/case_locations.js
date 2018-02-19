@@ -4,12 +4,12 @@ const {decorate_incoming_document} = require('../../lib/decorate_incoming_docume
 
 
 async function create(req, res) {
-    const case_point = req.db.collection('case_location')
+    const case_locations = req.db.collection('case_location')
     let doc = req.body
 
     const decorated = decorate_incoming_document({doc, req})
     try {
-        let inserted = await case_point.insertOne(decorated)
+        let inserted = await case_location.insertOne(decorated)
         res.status(201).send(inserted)
     } catch (e) {
         console.log(e)
@@ -18,7 +18,7 @@ async function create(req, res) {
 }
 
 async function create_bulk(req, res) {
-    const case_point = req.db.collection('case_location')
+    const case_location = req.db.collection('case_location')
     let docs = req.body
 
     const decorated = [];
@@ -27,7 +27,7 @@ async function create_bulk(req, res) {
     }
 
     try {
-        let inserted = await case_point.insertMany(decorated)
+        let inserted = await case_location.insertMany(decorated)
         res.status(201).send(inserted)
     } catch (e) {
         console.log(e)
@@ -36,11 +36,11 @@ async function create_bulk(req, res) {
 }
 
 async function get_all(req, res) {
-    const case_point = req.db.collection('case_location')
+    const case_location = req.db.collection('case_location')
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
-    case_point
+    case_location
         .find({personalised_instance_id})
         .sort({recorded_at: -1})
         .toArray((err, docs) => {
@@ -50,11 +50,11 @@ async function get_all(req, res) {
 }
 
 async function count(req, res) {
-    const case_point = req.db.collection('case_location')
+    const case_location = req.db.collection('case_location')
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
-    case_point
+    case_location
         .find({personalised_instance_id})
         .sort({recorded_at: -1})
         .toArray((err, docs) => {
@@ -64,7 +64,7 @@ async function count(req, res) {
 }
 
 async function update(req, res) {
-    const case_point = req.db.collection('case_location')
+    const case_location = req.db.collection('case_location')
     let doc = req.body
     let _id = doc._id
     delete doc._id
@@ -72,7 +72,7 @@ async function update(req, res) {
     const decorated = decorate_incoming_document({doc, req})
 
     try {
-        let _doc = await case_point.updateOne({_id}, decorated)
+        let _doc = await case_location.updateOne({_id}, decorated)
         res.status(200).send(_doc)
     } catch (e) {
         console.log(e)
@@ -83,10 +83,10 @@ async function update(req, res) {
 
 async function delete_case_location(req,res){
     //console.log('Delete case points')
-    const cluster = req.db.collection('case_location')
+    const case_location = req.db.collection('case_location')
     let query = req.body;
     try {
-        const result = await cluster.removeMany(query)
+        const result = await case_location.removeMany(query)
         res.send(result)
     } catch (e) {
         res.status(500).send(e.toString())

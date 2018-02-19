@@ -8,12 +8,12 @@ const {validate_case_cluster} = require('../lib/schema_validation')
 
 
 async function generate_foci(req, res) {
-    const case_point = req.db.collection('case_point')
-    const cluster = req.db.collection('cluster')
+    const case_location = req.db.collection('case_location')
+    const cluster = req.db.collection('case_cluster')
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
-    case_point
+    case_location
         .find({personalised_instance_id})
         .sort({recorded_at: -1})
         .toArray(async (err, docs) => {
