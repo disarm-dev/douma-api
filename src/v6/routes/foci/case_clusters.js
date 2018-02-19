@@ -21,9 +21,6 @@ async function create(req, res) {
 
 async function get_all(req, res) {
     const cluster = req.db.collection('case_cluster')
-    const country = req.country
-    const personalised_instance_id = req.personalised_instance_id
-
     cluster
         .find()
         .sort({recorded_at: -1})
@@ -44,8 +41,6 @@ async function get_all(req, res) {
 
 async function count(req, res) {
     const cluster = req.db.collection('case_cluster')
-    const country = req.country
-    const personalised_instance_id = req.personalised_instance_id
 
     cluster
         .find()
