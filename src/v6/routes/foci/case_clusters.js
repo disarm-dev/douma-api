@@ -5,7 +5,7 @@ const {validate_case_cluster} = require('../../lib/schema_validation')
 
 
 async function create(req, res) {
-    const cluster = req.db.collection('cluster')
+    const cluster = req.db.collection('case_cluster')
     let doc = req.body
     const decorated = decorate_incoming_document({doc, req})
 
@@ -20,7 +20,7 @@ async function create(req, res) {
 }
 
 async function get_all(req, res) {
-    const cluster = req.db.collection('cluster')
+    const cluster = req.db.collection('case_cluster')
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
@@ -43,7 +43,7 @@ async function get_all(req, res) {
 }
 
 async function count(req, res) {
-    const cluster = req.db.collection('cluster')
+    const cluster = req.db.collection('case_cluster')
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
@@ -57,7 +57,7 @@ async function count(req, res) {
 }
 
 async function update(req, res) {
-    const cluster = req.db.collection('cluster')
+    const cluster = req.db.collection('case_cluster')
     let doc = req.body
     let _id = ObjectID(doc._id)
     delete doc._id
@@ -78,7 +78,7 @@ async function update(req, res) {
 
 async function delete_cluster(req, res) {
     console.log('Delete cluster')
-    const cluster = req.db.collection('cluster')
+    const cluster = req.db.collection('case_cluster')
     let query = req.body;
     try {
         const result = await cluster.removeMany(query)

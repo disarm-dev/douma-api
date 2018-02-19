@@ -29,7 +29,7 @@ test('updateUserList', async t => {
     t.plan(5)
     const userList = await updateUserList()
 
-    t.is(userList.length, 4)
+    t.is(userList.length, 5)
 
     const powerUser = userList[1]
     t.true(powerUser.permissions.includes('read:irs_plan'))

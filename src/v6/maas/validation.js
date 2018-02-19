@@ -15,12 +15,12 @@ const validate = schema => data => {
 
 }
 const validate_input = (stdin, config) => {
-    console.log('Validating input',stdin[0].geometry)
+   // console.log('Validating input',stdin[0].geometry)
     validate(config.input)(stdin)
 }
 
 const validate_output = (output, config) => {
-    console.log('Validation Output')
+   // console.log('Validation Output')
     validate(config.output)(output)
 }
 

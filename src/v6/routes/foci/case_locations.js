@@ -4,7 +4,7 @@ const {decorate_incoming_document} = require('../../lib/decorate_incoming_docume
 
 
 async function create(req, res) {
-    const case_point = req.db.collection('case_point')
+    const case_point = req.db.collection('case_location')
     let doc = req.body
 
     const decorated = decorate_incoming_document({doc, req})
@@ -18,7 +18,7 @@ async function create(req, res) {
 }
 
 async function create_bulk(req, res) {
-    const case_point = req.db.collection('case_point')
+    const case_point = req.db.collection('case_location')
     let docs = req.body
 
     const decorated = [];
@@ -36,7 +36,7 @@ async function create_bulk(req, res) {
 }
 
 async function get_all(req, res) {
-    const case_point = req.db.collection('case_point')
+    const case_point = req.db.collection('case_location')
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
@@ -50,7 +50,7 @@ async function get_all(req, res) {
 }
 
 async function count(req, res) {
-    const case_point = req.db.collection('case_point')
+    const case_point = req.db.collection('case_location')
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
@@ -64,7 +64,7 @@ async function count(req, res) {
 }
 
 async function update(req, res) {
-    const case_point = req.db.collection('case_point')
+    const case_point = req.db.collection('case_location')
     let doc = req.body
     let _id = doc._id
     delete doc._id
@@ -82,8 +82,8 @@ async function update(req, res) {
 }
 
 async function delete_case_point(req,res){
-    console.log('Delete case points')
-    const cluster = req.db.collection('case_point')
+    //console.log('Delete case points')
+    const cluster = req.db.collection('case_location')
     let query = req.body;
     try {
         const result = await cluster.removeMany(query)
@@ -97,7 +97,7 @@ module.exports = {
     create,
     get_all,
     update,
-    delete_case_point,
+    delete_case_location,
     count,
     create_bulk
 }

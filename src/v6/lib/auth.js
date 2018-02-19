@@ -34,7 +34,7 @@ function addPermission(method, path, permissions) {
  * @param path   URI of the route
  */
 function checkPermission(user, method, path) {
-  console.log('path',path,'perm',endpointPermissions)
+ // console.log('path',path,'perm',endpointPermissions)
   if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
     return false
   }
@@ -86,7 +86,7 @@ function updateUserList() {
 
       // Generate key
       user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
-      console.log('Created user', user.username, user.key)
+      //console.log('Created user', user.username, user.key)
 
       return user
     })
