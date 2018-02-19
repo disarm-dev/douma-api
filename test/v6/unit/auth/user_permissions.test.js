@@ -41,26 +41,26 @@ test('GET /v6/plan/current with correct api token and sufficient permissions => 
     t.is(res.status, 200)
 })
 
-test('GET /v6/foci/cluster with correct api token and sufficient permissions => 200', async t => {
+test('GET /v6/foci/case_clusters with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
-    const res = await request(app).get('/v6/foci/cluster?country=swz').set('Api-Key', foci_key)
+    const res = await request(app).get('/v6/foci/case_clusters?country=swz').set('Api-Key', foci_key)
     console.log(res)
     t.is(res.status, 200)
 })
 
-test('GET /v6/foci/case with correct api token and sufficient permissions => 200', async t => {
+test('GET /v6/foci/case_locations with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
-    const res = await request(app).get('/v6/foci/case?country=swz').set('Api-Key', foci_key)
+    const res = await request(app).get('/v6/foci/case_locations?country=swz').set('Api-Key', foci_key)
 
     t.is(res.status, 200)
 })
 
-test('GET /v6/foci/case with correct api token and sufficient permissions => 200', async t => {
+test('GET /v6/foci/case_locations with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
-    const res = await request(app).get('/v6/foci/case?country=swz').set('Api-Key', foci_key)
+    const res = await request(app).get('/v6/foci/case_locations?country=swz').set('Api-Key', foci_key)
 
     t.is(res.status, 200)
 })

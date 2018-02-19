@@ -82,7 +82,7 @@ module.exports = function (app, version) {
     app.post(v('/foci/case_locations/bulk'), case_location.create_bulk)
     app.get(v('/foci/case_locations'), case_location.get_all)
     app.put(v('/foci/case_locations'), case_location.update)
-    app.delete(v('/foci/case_locations'), case_location.delete_case_point)
+    app.delete(v('/foci/case_locations'), case_location.delete_case_location)
 
     //Foci Generation
     addPermission('post','/foci/model/run',['write:foci'])

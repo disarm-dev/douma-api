@@ -3,7 +3,7 @@
 
 # Get case custers
 
-**URL** : `/v6/foci/cluster`
+**URL** : `/v6/foci/case_clusters`
 
 **Status** : TODO
 
@@ -71,7 +71,7 @@ The format can be url_encoded
 
 # Create a case cluster
 
-**URL** : `/v6/foci/cluster`
+**URL** : `/v6/foci/case_clusters`
 
 **Status** : TODO
 
@@ -122,7 +122,7 @@ json-encoded data
 
 # Update a case cluster
 
-**URL** : `/v6/foci/cluster`
+**URL** : `/v6/foci/case_clusters`
 
 **Status** : TODO
 
@@ -204,7 +204,7 @@ json-formated data example
 
 # Get cases
 
-**URL** : `/v6/foci/case`
+**URL** : `/v6/foci/case_locations`
 
 **Status** : TODO
 
@@ -258,7 +258,7 @@ url-encoded data
 
 # Create a case cluster
 
-**URL** : `/v6/foci/case`
+**URL** : `/v6/foci/case_locations`
 
 **Status** : TODO
 
@@ -313,7 +313,7 @@ json-encoded data example
 
 # Update a case
 
-**URL** : `/v6/foci/case`
+**URL** : `/v6/foci/case_locations`
 
 **Status** : TODO
 
@@ -412,7 +412,7 @@ url-encoded data
 
 # Case count
 
-**URL** : `/v6/foci/number_of_cases`
+**URL** : `/v6/foci/number_of_case_clusters`
 
 **Status** : DONE
 
