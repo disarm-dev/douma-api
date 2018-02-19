@@ -22,24 +22,34 @@ async function generate_foci(req, res) {
             try {
                 let input = JSON.parse(JSON.stringify(docs))
                 let result = await run_model({input, config})
-                for (doc of result.cluster) {
-                    doc.investigation_status = 'suggested'
-                    doc.status = 'active'
-                    try {
-                       // const decorated = decorate_incoming_document({doc, req})
-                        validate_case_cluster(doc)
-                        let inserted = await cluster.insertOne(doc)
-                       // console.log('Saved Cluster', inserted)
-                    } catch (e) {
-                        console.log('Failed to insert cluster', e)
-                    }
-                }
+                delete_cluster(cluster)
+                    .catch(console.log)
+                    .then(async r =>{
+                        for (doc of result.cluster) {
+                            doc.investigation_status = 'suggested'
+                            doc.status = 'active'
+                            try {
+                                validate_case_cluster(doc)
+                                let inserted = await cluster.insertOne(doc)
+                            } catch (e) {
+                                console.log('Failed to insert cluster', e)
+                            }
+                        }
+                    })
                 res.send({result: 'success'})
             } catch (e) {
                 console.log('Error', e)
                 res.status(5000).send({result: 'success'})
             }
         })
+}
+
+async function delete_cluster(cluster_collection) {
+    try {
+        return await cluster_collection.removeMany({})
+    } catch (e) {
+        throw (e)
+    }
 }
 
 module.exports = {
