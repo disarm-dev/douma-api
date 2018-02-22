@@ -14,6 +14,8 @@ const validate = schema => data => {
     }
 
 }
+
+
 const validate_input = (stdin, config) => {
    // console.log('Validating input',stdin[0].geometry)
     validate(config.input)(stdin)

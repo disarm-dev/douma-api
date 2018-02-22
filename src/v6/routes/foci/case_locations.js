@@ -4,6 +4,7 @@ const {decorate_incoming_document} = require('../../lib/decorate_incoming_docume
 //const {validate_case_location,validate_case_locations} = require('../../lib/schema_validation')
 
 
+
 async function create(req, res) {
     const case_locations = req.db.collection('case_location')
     let doc = req.body

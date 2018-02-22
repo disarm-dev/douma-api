@@ -14,7 +14,7 @@ async function generate_foci(req, res) {
     const personalised_instance_id = req.personalised_instance_id
 
     case_location
-        .find({personalised_instance_id})
+        .find()
         .sort({recorded_at: -1})
         .toArray(async (err, docs) => {
             if (err) res.status(403).send(err)

@@ -4,6 +4,8 @@ const case_location_schema = require('./schemas/case_locations_schema')
 
 const ajv = new Ajv()
 
+const case_location_validate = ajv.compile(case_location_schema);
+
 
 
 function validate_case_clusters(case_clusters) {
@@ -32,7 +34,7 @@ function validate_case_locations(case_locations) {
 }
 
 function validate_case_location(case_location) {
-    const validation = ajv.validate(case_location_schema, case_location)
+    const validation = case_location_validate(case_location)
     if (!validation) {
         throw ajv.errors
     } else {

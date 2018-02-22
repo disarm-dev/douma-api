@@ -57,12 +57,12 @@ async function update(req, res) {
     let _id = ObjectID(doc._id)
     delete doc._id
 
-    console.log('Document _id', _id)
+    ///console.log('Document _id', _id)
 
-    const decorated = decorate_incoming_document({doc, req})
+    //const decorated = decorate_incoming_document({doc, req})
 
     try {
-        let _doc = await cluster.updateOne({_id}, {$set: {decorated}})
+        let _doc = await cluster.updateOne({_id}, {$set: {...doc}})
         res.status(200).send(_doc)
     } catch (e) {
         console.log(e)
