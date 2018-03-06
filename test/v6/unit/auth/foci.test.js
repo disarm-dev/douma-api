@@ -1,8 +1,8 @@
 //Database Setup
 import test from 'ava'
 import request from 'supertest'
-import {app} from '../../../src/api'
-const collections = require('../../../src/v6/lib/collections')
+import {app} from '../../../../src/api'
+const collections = require('../../../../src/v6/lib/collections')
 
 const admin_key = '58134d20b78c8b3c17cc7f811c2332a0'
 const power_key = '820ea90b279df4da0a2cf9dc8ece3856'
@@ -78,7 +78,6 @@ test('PUT /v6/foci/case_clusters with correct api token and sufficient permissio
 test('GET /v6/foci/case_locations with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
-
     const res = await request(app).get('/v6/foci/case_locations?country=swz').set('Api-Key', foci_key)
 
     t.is(res.status, 200)
@@ -91,6 +90,8 @@ test('GET /v6/foci/case_locations with correct api token and sufficient permissi
 
     t.is(res.status, 200)
 })
+
+
 
 
 

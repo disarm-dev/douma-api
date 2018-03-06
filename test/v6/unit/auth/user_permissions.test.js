@@ -43,3 +43,9 @@ test('GET /v6/plan/current with correct api token and sufficient permissions => 
     t.is(res.status, 200)
 })
 
+test('Test For getting all plans', async t =>{
+    const res = await request(app).get('/v6/plan/all?country=swz').set('Api-Key',admin_key)
+    console.log('res body',res.body)
+    t.is(res.status, 200)
+})
+
