@@ -11,6 +11,157 @@ const maas = require('./maas')
 
 User_v5.updateUserList()
 
+const version_meta = (req, res) => res.send({
+    DOUMA_API: process.env.SOURCE_VERSION || 'DEV',
+    version: version
+})
+
+const POST = 'post'
+const GET = 'get'
+const PUT = 'put'
+const DELETE = 'delete'
+
+const endpoints = [
+    {
+        permissions: ['*'],
+        method: GET,
+        path: '/',
+        callback: version_meta
+    },
+    {
+        permissions: ['*'],
+        method: GET,
+        path: '/refresh_users',
+        callback: User_v5.forceUpdateUserList
+    },
+    {
+        permissions: ['*'],
+        method: POST,
+        path: '/login',
+        callback: login.login
+    },
+    {
+        permissions: ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'],
+        method: GET,
+        path: '/plan/current',
+        callback: plan.get_current
+    },
+    {
+        permissions: ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'],
+        method: GET,
+        path: '/plan/all',
+        callback: plan.list_all
+    },
+    {
+        permissions: ['write:irs_plan'],
+        method: POST,
+        path: '/plan/create',
+        callback: plan.create
+    },
+    {
+        permissions: ['read:irs_record_point', 'read:irs_monitor'],
+        method: GET,
+        path: '/record/all',
+        callback: record.get_all
+    },
+    {
+        permissions: ['read:irs_record_point', 'read:irs_monitor'],
+        method: POST,
+        path: '/record/updates',
+        callback: record.get_updates
+    },
+    {
+        permissions: ['write:irs_record_point'],
+        method: POST,
+        path: '/record/create',
+        callback: record.create
+    },
+    {
+        permissions: ['read:irs_tasker'],
+        method: GET,
+        path: '/assignment_plan/current',
+        callback: assignment_plan.read
+    },
+    {
+        permissions: ['write:irs_tasker'],
+        method: POST,
+        path: '/assignment_plan/create',
+        callback: assignment_plan.create
+    },
+    {
+        permissions: ['read:foci'],
+        method: GET,
+        path: '/foci/case_clusters',
+        callback: cluster.get_all
+    },
+    {
+        permissions: ['write:foci'],
+        method: POST,
+        path: '/foci/case_clusters',
+        callback: cluster.create
+    },
+    {
+        permissions: ['write:foci'],
+        method: PUT,
+        path: '/foci/case_clusters',
+        callback: cluster.update
+    },
+    {
+        permissions: ['write:foci'],
+        method: DELETE,
+        path: '/foci/case_clusters',
+        callback: cluster.delete_cluster
+    },
+    {
+        permissions: ['read:foci'],
+        method: GET,
+        path: '/foci/number_of_case_clusters',
+        callback: cluster.count
+    },
+    {
+        permissions: ['read:foci'],
+        method: GET,
+        path: '/foci/case_locations',
+        callback:case_location.get_all,
+    },
+    {
+        permissions:['write:foci'],
+        method:POST,
+        path:'/foci/case_locations',
+        callback:case_location.create
+    },
+    {
+        permissions:['write:foci'],
+        method:POST,
+        path:'/foci/case_locations/bulk',
+        callback:case_location.create_bulk
+    },
+    {
+        permissions:['write:foci'],
+        method:PUT,
+        path:'/foci/case_locations',
+        callback:case_location.update
+    },
+    {
+        permissions: ['write:foci'],
+        method:DELETE,
+        path:'/foci/case_locations',
+        callback:case_location.delete_case_location
+    },
+    {
+        permissions:['read:foci'],
+        method:GET,
+        path:'/foci/number_of_case_locations',
+        callback:case_location.count
+    },
+    {
+        permissions:['write:foci'],
+        method:POST,
+        path:'/foci/model/run',
+        callback:maas.generate_foci
+    }
+]
+
 module.exports = function (app, version) {
     const version_prefix = '/' + version
 
@@ -18,73 +169,15 @@ module.exports = function (app, version) {
         return version_prefix + url
     }
 
+    const make_endpoint =  (endpoint) =>{
+        addPermission(endpoint.method,endpoint.path,endpoint.permissions)
+        app[endpoint.method](v(endpoint.path),endpoint.callback)
+    }
+
     const version_path_regex = new RegExp(version_prefix)
     app.use(version_path_regex, User_v5.authMiddleware)
     app.use(version_path_regex, User_v5.endpointPermissionsMiddleware)
     app.use(version_path_regex, User_v5.optionsMiddleware)
 
-    // Meta
-    addPermission('get', '/', ['*'])
-    app.get(v(''), (req, res) => res.send({
-        DOUMA_API: process.env.SOURCE_VERSION || 'DEV',
-        version: version
-    }))
-
-    addPermission('get', '/refresh_users', ['*'])
-    app.get(v('/refresh_users'), User_v5.forceUpdateUserList)
-
-    // Auth
-    addPermission('post', '/login', ['*'])
-    app.post(v('/login'), login.login)
-
-    // Plan
-    addPermission('get', '/plan/current', ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'])
-    app.get(v('/plan/current'), plan.get_current)
-
-    addPermission('post', '/plan/create', ['write:irs_plan'])
-    app.post(v('/plan/create'), plan.create)
-
-    // Record
-    addPermission('get', '/record/all', ['read:irs_record_point', 'read:irs_monitor'])
-    app.get(v('/record/all'), record.get_all)
-    addPermission('post', '/record/updates', ['read:irs_record_point', 'read:irs_monitor'])
-    app.post(v('/record/updates'), record.get_updates)
-    addPermission('post', '/record/create', ['write:irs_record_point'])
-    app.post(v('/record/create'), record.create)
-
-    // AssignmentPlan
-    addPermission('get', '/assignment_plan/current', ['read:irs_tasker'])
-    app.get(v('/assignment_plan/current'), assignment_plan.read)
-    addPermission('post', '/assignment_plan/create', ['write:irs_tasker'])
-    app.post(v('/assignment_plan/create'), assignment_plan.create)
-
-    // Foci / Case clustears CRUD
-    addPermission('get', '/foci/case_clusters', ['read:foci'])
-    addPermission('post','/foci/case_clusters',['write:foci'])
-    addPermission('put','/foci/case_clusters',['write:foci'])
-    addPermission('delete','/foci/case_clusters',['write:foci'])
-    addPermission('get','/foci/number_of_case_clusters',['read:foci'])
-    app.get(v('/foci/number_of_case_clusters'),cluster.count)
-    app.post(v('/foci/case_clusters'), cluster.create)
-    app.get(v('/foci/case_clusters'), cluster.get_all)
-    app.put(v('/foci/case_clusters'), cluster.update)
-    app.delete(v('/foci/case_clusters'), cluster.delete_cluster)
-
-    // Case points CRUD
-    addPermission('get', '/foci/case_locations', ['read:foci'])
-    addPermission('post','/foci/case_locations',['write:foci'])
-    addPermission('post','/foci/case_locations/bulk',['write:foci'])
-    addPermission('put','/foci/case_locations',['write:foci'])
-    addPermission('delete','/foci/case_locations',['write:foci'])
-    addPermission('get','/foci/number_of_case_locations',['read:foci'])
-    app.get(v('/foci/number_of_case_locations'),case_location.count)
-    app.post(v('/foci/case_locations'), case_location.create)
-    app.post(v('/foci/case_locations/bulk'), case_location.create_bulk)
-    app.get(v('/foci/case_locations'), case_location.get_all)
-    app.put(v('/foci/case_locations'), case_location.update)
-    app.delete(v('/foci/case_locations'), case_location.delete_case_location)
-
-    //Foci Generation
-    addPermission('post','/foci/model/run',['write:foci'])
-    app.post(v('/foci/model/run'),maas.generate_foci)
+    endpoints.forEach(make_endpoint)
 }

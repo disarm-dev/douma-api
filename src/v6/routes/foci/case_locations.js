@@ -1,12 +1,13 @@
 const ObjectID = require('mongodb').ObjectID
 const get = require('lodash').get
 const {decorate_incoming_document} = require('../../lib/decorate_incoming_document')
+const collections = require('../../lib/collections')
 //const {validate_case_location,validate_case_locations} = require('../../lib/schema_validation')
 
 
 
 async function create(req, res) {
-    const case_locations = req.db.collection('case_location')
+    const case_locations = req.db.collection(collections.CASE_LOCATIONS)
     let doc = req.body
     try {
        // validate_case_locations(doc)
@@ -19,7 +20,7 @@ async function create(req, res) {
 }
 
 async function create_bulk(req, res) {
-    const case_location = req.db.collection('case_location')
+    const case_location = req.db.collection(collections.CASE_LOCATIONS)
     let docs = req.body
     try {
       //  validate_case_locations(docs)
@@ -32,7 +33,7 @@ async function create_bulk(req, res) {
 }
 
 async function get_all(req, res) {
-    const case_location = req.db.collection('case_location')
+    const case_location = req.db.collection(collections.CASE_LOCATIONS)
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
@@ -47,7 +48,7 @@ async function get_all(req, res) {
 }
 
 async function count(req, res) {
-    const case_location = req.db.collection('case_location')
+    const case_location = req.db.collection(collections.CASE_LOCATIONS)
     const country = req.country
     const personalised_instance_id = req.personalised_instance_id
 
@@ -61,14 +62,14 @@ async function count(req, res) {
 }
 
 async function update(req, res) {
-    const case_location = req.db.collection('case_location')
+    const case_location = req.db.collection(collections.CASE_LOCATIONS)
     let doc = req.body
     let _id = doc._id
     delete doc._id
 
     try {
        // validate_case_location(doc)
-        let _doc = await case_location.updateOne({_id}, doc)
+        let _doc = await case_location.updateOne({_id}, {...doc})
         res.status(200).send(_doc)
     } catch (e) {
         console.log(e)
@@ -79,7 +80,7 @@ async function update(req, res) {
 
 async function delete_case_location(req,res){
     //console.log('Delete case points')
-    const case_location = req.db.collection('case_location')
+    const case_location = req.db.collection(collections.CASE_LOCATIONS)
     let query = req.body;
     try {
         const result = await case_location.removeMany(query)

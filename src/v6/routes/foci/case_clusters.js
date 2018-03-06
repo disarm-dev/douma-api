@@ -2,10 +2,11 @@ const ObjectID = require('mongodb').ObjectID
 const get = require('lodash').get
 const {decorate_incoming_document} = require('../../lib/decorate_incoming_document')
 const {validate_case_cluster} = require('../../lib/schema_validation')
+const {CASE_CLUSTERS} = require('../../lib/collections')
 
 
 async function create(req, res) {
-    const cluster = req.db.collection('case_cluster')
+    const cluster = req.db.collection(CASE_CLUSTERS)
     let doc = req.body
     const decorated = decorate_incoming_document({doc, req})
 
@@ -20,7 +21,7 @@ async function create(req, res) {
 }
 
 async function get_all(req, res) {
-    const cluster = req.db.collection('case_cluster')
+    const cluster = req.db.collection(CASE_CLUSTERS)
     cluster
         .find()
         .sort({recorded_at: -1})
@@ -40,7 +41,7 @@ async function get_all(req, res) {
 }
 
 async function count(req, res) {
-    const cluster = req.db.collection('case_cluster')
+    const cluster = req.db.collection(CASE_CLUSTERS)
 
     cluster
         .find()
@@ -52,7 +53,7 @@ async function count(req, res) {
 }
 
 async function update(req, res) {
-    const cluster = req.db.collection('case_cluster')
+    const cluster = req.db.collection(CASE_CLUSTERS)
     let doc = req.body
     let _id = ObjectID(doc._id)
     delete doc._id
@@ -73,7 +74,7 @@ async function update(req, res) {
 
 async function delete_cluster(req, res) {
     console.log('Delete cluster')
-    const cluster = req.db.collection('case_cluster')
+    const cluster = req.db.collection(CASE_CLUSTERS)
     let query = req.body;
     try {
         const result = await cluster.removeMany(query)
