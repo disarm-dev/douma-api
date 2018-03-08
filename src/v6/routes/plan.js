@@ -34,6 +34,7 @@ module.exports = {
             .then((result, err) => res.send(result.ops))
             .catch(err => res.status(403).send(err))
     },
+
     list_all: async (req, res) => {
         const plan_collection = req.db.collection('plans')
         const country = req.country
