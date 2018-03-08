@@ -35,7 +35,7 @@ function addPermission(method, path, permissions) {
  */
 function checkPermission(user, method, path) {
   console.log('Check permission',method,path, endpointPermissions[method][path],endpointPermissions)
-  //console.log('path',path,'perm',endpointPermissions, 'user',user)
+  
   if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
     console.log('Condition 1 fail')
     return false
