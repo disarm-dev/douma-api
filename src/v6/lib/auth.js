@@ -34,21 +34,26 @@ function addPermission(method, path, permissions) {
  * @param path   URI of the route
  */
 function checkPermission(user, method, path) {
-  console.log('path',path,'perm',endpointPermissions, 'user',user)
+  //console.log('path',path,'perm',endpointPermissions, 'user',user)
   if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
+    console.log('Condition 1 fail')
     return false
   }
 
   const allowedGroups = endpointPermissions[method][path]
   if (allowedGroups.includes('*')) {
+    console.log('Condition 2 pass')
     return true
   }
 
   if (!user) {
+    console.log('Condition 3 fail')
     return false
   }
 
-  return allowedGroups.some(group => user.permissions.includes(group))
+  let final_result =  allowedGroups.some(group => user.permissions.includes(group))
+    console.log('Final Result ', final_result)
+    return final_result
 }
 
 /*
