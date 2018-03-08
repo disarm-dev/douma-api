@@ -51,3 +51,56 @@ json-encoded data
 ## Notes
 - There is no validation of the plans before they are sent to the client.
 
+
+# Get A single specific plan
+
+**URL** : `/v6/plan/single/:id`
+
+**Status** : DOING
+
+To get one specific plan using the plan id
+
+**Method** : `GET`
+
+**Auth required** : YES
+
+**Permissions required** : `Every one who is logged in`
+
+**Data constraints**
+url-encoded data
+
+` country=<country> `
+
+json-encoded data
+
+``` json
+
+```
+
+## Success Responses
+
+**Condition** : If the plan with the requested id exists .
+
+**Code** : `200`
+
+**Response Content**
+
+```json
+[
+<Olan data >
+]
+```
+
+## Error Response
+
+**Condition** : If the requested id does not belong to an existing plan .
+
+**Code** : `404 NOT FOUND`
+
+**Condition** : If something unknown happened and the database returns an error .
+
+**Code** : `500 INTERNAL SERVER ERROR`
+
+## Notes
+- There is no validation of the plan before it is sent to the client.
+
