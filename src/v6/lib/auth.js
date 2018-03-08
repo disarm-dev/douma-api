@@ -34,7 +34,7 @@ function addPermission(method, path, permissions) {
  * @param path   URI of the route
  */
 function checkPermission(user, method, path) {
- // console.log('path',path,'perm',endpointPermissions)
+  console.log('path',path,'perm',endpointPermissions, 'user',user)
   if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
     return false
   }
@@ -151,6 +151,7 @@ function authMiddleware(req, res, next) {
  * Checks if current user has sufficient permissions to access current enpoint
  */
 function endpointPermissionsMiddleware(req, res, next) {
+  console.log('Reqest Params',req.params)
   if (checkPermission(req.user, req.method.toLowerCase(), req.path)) {
     next()
   } else {
