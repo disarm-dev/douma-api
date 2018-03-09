@@ -10,10 +10,12 @@ const case_location = require('./routes/foci/case_locations')
 const maas = require('./maas')
 
 User_v5.updateUserList()
+// TODO: Remove side effect
+let _version = '';
 
 const version_meta = (req, res) => res.send({
     DOUMA_API: process.env.SOURCE_VERSION || 'DEV',
-    version: version
+    version: _version
 })
 
 const POST = 'post'
@@ -122,56 +124,57 @@ const endpoints = [
         permissions: ['read:foci'],
         method: GET,
         path: '/foci/case_locations',
-        callback:case_location.get_all,
-    },
-    {
-        permissions:['write:foci'],
-        method:POST,
-        path:'/foci/case_locations',
-        callback:case_location.create
-    },
-    {
-        permissions:['write:foci'],
-        method:POST,
-        path:'/foci/case_locations/bulk',
-        callback:case_location.create_bulk
-    },
-    {
-        permissions:['write:foci'],
-        method:PUT,
-        path:'/foci/case_locations',
-        callback:case_location.update
+        callback: case_location.get_all,
     },
     {
         permissions: ['write:foci'],
-        method:DELETE,
-        path:'/foci/case_locations',
-        callback:case_location.delete_case_location
+        method: POST,
+        path: '/foci/case_locations',
+        callback: case_location.create
     },
     {
-        permissions:['read:foci'],
-        method:GET,
-        path:'/foci/number_of_case_locations',
-        callback:case_location.count
+        permissions: ['write:foci'],
+        method: POST,
+        path: '/foci/case_locations/bulk',
+        callback: case_location.create_bulk
     },
     {
-        permissions:['write:foci'],
-        method:POST,
-        path:'/foci/model/run',
-        callback:maas.generate_foci
+        permissions: ['write:foci'],
+        method: PUT,
+        path: '/foci/case_locations',
+        callback: case_location.update
+    },
+    {
+        permissions: ['write:foci'],
+        method: DELETE,
+        path: '/foci/case_locations',
+        callback: case_location.delete_case_location
+    },
+    {
+        permissions: ['read:foci'],
+        method: GET,
+        path: '/foci/number_of_case_locations',
+        callback: case_location.count
+    },
+    {
+        permissions: ['write:foci'],
+        method: POST,
+        path: '/foci/model/run',
+        callback: maas.generate_foci
     }
 ]
 
 module.exports = function (app, version) {
     const version_prefix = '/' + version
+    _version = version
 
     function v(url) {
         return version_prefix + url
     }
 
-    const make_endpoint =  (endpoint) =>{
-        addPermission(endpoint.method,endpoint.path,endpoint.permissions)
-        app[endpoint.method](v(endpoint.path),endpoint.callback)
+    const make_endpoint = (endpoint) => {
+        addPermission(endpoint.method, endpoint.path, endpoint.permissions)
+        app[endpoint.method](v(endpoint.path), endpoint.callback)
     }
 
     const version_path_regex = new RegExp(version_prefix)
