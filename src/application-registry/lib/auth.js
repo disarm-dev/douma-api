@@ -38,13 +38,12 @@ function checkPermission(user, method, path) {
         return true
     }
 
-    console.log('Method',method)
+    //TODO Revise this hack
+    let _path = Object.keys(endpointPermissions[method])
+        .filter(i => path.startsWith(i))[0]
+    path = _path?_path:path
 
-    if(user.instance_slug === 'all'){
-        return true
-    }
-
-    console.log('Instance Slug',user.instance_slug)
+    //End of Hack
 
     if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
         return false
@@ -61,6 +60,7 @@ function checkPermission(user, method, path) {
 
     return allowedGroups.some(group => user.permissions.includes(group))
 }
+
 
 /*
  * Parses users CSV file and populates in-memory cache of users
@@ -97,7 +97,7 @@ function updateUserList() {
 
             // Generate key
             user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
-            //console.log('Created user', user.username, user.key)
+            console.log('Created user', user.username, user.key )
 
             return user
         })
@@ -145,14 +145,15 @@ function findByUsernamePassword(username, password) {
  */
 function authMiddleware(req, res, next) {
     const openPaths = ['/login', '/', '/refresh_users']
-    if (openPaths.includes(req.path)) return next()
-    if(req.method==='GET'){
-        return next()
-    }
+    console.log('Auth Middleware ',req.params)
+
+    if (openPaths.includes(req.baseUrl)) return next()
+
     const key = req.get('API-Key')
     if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
 
     const user = findByApiKey(key)
+    console.log('User',user)
     if (!user) return res.status(401).send({message: 'Current API key is not valid. Please log out and try to login again.'})
 
     // In case everything succeeds
@@ -164,7 +165,8 @@ function authMiddleware(req, res, next) {
  * Checks if current user has sufficient permissions to access current enpoint
  */
 function endpointPermissionsMiddleware(req, res, next) {
-    if (checkPermission(req.user, req.method.toLowerCase(), req.path)) {
+    console.log('endPoint Middleware ',req.path)
+    if (checkPermission(req.user, req.method.toLowerCase(), req.baseUrl)) {
         next()
     } else {
         res.status(401).send({message: 'User does not have sufficient permissions to access this endpoint.'})
@@ -176,6 +178,8 @@ function endpointPermissionsMiddleware(req, res, next) {
  */
 function optionsMiddleware(req, res, next) {
     // Must have a country (though need to TODO: @refac Rename to instance_slug or similar)
+
+    console.log('Options ',req.path)
 
     next()
 

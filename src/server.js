@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient
-var ParseServer = require('parse-server').ParseServer;
+
 
 // Need a SECRET for a bit of extra safety
 if (!process.env.SECRET) {
@@ -44,7 +44,6 @@ function launch() {
 
     const api = require('./api').app
 
-    console.log('api',api)
 
     const port = process.env.PORT || 3000
 

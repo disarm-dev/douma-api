@@ -77,6 +77,19 @@ function get_orm() {
 
 function attach_waterline_to_express(app) {
 
+    const version_path_regex = new RegExp('/api/')
+
+    console.log(version_path_regex)
+
+    const v = p => '/v6'+p;
+    auth.updateUserList()
+
+    app.use(/\/api\/.*/, auth.authMiddleware)
+    app.use(/\/api\/.*/, auth.endpointPermissionsMiddleware)
+    app.use(/\/api\/.*/, auth.optionsMiddleware)
+
+    auth.addPermission('post','/api/config',['write:config'])
+    auth.addPermission('post','/api/geojson',['write:config'])
     app.post('/api/config', (req, res) => {
         waterline.getModel('config', orm)
             .create({_id: req.body.config_data.config_id, config_data: req.body.config_data})

@@ -140,6 +140,7 @@ function findByUsernamePassword(username, password) {
  */
 function authMiddleware(req, res, next) {
   const openPaths = ['/login', '/', '/refresh_users']
+    console.log('V6 options',req.path)
   if (openPaths.includes(req.path)) return next()
 
   const key = req.get('API-Key')
@@ -170,6 +171,7 @@ function endpointPermissionsMiddleware(req, res, next) {
  */
 function optionsMiddleware(req, res, next) {
   // Must have a country (though need to TODO: @refac Rename to instance_slug or similar)
+    console.log('V6 options',req.path)
   if (!req.query.country) {
     res.status(400).send('Country parameter missing')
   } else {
