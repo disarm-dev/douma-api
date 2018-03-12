@@ -49,6 +49,9 @@ module.exports = {
             //console.log('Plans ',plans)
             //res.status(200).send(plans)
 
+    },
+    plan_by_id: async (req,res) => {
+        
     }
 }
 

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const Raven = require('raven')
 const compression = require('compression')
 const expressMongoDb = require('express-mongo-db')
+const application_server = require('./application-registry')
 
 // Logging
 const morgan = require('morgan')
@@ -26,6 +27,8 @@ const app = express()
 if (process.env.NODE_ENV === 'production') {
     app.use(Raven.requestHandler())
 }
+
+application_server.attach_waterline_to_express(app);
 app.use(cors())
 app.use(compression())
 app.use(morgan('combined', {stream: accessLogStream}))
