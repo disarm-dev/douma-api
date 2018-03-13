@@ -89,6 +89,7 @@ function attach_waterline_to_express(app) {
     app.use(/\/api\/.*/, auth.optionsMiddleware)
 
     auth.addPermission('post','/api/config',['write:config'])
+    auth.addPermission('put','/api/config',['write:config'])
     auth.addPermission('post','/api/geojson',['write:config'])
     app.post('/api/config', (req, res) => {
         waterline.getModel('config', orm)
