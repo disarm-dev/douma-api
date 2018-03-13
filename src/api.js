@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(Raven.requestHandler())
 }
 
-application_server.attach_waterline_to_express(app);
+
 app.use(cors())
 app.use(compression())
 app.use(morgan('combined', {stream: accessLogStream}))
@@ -72,6 +72,8 @@ app.options('/*', function (req, res) {
 if (process.env.NODE_ENV === 'production') {
     app.use(Raven.errorHandler())
 }
+
+application_server.attach_waterline_to_express(app);
 
 module.exports = {
     app
