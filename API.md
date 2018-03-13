@@ -204,7 +204,7 @@ To upload new geojson data from a geojson file
 
 **Auth required** :  YES
 
-**Permissions required** : \[ write:admin\]
+**Permissions required** : \[ write:config\]
 
 **Data constraints**
 
@@ -251,7 +251,7 @@ To Update existing geojson data from a geojson file
 
 **Auth required** : YES
 
-**Permissions required** : \[ write:admin \]
+**Permissions required** : \[ write:config \]
 
 **Data constraints**
 
