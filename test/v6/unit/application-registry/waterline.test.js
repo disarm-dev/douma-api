@@ -4,7 +4,7 @@ const body_parser = require('body-parser')
 const test = require('ava').test
 const server = require('../../../../src/application-registry/')
 const auth = require('../../../../src/application-registry/lib/auth')
-const admin_key  = 'f93d47ef94831fdbe488f0ec16c3d99b'
+const admin_key  = '27599f876ad55a65762b2b9b57f1ba31'
 
 function makeApp() {
     const app = express();
@@ -70,7 +70,7 @@ test.serial('get all configs', async t => {
     let res = await request(await makeApp())
         .get(path)
         .send(config);
-    console.log(res.body)
+    //console.log(res.body)
     t.is(res.status, 200);
     t.true(res.body[0].hasOwnProperty('config_id') && res.body[0].hasOwnProperty('config_version'));
 })
@@ -83,7 +83,7 @@ test.serial('get a config by id', async t => {
     let res = await request(await makeApp())
         .get(path)
         .send();
-    console.log(res.body)
+    //console.log(res.body)
     t.is(res.status, 200);
     t.deepEqual(expected_config_id, res.body.config_data.config_id)
 })
@@ -109,7 +109,7 @@ test.serial('update config', async t => {
         .put(path)
         .set('Api-Key', admin_key)
         .send(config);
-    console.log(res)
+    //console.log(res.body)
     t.is(res.status, 200);
     t.deepEqual(res.body.config_data.config_version, "3.3.3")
 })

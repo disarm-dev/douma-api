@@ -6,7 +6,7 @@ const server = require('../../../../src/application-registry')
 const geojsons = require('../../../../src/application-registry/jeojson-data')
 const auth = require('../../../../src/application-registry/lib/auth')
 
-const admin_key  = 'f93d47ef94831fdbe488f0ec16c3d99b'
+const admin_key  = '27599f876ad55a65762b2b9b57f1ba31'
 
 function makeApp() {
     const app = express();
@@ -16,9 +16,6 @@ function makeApp() {
     app.use(body_parser.text({limit: '50mb'}))
     app.use(body_parser.urlencoded({extended: true, limit: '50mb'}))
 
-   // app.use(auth.authMiddleware)
-   // app.use(auth.endpointPermissionsMiddleware)
-   // app.use(auth.optionsMiddleware)
 
     let waterline_server = new server.attach_waterline_to_express(app)
 
