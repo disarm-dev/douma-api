@@ -38,6 +38,12 @@ function checkPermission(user, method, path) {
         return true
     }
 
+    console.log('Check permission',method,path, endpointPermissions[method][path],endpointPermissions)
+
+    if(!endpointPermissions[method]){
+        return false
+    }
+
     //TODO Revise this hack
     let _path = Object.keys(endpointPermissions[method])
         .filter(i => path.startsWith(i))[0]
@@ -45,7 +51,7 @@ function checkPermission(user, method, path) {
 
     //End of Hack
 
-    if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
+    if (!endpointPermissions[method][path]) {
         return false
     }
 
@@ -147,7 +153,9 @@ function authMiddleware(req, res, next) {
     const openPaths = ['/login', '/', '/refresh_users']
     console.log('Auth Middleware ',req.params)
 
-    if (openPaths.includes(req.baseUrl)) return next()
+    if(req.method==='GET') return next()
+
+    if (openPaths.includes(req.baseUrl+req.path)) return next()
 
     const key = req.get('API-Key')
     if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
@@ -165,8 +173,9 @@ function authMiddleware(req, res, next) {
  * Checks if current user has sufficient permissions to access current enpoint
  */
 function endpointPermissionsMiddleware(req, res, next) {
-    console.log('endPoint Middleware ',req.path)
-    if (checkPermission(req.user, req.method.toLowerCase(), req.baseUrl)) {
+    console.log('URL ',req.baseUrl+req.path)
+    if(req.method==='GET') return next()
+    if (checkPermission(req.user, req.method.toLowerCase(), req.baseUrl+req.path)) {
         next()
     } else {
         res.status(401).send({message: 'User does not have sufficient permissions to access this endpoint.'})

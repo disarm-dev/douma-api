@@ -34,7 +34,7 @@ function addPermission(method, path, permissions) {
  * @param path   URI of the route
  */
 function checkPermission(user, method, path) {
-  console.log('Check permission',method,path, endpointPermissions[method][path],endpointPermissions)
+
 
   if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
     console.log('Condition 1 fail')
