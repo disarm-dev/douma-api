@@ -57,7 +57,7 @@ function checkPermission(user, method, path) {
  */
 function updateUserList() {
   const path = process.env.SHEETS_URL || process.env.SHEETS_PATH
-  console.log('Updating users list from:', path)
+  //console.log('Updating users list from:', path)
   return getCSV(path).then(parsedCSV => {
     userList = parsedCSV.map(user => {
       // Parse permissions

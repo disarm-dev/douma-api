@@ -38,8 +38,6 @@ function checkPermission(user, method, path) {
         return true
     }
 
-    console.log('Check permission',method,path, endpointPermissions[method][path],endpointPermissions)
-
     if(!endpointPermissions[method]){
         return false
     }
@@ -75,7 +73,6 @@ function checkPermission(user, method, path) {
  */
 function updateUserList() {
     const path = process.env.SHEETS_URL || process.env.SHEETS_PATH
-    console.log('Updating users list from:', path)
     return getCSV(path).then(parsedCSV => {
         userList = parsedCSV.map(user => {
             // Parse permissions
@@ -103,7 +100,6 @@ function updateUserList() {
 
             // Generate key
             user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
-            console.log('Created user', user.username, user.key )
 
             return user
         })
@@ -151,7 +147,6 @@ function findByUsernamePassword(username, password) {
  */
 function authMiddleware(req, res, next) {
     const openPaths = ['/login', '/', '/refresh_users']
-    console.log('Auth Middleware ',req.params)
 
     if(req.method==='GET') return next()
 
@@ -161,7 +156,6 @@ function authMiddleware(req, res, next) {
     if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
 
     const user = findByApiKey(key)
-    console.log('User',user)
     if (!user) return res.status(401).send({message: 'Current API key is not valid. Please log out and try to login again.'})
 
     // In case everything succeeds
@@ -173,7 +167,6 @@ function authMiddleware(req, res, next) {
  * Checks if current user has sufficient permissions to access current enpoint
  */
 function endpointPermissionsMiddleware(req, res, next) {
-    console.log('URL ',req.baseUrl+req.path)
     if(req.method==='GET') return next()
     if (checkPermission(req.user, req.method.toLowerCase(), req.baseUrl+req.path)) {
         next()
@@ -187,8 +180,6 @@ function endpointPermissionsMiddleware(req, res, next) {
  */
 function optionsMiddleware(req, res, next) {
     // Must have a country (though need to TODO: @refac Rename to instance_slug or similar)
-
-    console.log('Options ',req.path)
 
     next()
 

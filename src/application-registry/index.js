@@ -9,7 +9,6 @@ let orm
 function get_orm() {
     return new Promise((resolve, reject) => {
         if (orm) {
-            console.log('Already Has ORM')
             resolve(orm)
         } else {
             waterline.start({
@@ -66,20 +65,13 @@ function get_orm() {
     })
 }
 
-/*const permissions = [
-    {
-        method:'post',
-        path:'/api/config',
-        permission:[instance_slug:"all"]
-    }
-]*/
 
 
 function attach_waterline_to_express(app) {
 
     const version_path_regex = new RegExp('/api/')
 
-    console.log(version_path_regex)
+    //console.log(version_path_regex)
 
     const v = p => '/v6'+p;
     auth.updateUserList()
@@ -117,7 +109,7 @@ function attach_waterline_to_express(app) {
             .create({_id: req.body.geojson_id, geojson_data: req.body})
             .meta({fetch: true})
             .then(function (newRecord) {
-                console.log(newRecord)
+               // console.log(newRecord)
                 return res.status(201).json(newRecord);
             })
             .catch({name: 'UsageError'}, function (err) {
@@ -173,6 +165,8 @@ function attach_waterline_to_express(app) {
         });
     })
 
+    //app.get('/api/config/:config_id')
+
     app.get('/api/geojson', (req, res) => {
         // console.log('Get Geojson')
         waterline.getModel('geojson', orm)
@@ -191,8 +185,18 @@ function attach_waterline_to_express(app) {
     })
 
     app.get('/api/config/:config_id', (req, res) => {
+        [config_id,config_version] = req.params.config_id.split('@')
+        console.log('Config ID',config_id)
+        console.log('Config Version',config_version)
+        const query = {}
+        if(config_id){
+            query._id = config_id
+        }
+        if(config_version){
+            query.config_version=config_version
+        }
         waterline.getModel('config', orm)
-            .findOne({_id: req.params.config_id}, function (err, record) {
+            .findOne({...query}, function (err, record) {
                 if (err && err.name === 'UsageError') {
                     return res.sendStatus(400);
                 }
@@ -383,7 +387,7 @@ let clear_geojson_by_id = async (id) => {
                     console.log(err)
                     reject(err)
                 } else {
-                    console.log('Cleared Single Geojson')
+                   // console.log('Cleared Single Geojson')
                     resolve('done')
                 }
             })
@@ -398,7 +402,7 @@ let insertData = async (data) => {
             .then(doc => doc)
             .catch(err => err)
     } else {
-        console.log('Not orm')
+        //console.log('Not orm')
     }
 }
 

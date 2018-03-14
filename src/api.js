@@ -12,7 +12,7 @@ const morgan = require('morgan')
 const path = require('path')
 const accessLogStream = fs.createWriteStream(path.join(__dirname, '..', 'log', 'access.log'), {flags: 'a'})
 
-const API_VERSIONS = ['v3', 'v4', 'v5', 'v6']
+const API_VERSIONS = ['v3', 'v4', 'v5', 'v6', 'v7']
 
 if (process.env.NODE_ENV === 'production') {
     Raven.config('https://ed8917e61540404da408a2a9efba0002:d99248fd72c140398999c7302e1da94b@sentry.io/138843', {

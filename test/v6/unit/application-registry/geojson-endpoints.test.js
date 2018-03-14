@@ -6,7 +6,7 @@ const server = require('../../../../src/application-registry')
 const geojsons = require('../../../../src/application-registry/jeojson-data')
 const auth = require('../../../../src/application-registry/lib/auth')
 
-const admin_key  = '27599f876ad55a65762b2b9b57f1ba31'
+const admin_key = '27599f876ad55a65762b2b9b57f1ba31'
 
 function makeApp() {
     const app = express();
@@ -35,16 +35,16 @@ test.afterEach(async () => {
 )
 
 
-test.serial('get all geojsons', async t => {
+test.skip('get all geojsons', async t => {
     t.plan(2);
     let path = '/api/geojson'
     let res = await request(await makeApp())
         .get(path)
         .set('Api-Key', admin_key)
         .send();
-    console.log(res.body)
+    //console.log(res.body)
     t.is(res.status, 200);
-    t.true(res.body.length>0) // Result should be an array with items
+    t.true(res.body.length > 0) // Result should be an array with items
 })
 
 
@@ -61,7 +61,7 @@ test.skip('create new geojson', async t => {
 
 })
 
-test.serial('overwite an existing geojson', async t => {
+test.skip('overwite an existing geojson', async t => {
     t.plan(2)
     let path = `/api/geojson/bwa/country`
 
@@ -76,12 +76,12 @@ test.serial('overwite an existing geojson', async t => {
         .send(require('../../../../src/application-registry/jeojson-data-v2'));
 
     t.is(res.status, 201);
-    t.is(copy.body._id,'bwa/country')
+    t.is(copy.body._id, 'bwa/country')
 
 })
 
 
-test.serial('create new geojson', async t => {
+test.skip('create new geojson', async t => {
     t.plan(2)
     let path = `/api/geojson/bwa/country`
 
@@ -95,7 +95,7 @@ test.serial('create new geojson', async t => {
 })
 
 
-test.serial('get a specific geojson', async t => {
+test.skip('get a specific geojson', async t => {
     t.plan(2)
     let path = `/api/geojson/test_instance/test_level`
 
@@ -108,7 +108,7 @@ test.serial('get a specific geojson', async t => {
 })
 
 
-test.serial('get geojsons from a specific instance', async t => {
+test.skip('get geojsons from a specific instance', async t => {
     t.plan(2)
     let path = `/api/geojson/test_instance`
 
@@ -120,7 +120,7 @@ test.serial('get geojsons from a specific instance', async t => {
     t.deepEqual(res.body, ['test_level'])
 })
 
-test.serial('get geojsons from a specific instance with a wrong instace', async t => {
+test.skip('get geojsons from a specific instance with a wrong instace', async t => {
     t.plan(2)
     let path = `/api/geojson/non_existent_instance`
 

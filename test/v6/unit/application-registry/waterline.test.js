@@ -38,7 +38,7 @@ test.beforeEach(async () => {
                     "key_2": "value_2"
                 }
             }
-        console.log('Running beforeach')
+       // console.log('Running beforeach')
         await server.clearModel()
         await server.insertData(config)
 
@@ -50,7 +50,32 @@ test.afterEach(async () => {
     }
 )
 
-test.serial('get all configs', async t => {
+test.skip('get all configs', async t => {
+    t.plan(2);
+
+    let path = '/api/config'
+    let config =
+        {
+            "config_data": {
+                "config_id": "new_config",
+                "config_version": "1.2.3",
+                "config_name": "example config",
+                "other_value": {
+                    "key_1": "value_1",
+                    "key_2": "value_2"
+                }
+            }
+        }
+
+    let res = await request(await makeApp())
+        .get(path)
+        .send(config);
+    //console.log(res.body)
+    t.is(res.status, 200);
+    t.true(res.body[0].hasOwnProperty('config_id') && res.body[0].hasOwnProperty('config_version'));
+})
+
+test.skip('get all configs', async t => {
     t.plan(2);
 
     let path = '/api/config'
@@ -76,19 +101,31 @@ test.serial('get all configs', async t => {
 })
 
 
-test.serial('get a config by id', async t => {
+test.skip('get a config by id', async t => {
     t.plan(2);
     let expected_config_id = 'new_config'
     let path = `/api/config/${expected_config_id}`
     let res = await request(await makeApp())
         .get(path)
         .send();
-    //console.log(res.body)
+    console.log(res.body)
     t.is(res.status, 200);
     t.deepEqual(expected_config_id, res.body.config_data.config_id)
 })
 
-test.serial('update config', async t => {
+test.skip('get a config by id and version', async t => {
+    t.plan(2);
+    let expected_config_id = 'new_config'
+    let path = `/api/config/${expected_config_id}@1.2.3`
+    let res = await request(await makeApp())
+        .get(path)
+        .send();
+    console.log('Config',res.body)
+    t.is(res.status, 200);
+    t.deepEqual(expected_config_id, res.body.config_data.config_id)
+})
+
+test.skip('update config', async t => {
     t.plan(2);
     let expected_config_id = 'new_config'
     let config =
@@ -114,7 +151,7 @@ test.serial('update config', async t => {
     t.deepEqual(res.body.config_data.config_version, "3.3.3")
 })
 
-test.serial('create new config', async t => {
+test.skip('create new config', async t => {
     let path = `/api/config`
     let config = {
         "config_data": {

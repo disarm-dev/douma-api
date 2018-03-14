@@ -37,23 +37,23 @@ function checkPermission(user, method, path) {
 
 
   if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
-    console.log('Condition 1 fail')
+    //console.log('Condition 1 fail')
     return false
   }
 
   const allowedGroups = endpointPermissions[method][path]
   if (allowedGroups.includes('*')) {
-    console.log('Condition 2 pass')
+   // console.log('Condition 2 pass')
     return true
   }
 
   if (!user) {
-    console.log('Condition 3 fail')
+    //console.log('Condition 3 fail')
     return false
   }
 
   let final_result =  allowedGroups.some(group => user.permissions.includes(group))
-    console.log('Final Result ', final_result)
+  //  console.log('Final Result ', final_result)
     return final_result
 }
 
@@ -64,7 +64,7 @@ function checkPermission(user, method, path) {
  */
 function updateUserList() {
   const path = process.env.SHEETS_URL || process.env.SHEETS_PATH
-  console.log('Updating users list from:', path)
+  //console.log('Updating users list from:', path)
   return getCSV(path).then(parsedCSV => {
     userList = parsedCSV.map(user => {
       // Parse permissions
@@ -140,7 +140,6 @@ function findByUsernamePassword(username, password) {
  */
 function authMiddleware(req, res, next) {
   const openPaths = ['/login', '/', '/refresh_users']
-    console.log('V6 options',req.path)
   if (openPaths.includes(req.path)) return next()
 
   const key = req.get('API-Key')
@@ -158,7 +157,6 @@ function authMiddleware(req, res, next) {
  * Checks if current user has sufficient permissions to access current enpoint
  */
 function endpointPermissionsMiddleware(req, res, next) {
-  console.log('Reqest Params',req.params)
   if (checkPermission(req.user, req.method.toLowerCase(), req.path)) {
     next()
   } else {
@@ -171,7 +169,6 @@ function endpointPermissionsMiddleware(req, res, next) {
  */
 function optionsMiddleware(req, res, next) {
   // Must have a country (though need to TODO: @refac Rename to instance_slug or similar)
-    console.log('V6 options',req.path)
   if (!req.query.country) {
     res.status(400).send('Country parameter missing')
   } else {
