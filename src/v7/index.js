@@ -9,6 +9,7 @@ const cluster = require('./routes/foci/case_clusters')
 const case_location = require('./routes/foci/case_locations')
 const maas = require('./maas')
 const config = require('./routes/config')
+const geojson = require('./geojson')
 
 const {url_base} = require('./lib/url_helper')
 
@@ -201,6 +202,41 @@ const endpoints = [
         method:DELETE,
         path:'/config',
         callback:config[DELETE]
+    },{
+        permissions:['write:config'],
+        method:POST,
+        path:'/geojson',
+        callback:geojson[POST]
+    },
+    {
+        permissions:['write:config'],
+        method:POST,
+        path:'/geojson/:geojson_id',
+        callback:geojson[POST]
+    },
+    {
+        permissions:['*'],
+        method:GET,
+        path:'/geojson',
+        callback:geojson[GET]
+    },
+    {
+        permissions:['*'],
+        method:GET,
+        path:'/geojson/:geojson_id',
+        callback:geojson[GET]
+    },
+    {
+        permissions:['write:config'],
+        method:PUT,
+        path:'/geojson',
+        callback:geojson[PUT]
+    },
+    {
+        permissions:['write:config'],
+        method:DELETE,
+        path:'/geojson',
+        callback:geojson[DELETE]
     }
 ]
 
