@@ -8,7 +8,7 @@
 
 # Create New Config
 
-**URL** : `/api/config/`
+**URL** : `/v7/config`
 
 **Status** : Done
 
@@ -49,7 +49,7 @@ To create a new config
 
 
 # Updating an existing config
-**URL** : `/api/config/{config_id}`
+**URL** : `/v7/config/{config_id}`
 
 **Status** : Done
 
@@ -92,7 +92,7 @@ To Update an existing config
 
 # Get all configs
 
-**URL** : `/api/config`
+**URL** : `/v7/config`
 
 **Status** : Done
 
@@ -144,7 +144,7 @@ To get all existing configs
 
 # Get A config
 
-**URL** : `/api/config/{config_id}`
+**URL** : `/v7/config/{config_id}`
 
 **Status** : Done
  
@@ -194,7 +194,7 @@ and a config with the config id exists.
 
 # Create new GEOJSON data
 
-**URL** : `/api/geojson/:instance/:spatial_hierarchy`
+**URL** : `/v7/geojson/:instance/:spatial_hierarchy`
 
 **Status** : DONE
 
@@ -240,10 +240,10 @@ waterline requires that documents have a primary key and it is used as a primary
 
 
 # Updating existing GEOJSON
-**URL** : `/api/geojson/{geojson_id}`
+**URL** : `/v7/geojson/:instance/:spatial_hierarchy`
 
 
-**Status** : TODO
+**Status** : DONE
 
 To Update existing geojson data from a geojson file
 
@@ -257,7 +257,7 @@ To Update existing geojson data from a geojson file
 
 ```json
 {
-    "geojson_data": {<valid geojson data>}
+   {<valid geojson data>}
 }
 ```
 
@@ -283,7 +283,7 @@ To Update existing geojson data from a geojson file
 
 # Fetch all GEOJSON data
 
-**URL** : `/api/geojson`
+**URL** : `/v7/geojson`
 
 
 **Status** : DONE
@@ -323,7 +323,7 @@ To get all existing GEOJSON data
 ## Notes
 
 
-# Get GEOJSON data 
+# Get GEOJSON data for a single jeojson file
 
 **URL** : `/api/geojson/:instance/:spatial_hierarchy`
 

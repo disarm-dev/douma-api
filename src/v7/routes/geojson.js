@@ -7,7 +7,8 @@ module.exports = {
                 const _id = `${instance}/${spatial_hierarchy}`
                 res.send(await geojson_collection.find({_id}).toArray())
             }else if(instance){
-                res.send(await geojson_collection.find({instance}).toArray())
+                const geojsons = await geojson_collection.find({instance}).toArray()
+                res.send(geojsons.map(e => e.spatial_hierarchy))
             }else {
                 res.send(await geojson_collection.find({}).toArray())
             }

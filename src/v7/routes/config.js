@@ -4,17 +4,27 @@ module.exports = {
         const config_id = req.params.config_id
         try {
             if (config_id) {//
-                if (config_id.indexOf('@')>0) {
+                if (config_id.indexOf('@') > 0) {
                     console.log(config_id.indexOf('@'))
                     res.send(await config_collection.find({_id: config_id}).toArray());
                 } else {
-                    console.log('config_id')
-                    res.send(await config_collection.find({'config_id':'bwa'}).toArray());
+                    const config = await config_collection.find({'config_id': 'bwa'}).toArray()
+                    if (config.length) {
+                        res.send(config[0]);
+                    } else {
+                        res.status(404).send(`There is no config for ${config_id}`)
+                    }
                 }
             } else {
-                res.send(await config_collection.find({}).toArray());
+                const configs = await config_collection.find({}).toArray()
+                res.send(configs.map(cfg => {
+                 return  {
+                        config_id:cfg.config_id,
+                        config_version:cfg.config_version
+                    }
+                }));
             }
-        }catch(e) {
+        } catch (e) {
             res.status(500).send(e.message)
         }
 
