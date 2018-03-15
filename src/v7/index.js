@@ -199,6 +199,12 @@ const endpoints = [
     },
     {
         permissions:['write:config'],
+        method:PUT,
+        path:'/config/:config_id',
+        callback:config[PUT]
+    },
+    {
+        permissions:['write:config'],
         method:DELETE,
         path:'/config',
         callback:config[DELETE]
