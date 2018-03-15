@@ -192,13 +192,13 @@ and a config with the config id exists.
 
 
 
-# Create new GEOJSON data
+# Create new geodata data
 
-**URL** : `/v7/geojson/:instance/:spatial_hierarchy`
+**URL** : `/v7/geodata/:instance/:spatial_hierarchy`
 
 **Status** : DONE
 
-To upload new geojson data from a geojson file
+To upload new geodata data from a geodata file
 
 **Method** : `POST`
 
@@ -208,18 +208,18 @@ To upload new geojson data from a geojson file
 
 **Data constraints**
 
-A valid GEOJSON Data should have a geojson_id field which is a string,
+A valid geodata Data should have a geodata_id field which is a string,
 waterline requires that documents have a primary key and it is used as a primary key
 
 ```json
 
-    {<valid geojson data>}
+    {<valid geodata data>}
 
 ```
 
 ## Success Responses
 
-**Condition** : If provided `geojson_data` is valid .
+**Condition** : If provided `geodata_data` is valid .
 
 **Code** : `201 Created`
 
@@ -227,7 +227,7 @@ waterline requires that documents have a primary key and it is used as a primary
 
 ## Error Response
 
-**Condition** : If provided `geojson_data` is not valid .
+**Condition** : If provided `geodata_data` is not valid .
 
 **Code** : `400 BAD REQUEST`
 
@@ -239,13 +239,13 @@ waterline requires that documents have a primary key and it is used as a primary
 
 
 
-# Updating existing GEOJSON
-**URL** : `/v7/geojson/:instance/:spatial_hierarchy`
+# Updating existing geodata
+**URL** : `/v7/geodata/:instance/:spatial_hierarchy`
 
 
 **Status** : DONE
 
-To Update existing geojson data from a geojson file
+To Update existing geodata data from a geodata file
 
 **Method** : `POST`
 
@@ -257,13 +257,13 @@ To Update existing geojson data from a geojson file
 
 ```json
 {
-   {<valid geojson data>}
+   {<valid geodata data>}
 }
 ```
 
 ## Success Responses
 
-**Condition** : If provided `geojson_data` is valid and a record exists with the provide `geojson_id`.
+**Condition** : If provided `geodata_data` is valid and a record exists with the provide `geodata_id`.
 
 **Code** : `200 OK`
 
@@ -271,7 +271,7 @@ To Update existing geojson data from a geojson file
 
 ## Error Response
 
-**Condition** : If provided `geojson_data` is not valid or the provided `geojson_id` does not belong to an existing GEOJSON record .
+**Condition** : If provided `geodata_data` is not valid or the provided `geodata_id` does not belong to an existing geodata record .
 
 **Code** : `400 BAD REQUEST`
 
@@ -281,14 +281,14 @@ To Update existing geojson data from a geojson file
 
 
 
-# Fetch all GEOJSON data
+# Fetch all geodata data
 
-**URL** : `/v7/geojson`
+**URL** : `/v7/geodata`
 
 
 **Status** : DONE
 
-To get all existing GEOJSON data
+To get all existing geodata data
 
 **Method** : `GET`
 
@@ -306,7 +306,7 @@ To get all existing GEOJSON data
 
 ## Success Responses
 
-**Condition** : If `geojson_version` is not provided or the  provided `geojson_version` exists.
+**Condition** : If `geodata_version` is not provided or the  provided `geodata_version` exists.
 
 **Code** : `200 OK`
 
@@ -314,7 +314,7 @@ To get all existing GEOJSON data
 
 ## Error Response
 
-**Condition** : If the provided `geojson_versin` does not exist.
+**Condition** : If the provided `geodata_versin` does not exist.
 
 **Code** : `400 BAD REQUEST`
 
@@ -323,14 +323,14 @@ To get all existing GEOJSON data
 ## Notes
 
 
-# Get GEOJSON data for a single jeojson file
+# Get geodata data for a single jeojson file
 
-**URL** : `/api/geojson/:instance/:spatial_hierarchy`
+**URL** : `/api/geodata/:instance/:spatial_hierarchy`
 
 
 **Status** : TODO
 
-To get GEOJSON from a single GEOJSON file, by id
+To get geodata from a single geodata file, by id
 
 **Method** : `GET`
 
@@ -344,13 +344,13 @@ To get GEOJSON from a single GEOJSON file, by id
 
 ```json
 {
-    "geojson_version"
+    "geodata_version"
 }
 ```
 
 ## Success Responses
 
-**Condition** : If `geojson_version` is not provided or the  provided `geojson_version` exists
+**Condition** : If `geodata_version` is not provided or the  provided `geodata_version` exists
 and a config with the config id exists.
 
 **Code** : `200 OK`
@@ -359,20 +359,20 @@ and a config with the config id exists.
 
 ## Error Response
 
-**Condition** : If there is no config with the provided `geojson_id`  .
+**Condition** : If there is no config with the provided `geodata_id`  .
 
 **Code** : `401 NOT FOUND`
 
 
 
-# Get all geojson levels for an instance
+# Get all geodata levels for an instance
 
-**URL** : `/api/geojson/:instance`
+**URL** : `/api/geodata/:instance`
 
 
 **Status** : DONE
 
-To get GEOJSON levels from an instance
+To get geodata levels from an instance
 
 **Method** : `GET`
 
@@ -390,7 +390,7 @@ To get GEOJSON levels from an instance
 
 ## Success Responses
 
-**Condition** : If `geojson_version` is not provided or the  provided `geojson_version` exists
+**Condition** : If `geodata_version` is not provided or the  provided `geodata_version` exists
 and a config with the config id exists.
 
 **Code** : `200 OK`
@@ -403,6 +403,6 @@ and a config with the config id exists.
 
 ## Error Response
 
-**Condition** : If there is no config with the provided `geojson_id`  .
+**Condition** : If there is no config with the provided `geodata_id`  .
 
 **Code** : `401 NOT FOUND`

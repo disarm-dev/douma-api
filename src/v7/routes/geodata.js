@@ -1,16 +1,16 @@
 module.exports = {
     async get(req, res) {
-        const geojson_collection = req.db.collection('geojson');
+        const geodata_collection = req.db.collection('geodata');
         const {instance, spatial_hierarchy} = req.params;
         try {
             if(spatial_hierarchy){
                 const _id = `${instance}/${spatial_hierarchy}`
-                res.send(await geojson_collection.find({_id}).toArray())
+                res.send(await geodata_collection.find({_id}).toArray())
             }else if(instance){
-                const geojsons = await geojson_collection.find({instance}).toArray()
-                res.send(geojsons.map(e => e.spatial_hierarchy))
+                const geodatas = await geodata_collection.find({instance}).toArray()
+                res.send(geodatas.map(e => e.spatial_hierarchy))
             }else {
-                res.send(await geojson_collection.find({}).toArray())
+                res.send(await geodata_collection.find({}).toArray())
             }
 
         } catch (e) {
@@ -19,7 +19,7 @@ module.exports = {
     }
     ,
     put(req, res) {
-        const geojson_collection = req.db.collection('geojson');
+        const geodata_collection = req.db.collection('geodata');
         try {
             console.log('put', req.path)
             res.send(req.path)
@@ -29,15 +29,15 @@ module.exports = {
     }
     ,
     async post(req, res) {
-        const geojson_collection = req.db.collection('geojson');
+        const geodata_collection = req.db.collection('geodata');
         const {instance, spatial_hierarchy} = req.params;
         try {
-            await geojson_collection.removeOne({_id: `${instance}/${spatial_hierarchy}`})
-            await geojson_collection.insertOne({
+            await geodata_collection.removeOne({_id: `${instance}/${spatial_hierarchy}`})
+            await geodata_collection.insertOne({
                 _id: `${instance}/${spatial_hierarchy}`,
                 instance,
                 spatial_hierarchy,
-                geojson_data:req.body
+                geodata_data:req.body
             })
             res.status(201).send({success: true})
         } catch (e) {
@@ -48,7 +48,7 @@ module.exports = {
     }
     ,
     delete(req, res) {
-        const geojson_collection = req.db.collection('geojson');
+        const geodata_collection = req.db.collection('geodata');
         try {
             console.log('delete', req.path)
             res.send(req.path)

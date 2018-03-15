@@ -9,7 +9,7 @@ const cluster = require('./routes/foci/case_clusters')
 const case_location = require('./routes/foci/case_locations')
 const maas = require('./maas')
 const config = require('./routes/config')
-const geojson = require('./routes/geojson')
+const geodata = require('./routes/geodata')
 
 const {url_base} = require('./lib/url_helper')
 
@@ -205,38 +205,38 @@ const endpoints = [
     },{
         permissions:['write:config'],
         method:POST,
-        path:'/geojson/:instance/:spatial_hierarchy',
-        callback:geojson[POST]
+        path:'/geodata/:instance/:spatial_hierarchy',
+        callback:geodata[POST]
     },
     {
         permissions:['*'],
         method:GET,
-        path:'/geojson',
-        callback:geojson[GET]
+        path:'/geodata',
+        callback:geodata[GET]
     },
     {
         permissions:['*'],
         method:GET,
-        path:'/geojson/:instance',
-        callback:geojson[GET]
+        path:'/geodata/:instance',
+        callback:geodata[GET]
     },
     {
         permissions:['*'],
         method:GET,
-        path:'/geojson/:instance/:spatial_hierarchy',
-        callback:geojson[GET]
+        path:'/geodata/:instance/:spatial_hierarchy',
+        callback:geodata[GET]
     },
     {
         permissions:['write:config'],
         method:PUT,
-        path:'/geojson',
-        callback:geojson[PUT]
+        path:'/geodata',
+        callback:geodata[PUT]
     },
     {
         permissions:['write:config'],
         method:DELETE,
-        path:'/geojson',
-        callback:geojson[DELETE]
+        path:'/geodata',
+        callback:geodata[DELETE]
     }
 ]
 
