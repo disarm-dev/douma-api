@@ -150,6 +150,8 @@ function authMiddleware(req, res, next) {
   const openPaths = ['/login', '/', '/refresh_users']
   if (openPaths.includes(req.path)) return next()
 
+  if(req.path.startsWith('/config')&&req.method==='GET') return next()
+
   const key = req.get('API-Key')
   if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
 
