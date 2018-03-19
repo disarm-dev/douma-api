@@ -5,7 +5,7 @@ module.exports = {
         try {
             if(spatial_hierarchy){
                 const _id = `${instance}/${spatial_hierarchy}`
-                res.send(await geodata_collection.find({_id}).toArray())
+                res.send(await geodata_collection.findOne({_id}))
             }else if(instance){
                 const geodatas = await geodata_collection.find({instance}).toArray()
                 res.send(geodatas.map(e => e.spatial_hierarchy))
