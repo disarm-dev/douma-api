@@ -8,7 +8,7 @@ module.exports = function (app, version) {
   const version_prefix = '/' + version
 
   function v(url) {
-    console.log(version_prefix + url)
+    //console.log(version_prefix + url)
     return version_prefix + url
   }
 

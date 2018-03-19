@@ -1,7 +1,7 @@
 
 # List all plans
 
-**URL** : `/v6/plan/all`
+**URL** : `/v6/plan/list`
 
 **Status** : DONE
 
@@ -34,7 +34,11 @@ json-encoded data
 
 ```json
 [
-<List of Plans >
+<{
+ _id, //plan id
+ targets, //Number of targets
+ date // Update date
+ }>
 ]
 ```
 
@@ -54,9 +58,9 @@ json-encoded data
 
 # Get A single specific plan
 
-**URL** : `/v6/plan/single/:id`
+**URL** : `/v6/plan/detail/:plan_id`
 
-**Status** : DOING
+**Status** : DONE
 
 To get one specific plan using the plan id
 

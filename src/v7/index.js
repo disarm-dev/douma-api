@@ -50,13 +50,13 @@ const endpoints = [
     {
         permissions: ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'],
         method: GET,
-        path: '/plan/current',
+        path: '/plan/detail/:plan_id',
         callback: plan.get_current
     },
     {
         permissions: ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'],
         method: GET,
-        path: '/plan/all',
+        path: '/plan/list',
         callback: plan.list_all
     },
     {
@@ -64,6 +64,12 @@ const endpoints = [
         method: POST,
         path: '/plan/create',
         callback: plan.create
+    },
+    {
+        permissions: ['write:irs_plan'],
+        method: GET,
+        path: '/plan/current',
+        callback: plan.get_current
     },
     {
         permissions: ['read:irs_record_point', 'read:irs_monitor'],
@@ -260,7 +266,7 @@ module.exports = function (app, version) {
     }
 
     const version_path_regex = new RegExp(version_prefix)
-    console.log(version_path_regex)
+    //console.log(version_path_regex)
     app.use(version_path_regex, User_v5.authMiddleware)
     app.use(version_path_regex, User_v5.endpointPermissionsMiddleware)
     app.use(version_path_regex, User_v5.optionsMiddleware)

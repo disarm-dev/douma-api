@@ -12,7 +12,7 @@ test.serial('GET /v7/config config get is open => 200', async t => {
     t.is(res.status, 200)
 })
 
-test.serial('Create A new Config ' , async t => {
+test.skip('Create A new Config ' , async t => {
     const res = await request(app).post('/v7/config?country=all')
     t.is(res.status, 201)
 })

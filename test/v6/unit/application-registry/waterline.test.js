@@ -108,7 +108,7 @@ test.skip('get a config by id', async t => {
     let res = await request(await makeApp())
         .get(path)
         .send();
-    console.log(res.body)
+    //console.log(res.body)
     t.is(res.status, 200);
     t.deepEqual(expected_config_id, res.body.config_data.config_id)
 })
@@ -120,7 +120,7 @@ test.skip('get a config by id and version', async t => {
     let res = await request(await makeApp())
         .get(path)
         .send();
-    console.log('Config',res.body)
+    //console.log('Config',res.body)
     t.is(res.status, 200);
     t.deepEqual(expected_config_id, res.body.config_data.config_id)
 })

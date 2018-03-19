@@ -104,7 +104,7 @@ function attach_waterline_to_express(app) {
 
 
     app.post('/api/geojson', (req, res) => {
-          console.log('Deprectaed Post Geojson',req.body.geojson_id)
+        //  console.log('Deprectaed Post Geojson',req.body.geojson_id)
         waterline.getModel('geojson', orm)
             .create({_id: req.body.geojson_id, geojson_data: req.body})
             .meta({fetch: true})
