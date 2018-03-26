@@ -25,9 +25,10 @@ const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
   // If no focus_filter_area
 
   // Get instance_config (from cache or remote)
-  const instance_config = await get_instance_config(req.country)
+  const instance_config = await get_instance_config(req)
 
   // Get current plan
+  // TODO: use findOne, not find().toArray()[0]
   const result = await find_latest_plan(req)
   let current_plan = await result.toArray()
   current_plan = current_plan[0]
@@ -43,6 +44,7 @@ const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
   const planning_level_id_field = get_planning_level_id_field(instance_config)
 
   // Get polygon for focus_filter_area
+  // TODO: Retrieve geodata from db, not client.
   const geodata = await get_geodata(req.country)
   const focus_filter_area_polygon = geodata[selection_level.name].features.find(feature => {
     return feature.properties[selection_level.field_name] === incoming_plan.focus_filter_area.id
