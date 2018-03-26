@@ -1,13 +1,17 @@
 module.exports = {
     async get(req, res) {
+        // TODO: Split into two methods.
+        // Since this is used for two endpoints, /config and /config/:config_id. It will be easier to read and maintain
         const config_collection = req.db.collection('config');
         const config_id = req.params.config_id
         try {
             if (config_id) {//
                 if (config_id.indexOf('@') > 0) {
                     console.log(config_id.indexOf('@'))
+                    // TODO: use findOne, not find().toArray()[0]
                     res.send(await config_collection.find({_id: config_id}).toArray());
                 } else {
+                    // TODO: use findOne, not find().toArray()[0]
                     const config = await config_collection.find({config_id}).toArray()
                     if (config.length) {
                         res.send(config[0]);
@@ -16,6 +20,7 @@ module.exports = {
                     }
                 }
             } else {
+                // TODO: Only return one config per config_id, no need to send all versions.
                 const configs = await config_collection.find({}).toArray()
                 res.send(configs.map(cfg => {
                     return {
@@ -44,7 +49,10 @@ module.exports = {
                     console.log(updated_config)
                     res.send(updated_config);
                 } else { //Update one version
+                    // TODO: Clarify what is going on here, what's happening in the else?
                     if (config_version) {
+                        // TODO: you shouldn't be able to update a config with the same version, then it's not the same version.
+                        // TODO: We should use the mongo ids, not create our own. We should query by config_id and config_version though.
                         await config_collection.removeOne({_id: `${req.body.config_data.config_id}@${req.body.config_data.config_version}`})
                         await config_collection.insertOne({
                             _id: `${req.body.config_data.config_id}@${req.body.config_data.config_version}`,

@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const stripComments = require('strip-json-comments');
 
 // Get country from req
 // Get instance_config from cache or from remote
@@ -14,32 +13,23 @@ const root_url = (instance_slug) => {
   }
 }
 
-const get_instance_config = async (instance_slug) => {
-  const url = `${root_url(instance_slug)}/static/instances/${instance_slug}/config/${instance_slug}.instance.json`
-
-  try {
-    const res = await fetch(url)
-    const instance_text = await res.text()
-    const instance_config = JSON.parse(stripComments(instance_text))
-
-    return instance_config
-  } catch (e) {
-    console.error(e)
-  }
+const get_instance_config = async (req) => {
+  const instance_slug = req.country
+  const config_collection = req.db.collection('config');
+  const config = await config_collection.findOne({ $query: { config_id: instance_slug}, $orderby: { config_version: -1 } })
+  return config
 }
 
-const get_geodata = async (instance_slug) => {
-  const geodata = {}
-  const instance_config = await get_instance_config(instance_slug)
-
+const get_geodata = async (req) => {
+  const instance_slug = req.country
+  const geodata_collection = req.db.collection('geodata');
+  const instance_config = await get_instance_config(req)
   const levels = instance_config.spatial_hierarchy.levels
 
-  for (level of levels) {
-    const url = `${root_url(instance_slug)}/static/instances/${instance_slug}/spatial_hierarchy/${instance_slug}.${level.name}.geojson`
-
-    const response = await fetch(url)
-    const response_json = await response.json()
-    geodata[level.name] = response_json
+  const geodata = {}
+  for (const level of levels) {
+    const geodata_level = await geodata_collection.findOne({ _id: `${instance_slug}/${level.name}`})
+    geodata[level.name] = geodata_level.geodata_data
   }
 
   return geodata
