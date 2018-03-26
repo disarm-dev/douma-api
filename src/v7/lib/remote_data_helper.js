@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const stripComments = require('strip-json-comments');
 
 // Get country from req
 // Get instance_config from cache or from remote
@@ -14,18 +13,11 @@ const root_url = (instance_slug) => {
   }
 }
 
-const get_instance_config = async (instance_slug) => {
-  const url = `${root_url(instance_slug)}/static/instances/${instance_slug}/config/${instance_slug}.instance.json`
-
-  try {
-    const res = await fetch(url)
-    const instance_text = await res.text()
-    const instance_config = JSON.parse(stripComments(instance_text))
-
-    return instance_config
-  } catch (e) {
-    console.error(e)
-  }
+const get_instance_config = async (req) => {
+  const instance_slug = req.country
+  const config_collection = req.db.collection('config');
+  const config = await config_collection.findOne({ $query: { config_id: instance_slug}, $orderby: { config_version: -1 } })
+  return config
 }
 
 const get_geodata = async (instance_slug) => {
