@@ -44,8 +44,7 @@ const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
   const planning_level_id_field = get_planning_level_id_field(instance_config)
 
   // Get polygon for focus_filter_area
-  // TODO: Retrieve geodata from db, not client.
-  const geodata = await get_geodata(req.country)
+  const geodata = await get_geodata(req)
   const focus_filter_area_polygon = geodata[selection_level.name].features.find(feature => {
     return feature.properties[selection_level.field_name] === incoming_plan.focus_filter_area.id
   })

@@ -20,18 +20,16 @@ const get_instance_config = async (req) => {
   return config
 }
 
-const get_geodata = async (instance_slug) => {
-  const geodata = {}
-  const instance_config = await get_instance_config(instance_slug)
-
+const get_geodata = async (req) => {
+  const instance_slug = req.country
+  const geodata_collection = req.db.collection('geodata');
+  const instance_config = await get_instance_config(req)
   const levels = instance_config.spatial_hierarchy.levels
 
-  for (level of levels) {
-    const url = `${root_url(instance_slug)}/static/instances/${instance_slug}/spatial_hierarchy/${instance_slug}.${level.name}.geojson`
-
-    const response = await fetch(url)
-    const response_json = await response.json()
-    geodata[level.name] = response_json
+  const geodata = {}
+  for (const level of levels) {
+    const geodata_level = await geodata_collection.findOne({ _id: `${instance_slug}/${level.name}`})
+    geodata[level.name] = geodata_level.geodata_data
   }
 
   return geodata
