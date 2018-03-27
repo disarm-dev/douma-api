@@ -7,8 +7,8 @@ import {app} from '../../../../src/api'
 const admin_key = '58134d20b78c8b3c17cc7f811c2332a0'
 const power_key = '820ea90b279df4da0a2cf9dc8ece3856'
 const novice_key = '04a184f1adf9b44a065d287a5d377284'
-const foci_key = 'f03b611f5c032a2dc45de336edc46e4f'
-const {tear_down} = require('../helper')
+const foci_key = '8ab171b97b246e87b03ef8434c56ee3d'
+const {tear_down} = require('../../helper')
 
 const setup = async function () {
 
