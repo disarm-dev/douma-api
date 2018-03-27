@@ -1,0 +1,24 @@
+import {app} from "../../../src/api";
+import request from "supertest";
+
+const admin_key = '58134d20b78c8b3c17cc7f811c2332a0'
+const {tear_down, populate_responses} = require('../helper')
+
+
+const test = require('ava').test
+
+//Insert seed responses
+test.beforeEach(async () => {
+    await tear_down()
+    await populate_responses()
+})
+
+
+//test('Test For creating responses')
+
+test.serial('Get filtered responses', async t => {
+    t.plan(2)
+    const res = await request(app).get('/v7/record/filtered?country=bwa&start_date=2018-02-20T09:39:45.347Z&end_date=2018-03-27T08:11:58.410Z').set('Api-Key', admin_key)
+    t.true(res.body.length>0)
+    t.is(res.status, 200)
+})
