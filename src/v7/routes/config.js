@@ -41,18 +41,19 @@ module.exports = {
         const config_data = req.body.config_data ? req.body.config_data : req.body
         const config_version = config_data.config_version
         try {
-            if (config_id) {//
+            if (config_id) {// if the config id is specified as part of the path
                 if (config_id.indexOf('@') > 0) { // Update one version
                     console.log(config_id.indexOf('@'))
                     await config_collection.updateOne({_id: config_id}, {...config_data})
                     const updated_config = await config_collection.findOne({_id: config_id})
                     console.log(updated_config)
                     res.send(updated_config);
-                } else { //Update one version
+                } else { // If there is no config id in the path then get the config id from the data
                     // TODO: Clarify what is going on here, what's happening in the else?
                     if (config_version) {
                         // TODO: you shouldn't be able to update a config with the same version, then it's not the same version.
                         // TODO: We should use the mongo ids, not create our own. We should query by config_id and config_version though.
+
                         await config_collection.removeOne({_id: `${req.body.config_data.config_id}@${req.body.config_data.config_version}`})
                         await config_collection.insertOne({
                             _id: `${req.body.config_data.config_id}@${req.body.config_data.config_version}`,
