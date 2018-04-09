@@ -16,7 +16,6 @@ let endpointPermissions = {}
  * @param permissions An array of permission rules
  */
 function addPermission(method, path, permissions) {
-   // console.log('addPermission', method, path, permissions)
     if (!endpointPermissions[method]) {
         endpointPermissions[method] = {}
     }
@@ -25,7 +24,7 @@ function addPermission(method, path, permissions) {
     }
 
     endpointPermissions[method][path] = endpointPermissions[method][path].concat(permissions)
-    //console.log('Added Permission', endpointPermissions[method][path])
+
 }
 
 /*
@@ -42,16 +41,16 @@ function checkPermission(user, method, path) {
         .filter(i => i.length)[0]
     path = _path ? _path : path
 
-    //console.log('Path ', path, 'Endpoint Permissions', endpointPermissions[method])
+    console.log('Path ', path, 'Endpoint Permissions', endpointPermissions[method])
 
     if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
-        console.log('Condition 1 fail')
+        console.log('Condition 1 fail', method, path)
         return false
     }
 
     const allowedGroups = endpointPermissions[method][path]
     if (allowedGroups.includes('*')) {
-        // console.log('Condition 2 pass')
+
         return true
     }
 
