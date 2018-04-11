@@ -1,5 +1,6 @@
 const {filter_plan_targets_for_focus_area, find_latest_plan} = require('../lib/plan_helper')
 const {decorate_incoming_document} = require('../lib/decorate_incoming_document')
+const ObjectID = require('mongodb').ObjectID
 
 
 module.exports = {
@@ -62,7 +63,7 @@ module.exports = {
             const plan_collection = req.db.collection('plans')
             const plan_id = req.params.plan_id
             plan_collection
-                .findOne({_id:plan_id},(error,doc)=>{
+                .findOne({_id:ObjectID(plan_id)},(error,doc)=>{
                     if(error){
                         cosole.log('Error',error)
                         res.status(500).send('Internal Server Error')
