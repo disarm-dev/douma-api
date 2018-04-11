@@ -51,7 +51,7 @@ const endpoints = [
         permissions: ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'],
         method: GET,
         path: '/plan/detail/:plan_id',
-        callback: plan.get_current
+        callback: plan.plan_by_id
     },
     {
         permissions: ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'],
@@ -272,7 +272,6 @@ module.exports = function (app, version) {
     }
 
     const version_path_regex = new RegExp(version_prefix)
-    //console.log(version_path_regex)
     app.use(version_path_regex, User_v5.authMiddleware)
     app.use(version_path_regex, User_v5.endpointPermissionsMiddleware)
     app.use(version_path_regex, User_v5.optionsMiddleware)

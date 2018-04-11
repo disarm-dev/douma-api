@@ -39,9 +39,10 @@ function checkPermission(user, method, path) {
     let _path = Object.keys(endpointPermissions[method])
         .filter(i => path.startsWith(i))
         .filter(i => i.length)[0]
-    path = _path ? _path : path
 
-    console.log('Path ', path, 'Endpoint Permissions', endpointPermissions[method])
+    path = _path&&_path!=='/' ? _path : path
+
+    console.log('Path ', path,_path, 'Endpoint Permissions', user)
 
     if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
         console.log('Condition 1 fail', method, path)
@@ -55,7 +56,7 @@ function checkPermission(user, method, path) {
     }
 
     if (!user) {
-        //console.log('Condition 3 fail')
+        console.log('Condition 3 fail')
         return false
     }
 
