@@ -62,14 +62,14 @@ module.exports = {
             const plan_collection = req.db.collection('plans')
             const plan_id = req.params.plan_id
             plan_collection
-                .findOne({_id:plan_id})
-                .then((plan,doc) =>{
-                    console.log('Found plan', plan,doc)
-                    res.send(plan)
-                } )
-                .catch(error =>{
-                    console.log('Database Error',error)
-                    res.status(500).send(error)
+                .findOne({_id:plan_id},(error,doc)=>{
+                    if(error){
+                        cosole.log('Error',error)
+                        res.status(500).send('Internal Server Error')
+                    }else{
+                        console.log('Doc',doc)
+                        res.send(doc)
+                    }
                 })
         }
         catch(e) {
