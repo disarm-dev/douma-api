@@ -4,7 +4,7 @@ import request from 'supertest'
 import {app} from '../../../../src/api'
 
 
-const admin_key = '58134d20b78c8b3c17cc7f811c2332a0'
+const admin_key = 'f3c04df6f4380af247acf7b13a8328d8'
 const power_key = '820ea90b279df4da0a2cf9dc8ece3856'
 const novice_key = '04a184f1adf9b44a065d287a5d377284'
 const foci_key = '8ab171b97b246e87b03ef8434c56ee3d'

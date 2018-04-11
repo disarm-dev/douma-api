@@ -50,7 +50,7 @@ module.exports = {
     delete(req, res) {
         const geodata_collection = req.db.collection('geodata');
         try {
-            console.log('delete', req.path)
+            //console.log('delete', req.path)
             res.send(req.path)
         } catch (e) {
 

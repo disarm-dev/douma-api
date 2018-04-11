@@ -7,7 +7,7 @@ module.exports = {
         try {
             if (config_id) {//
                 if (config_id.indexOf('@') > 0) {
-                    console.log(config_id.indexOf('@'))
+                   // console.log(config_id.indexOf('@'))
                     // TODO: use findOne, not find().toArray()[0]
                     res.send(await config_collection.find({_id: config_id}).toArray());
                 } else {
@@ -32,7 +32,6 @@ module.exports = {
         } catch (e) {
             res.status(500).send(e.message)
         }
-
     }
     ,
     async put(req, res) {
@@ -43,10 +42,10 @@ module.exports = {
         try {
             if (config_id) {// if the config id is specified as part of the path
                 if (config_id.indexOf('@') > 0) { // Update one version
-                    console.log(config_id.indexOf('@'))
+                    //console.log(config_id.indexOf('@'))
                     await config_collection.updateOne({_id: config_id}, {...config_data})
                     const updated_config = await config_collection.findOne({_id: config_id})
-                    console.log(updated_config)
+                   // console.log(updated_config)
                     res.send(updated_config);
                 } else { // If there is no config id in the path then get the config id from the data
                     // TODO: Clarify what is going on here, what's happening in the else?
@@ -106,7 +105,7 @@ module.exports = {
     delete(req, res) {
         const config_collection = req.db.collection('config');
         try {
-            console.log('delete', req.path,req.body.query)
+           // console.log('delete', req.path,req.body.query)
             const query = req.body.query
             config_collection.deleteMany(query)
                 .catch(console.log)
@@ -116,4 +115,20 @@ module.exports = {
 
         }
     }
+}
+
+function get_config(){
+
+}
+
+function get_configs(){
+
+}
+
+function create_config(){
+
+}
+
+function update_config(){
+
 }

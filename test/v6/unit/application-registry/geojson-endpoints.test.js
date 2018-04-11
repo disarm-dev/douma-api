@@ -6,7 +6,7 @@ const server = require('../../../../src/application-registry')
 const geojsons = require('../../../../src/application-registry/jeojson-data')
 const auth = require('../../../../src/application-registry/lib/auth')
 
-const admin_key = '27599f876ad55a65762b2b9b57f1ba31'
+const admin_key = 'f3c04df6f4380af247acf7b13a8328d8'
 
 function makeApp() {
     const app = express();
