@@ -64,7 +64,10 @@ module.exports = {
             plan_collection
                 .findOne({_id:plan_id})
                 .then(plan => res.send(plan))
-                .catch(res.status(500).send)
+                .catch(error =>{
+                    console.log('Database Error',error)
+                    res.status(500).send(error)
+                })
         }
         catch(e) {
             console.log('Internal error',e)
