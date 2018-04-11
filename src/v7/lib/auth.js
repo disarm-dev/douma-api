@@ -37,7 +37,7 @@ function addPermission(method, path, permissions) {
 function checkPermission(user, method, path) {
 
     let _path = Object.keys(endpointPermissions[method])
-        .filter(i => path.startsWith(i))
+        .filter(i => path.startsWith(i)&&i!=='/')
         .filter(i => i.length)[0]
 
     path = _path&&_path!=='/' ? _path : path
