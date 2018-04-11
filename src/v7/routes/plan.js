@@ -57,6 +57,7 @@ module.exports = {
 
     },
     plan_by_id: async (req, res) => {
+        console.log('Plan By ID',req.params.plan_id)
         try {
             const plan_collection = req.db.collection('plans')
             const plan_id = req.params.plan_id
