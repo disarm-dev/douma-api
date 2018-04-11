@@ -57,12 +57,19 @@ module.exports = {
 
     },
     plan_by_id: async (req, res) => {
-        const plan_collection = req.db.collection('plans')
-        const plan_id = req.params.plan_id
-        plan_collection
-            .findOne({_id:plan_id})
-            .then(res.send)
-            .catch(res.status(500).send)
+        try {
+            const plan_collection = req.db.collection('plans')
+            const plan_id = req.params.plan_id
+            plan_collection
+                .findOne({_id:plan_id})
+                .then(res.send)
+                .catch(res.status(500).send)
+        }
+        catch(e) {
+            console.log(e)
+            res.status(500).send('Internal Server Error')
+        }
+
     }
 }
 
