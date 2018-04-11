@@ -63,8 +63,8 @@ module.exports = {
             const plan_id = req.params.plan_id
             plan_collection
                 .findOne({_id:plan_id})
-                .then(plan =>{
-                    console.log('Found plan', plan)
+                .then((plan,doc) =>{
+                    console.log('Found plan', plan,doc)
                     res.send(plan)
                 } )
                 .catch(error =>{
