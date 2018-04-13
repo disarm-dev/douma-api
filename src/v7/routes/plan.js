@@ -78,7 +78,40 @@ module.exports = {
             res.status(500).send('Internal Server Error')
         }
 
+    },
+    update: async (req,res) => {
+        try{
+            let {_id} = req.param
+            const plan_collection = req.db.collection('plans')
+            console.log()
+            plan_collection
+                .findOne({_id:ObjectID(_id)})
+                .then(plan =>{
+                    let incoming_targets = res.body.plan.targets.filter( t => {
+                        return !(plan.targets.map(t => t.id)
+                            .includes(t.id))
+                    })
+                    plan.targets.concat(incoming_targets)
+                    plan.save()
+                        .then(saved => res.send(saved))
+                        .catch(error => res.status(500).send('There was an error while saving'))
+                })
+                .catch(error => res.status(404).send('Plan could not be found'))
+
+        }
+        catch(e){
+            res.status(500).send('Internal server error')
+        }
+    },
+    remove: async(req, res) => {
+        try{
+
+        }
+        catch (e){
+
+        }
     }
+
 }
 
 

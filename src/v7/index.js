@@ -54,6 +54,12 @@ const endpoints = [
         callback: plan.plan_by_id
     },
     {
+        permissions: ['write:irs_plan', 'write:irs_monitor', 'write:irs_tasker'],
+        method: PUT,
+        path: '/plan/:plan_id',
+        callback: plan.update
+    },
+    {
         permissions: ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'],
         method: GET,
         path: '/plan/list',
