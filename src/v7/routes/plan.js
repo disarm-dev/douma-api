@@ -86,7 +86,8 @@ module.exports = {
             console.log(req.params)
             plan_collection
                 .findOne({_id:ObjectID(_id)})
-                .then(plan =>{
+                .then(_plan =>{
+                    let plan = _plan.toObject()
                     let incoming_targets = req.body.targets.filter( t => {
                         console.log(plan)
                         return !(plan.targets.map(t => t.id)
