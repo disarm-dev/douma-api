@@ -81,7 +81,7 @@ module.exports = {
     },
     update: async (req,res) => {
         try{
-            let {_id} = req.param
+            let {_id} = req.params
             const plan_collection = req.db.collection('plans')
             console.log(_id)
             plan_collection
