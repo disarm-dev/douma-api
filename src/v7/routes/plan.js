@@ -93,7 +93,8 @@ module.exports = {
                             .includes(t.id))
                     })
                     plan.targets.concat(incoming_targets)
-                    plan.save()
+                    delete plan._id
+                    plan_collection.updateOne({_id:ObjectID(_id)},{...plan})
                         .then(saved => res.send(saved))
                         .catch(error => res.status(500).send('There was an error while saving'))
                 })
