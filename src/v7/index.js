@@ -56,7 +56,7 @@ const endpoints = [
     {
         permissions: ['write:irs_plan', 'write:irs_monitor', 'write:irs_tasker'],
         method: PUT,
-        path: '/plan/:plan_id',
+        path: '/plan/:_id',
         callback: plan.update
     },
     {

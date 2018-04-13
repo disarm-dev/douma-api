@@ -83,7 +83,7 @@ module.exports = {
         try{
             let {_id} = req.params
             const plan_collection = req.db.collection('plans')
-            console.log(_id)
+            console.log(req.params)
             plan_collection
                 .findOne({_id:ObjectID(_id)})
                 .then(plan =>{
