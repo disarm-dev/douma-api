@@ -60,6 +60,12 @@ const endpoints = [
         callback: plan.update
     },
     {
+        permissions: ['write:irs_plan', 'write:irs_monitor', 'write:irs_tasker'],
+        method: DELETE,
+        path: '/plan/:_id',
+        callback: plan.remove
+    },
+    {
         permissions: ['read:irs_plan', 'read:irs_monitor', 'read:irs_tasker'],
         method: GET,
         path: '/plan/list',
