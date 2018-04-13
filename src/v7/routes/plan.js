@@ -96,7 +96,10 @@ module.exports = {
                         .then(saved => res.send(saved))
                         .catch(error => res.status(500).send('There was an error while saving'))
                 })
-                .catch(error => res.status(404).send('Plan could not be found'))
+                .catch(error =>{
+                    console.log(error)
+                    res.status(404).send('Plan could not be found')
+                } )
 
         }
         catch(e){
