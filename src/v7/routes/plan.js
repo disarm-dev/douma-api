@@ -88,6 +88,7 @@ module.exports = {
                 .findOne({_id:ObjectID(_id)})
                 .then(plan =>{
                     let incoming_targets = req.body.targets.filter( t => {
+                        console.log(plan)
                         return !(plan.targets.map(t => t.id)
                             .includes(t.id))
                     })
