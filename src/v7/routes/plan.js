@@ -92,6 +92,7 @@ module.exports = {
                         return !(plan.targets.map(t => t.id)
                             .includes(t.id))
                     })
+                    console.log('Incoming targets',incoming_targets)
                     plan.targets.concat(incoming_targets)
                     delete plan._id
                     plan_collection.updateOne({_id:ObjectID(_id)},{...plan})
