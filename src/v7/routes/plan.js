@@ -86,14 +86,13 @@ module.exports = {
             console.log(req.params)
             plan_collection
                 .findOne({_id:ObjectID(_id)})
-                .then(_plan =>{
-                    let plan = _plan.toObject()
+                .then(plan =>{
                     let incoming_targets = req.body.targets.filter( t => {
                         console.log(plan)
                         return !(plan.targets.map(t => t.id)
                             .includes(t.id))
                     })
-                    plan.targets.concat(incoming_targets)
+                    plan.targets = plan.targets.concat(incoming_targets)
                     console.log('Incoming targets',plan)
                     delete plan._id
                     plan_collection.updateOne({_id:ObjectID(_id)},{...plan})
