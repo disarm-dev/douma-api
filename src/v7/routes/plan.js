@@ -87,7 +87,7 @@ module.exports = {
             plan_collection
                 .findOne({_id:ObjectID(_id)})
                 .then(plan =>{
-                    let incoming_targets = res.body.plan.targets.filter( t => {
+                    let incoming_targets = res.body.targets.filter( t => {
                         return !(plan.targets.map(t => t.id)
                             .includes(t.id))
                     })
