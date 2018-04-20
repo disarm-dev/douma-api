@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@locational/application-registry-validation": "^2.4.1",
+    "@locational/application-registry-validation": "^2.4.2",
     "@turf/centroid": "^4.5.2",
     "@turf/inside": "^4.5.2",
     "@turf/turf": "^5.1.6",
@@ -36,9 +36,9 @@
     "parse-server": "^2.7.2",
     "raven": "^1.1.2",
     "sails-mongo": "^1.0.0-11",
+    "strip-json-comments": "^2.0.1",
     "supertest": "^3.0.0",
-    "waterline": "^0.13.1-9",
-    "strip-json-comments": "^2.0.1"
+    "waterline": "^0.13.1-9"
   },
   "engines": {
     "node": "8.5.0"
