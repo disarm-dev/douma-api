@@ -29,7 +29,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-app.use(cors())
+app.use(cors({
+    exposedHeaders: ['Content-Length']
+}))
 app.use(compression())
 app.use(morgan('combined', {stream: accessLogStream}))
 
