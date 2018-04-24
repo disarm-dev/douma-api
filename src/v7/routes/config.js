@@ -1,23 +1,28 @@
+const semverSort = require('semver-sort');
+
 module.exports = {
     async get(req, res) {
         // TODO: Split into two methods.
         // Since this is used for two endpoints, /config and /config/:config_id. It will be easier to read and maintain
         const config_collection = req.db.collection('config');
         const config_id = req.params.config_id
+
         try {
             if (config_id) {//
-                if (config_id.indexOf('@') > 0) {
-                   // console.log(config_id.indexOf('@'))
-                    // TODO: use findOne, not find().toArray()[0]
-                    res.send(await config_collection.find({_id: config_id}).toArray());
+                if (config_id.indexOf('@') > 0) { //Has version
+                    res.send(await config_collection.findOne({_id: config_id}));
                 } else {
-                    // TODO: use findOne, not find().toArray()[0]
-                    const config = await config_collection.find({config_id}).toArray()
-                    if (config.length) {
-                        res.send(config[0]);
-                    } else {
+                    // This is where the user sent bwa,nam
+                    const configs = await config_collection.find({config_id}).toArray()
+                    if (!configs.length) {
                         res.status(404).send(`There is no config for ${config_id}`)
                     }
+
+                    const latest_config = configs.find(cfg => {
+                        return cfg.config_version === semverSort.desc(configs.map(config => config.config_version))[0]
+                    })
+
+                    res.send(latest_config)
                 }
             } else {
                 // TODO: Only return one config per config_id, no need to send all versions.
@@ -41,13 +46,13 @@ module.exports = {
         const config_version = config_data.config_version
         try {
             if (config_id) {// if the config id is specified as part of the path
-                if (config_id.indexOf('@') > 0) { // Update one version
-                    //console.log(config_id.indexOf('@'))
+                if (config_id.indexOf('@') > 0) { //the _id is instance@version
+                    //TODO check that _id is instace@version
                     await config_collection.updateOne({_id: config_id}, {...config_data})
                     const updated_config = await config_collection.findOne({_id: config_id})
-                   // console.log(updated_config)
+                    // console.log(updated_config)
                     res.send(updated_config);
-                } else { // If there is no config id in the path then get the config id from the data
+                } else { //In the else there is no version in the _id
                     // TODO: Clarify what is going on here, what's happening in the else?
                     if (config_version) {
                         // TODO: you shouldn't be able to update a config with the same version, then it's not the same version.
@@ -78,7 +83,10 @@ module.exports = {
     async post(req, res) {
         const config_collection = req.db.collection('config');
         const config_id = req.params['config_id'];
-        if (config_id) {
+        const config_data = req.body.config_data;
+        const calculated_id = `${config_data.config_id}@${config_data.config_version}`
+
+        if (config_id && (config_id === calculated_id)) {
             try {
                 await config_collection.updateOne({_id: config_id}, {...req.body.config_data})
                 res.status(201).send({success: true})
@@ -105,30 +113,39 @@ module.exports = {
     delete(req, res) {
         const config_collection = req.db.collection('config');
         try {
-           // console.log('delete', req.path,req.body.query)
+            // console.log('delete', req.path,req.body.query)
             const query = req.body.query
             config_collection.deleteMany(query)
                 .catch(console.log)
                 .then(console.log)
-           // res.send(req.path)
+            // res.send(req.path)
         } catch (e) {
 
         }
     }
 }
 
-function get_config(){
+function get_config_list() {
 
 }
 
-function get_configs(){
-
+function find_latest_config(instance_slug, collection) {
+    return new Promise((resolve, reject) => {
+        collection.find({config_id: instance_slug})
+            .sort({config_version})
+            .then(docs => {
+                resolve(docs[0])
+            })
+            .throw(reason => reject(reason))
+    })
 }
 
-function create_config(){
+function find_configs_list(req, res) {
+    return new Promise((resolve, reject) => {
 
+    })
 }
 
-function update_config(){
+function create_config(req, res) {
 
 }
