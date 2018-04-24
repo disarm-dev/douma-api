@@ -158,6 +158,8 @@ To get an existing config by ID
 
 **Data constraints**
 
+The `config_id` could be either the `instance_slug` eg (`bwa`) or `instance_slug@version` eg (`bwa@1.0.2`)
+
 
 
 ```json
