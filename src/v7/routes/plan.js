@@ -48,7 +48,8 @@ module.exports = {
                 return {
                     _id:plan._id,
                     targets:plan.targets.length,
-                    date:plan.updated_at
+                    date:plan.updated_at,
+                    name:plan.name
                 }
             })))
             .catch(e => res.status(500).send(e))
