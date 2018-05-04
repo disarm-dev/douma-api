@@ -1,5 +1,5 @@
-const User_v5 = require('./lib/auth')
-const addPermission = User_v5.addPermission
+const Auth = require('./lib/auth')
+const addPermission = Auth.addPermission
 
 const login = require('./routes/login')
 const plan = require('./routes/plan')
@@ -13,7 +13,7 @@ const geodata = require('./routes/geodata')
 
 const {url_base} = require('./lib/url_helper')
 
-User_v5.updateUserList()
+Auth.updateUserList()
 // TODO: Remove side effect
 let _version = '';
 
@@ -39,7 +39,7 @@ const endpoints = [
         permissions: ['*'],
         method: GET,
         path: '/refresh_users',
-        callback: User_v5.forceUpdateUserList
+        callback: Auth.forceUpdateUserList
     },
     {
         permissions: ['*'],
@@ -284,9 +284,9 @@ module.exports = function (app, version) {
     }
 
     const version_path_regex = new RegExp(version_prefix)
-    app.use(version_path_regex, User_v5.authMiddleware)
-    app.use(version_path_regex, User_v5.endpointPermissionsMiddleware)
-    app.use(version_path_regex, User_v5.optionsMiddleware)
+    app.use(version_path_regex, Auth.authMiddleware)
+    app.use(version_path_regex, Auth.endpointPermissionsMiddleware)
+    app.use(version_path_regex, Auth.optionsMiddleware)
 
     endpoints.forEach(make_endpoint)
 }
