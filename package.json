@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@locational/application-registry-validation": "^2.4.2",
+    "@locational/application-registry-validation": "^2.4.7",
     "@turf/centroid": "^4.5.2",
     "@turf/inside": "^4.5.2",
     "@turf/turf": "^5.1.6",
