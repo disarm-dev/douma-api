@@ -38,7 +38,6 @@ async function generate_foci(req, res) {
                     })
                 res.send({result: 'success'})
             } catch (e) {
-                console.log('Error', e)
                 res.status(5000).send({result: 'success'})
             }
         })

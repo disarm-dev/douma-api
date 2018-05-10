@@ -57,7 +57,6 @@ function checkPermission(user, method, path) {
  */
 function updateUserList() {
   const path = process.env.SHEETS_URL || process.env.SHEETS_PATH
-  //console.log('Updating users list from:', path)
   return getCSV(path).then(parsedCSV => {
     userList = parsedCSV.map(user => {
       // Parse permissions
@@ -85,7 +84,6 @@ function updateUserList() {
 
       // Generate key
       user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
-      //console.log('Created user', user.username, user.key)
 
       return user
     })

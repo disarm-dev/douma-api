@@ -52,13 +52,8 @@ module.exports = {
                 }
             })))
             .catch(e => res.status(500).send(e))
-
-        //console.log('Plans ',plans)
-        //res.status(200).send(plans)
-
     },
     plan_by_id: async (req, res) => {
-        console.log('Plan By ID',req.params.plan_id)
         try {
             const plan_collection = req.db.collection('plans')
             const plan_id = req.params.plan_id
@@ -68,13 +63,11 @@ module.exports = {
                         cosole.log('Error',error)
                         res.status(500).send('Internal Server Error')
                     }else{
-                        console.log('Doc',doc)
                         res.send(doc)
                     }
                 })
         }
         catch(e) {
-            console.log('Internal error',e)
             res.status(500).send('Internal Server Error')
         }
 
@@ -83,24 +76,20 @@ module.exports = {
         try{
             let {_id} = req.params
             const plan_collection = req.db.collection('plans')
-            console.log(req.params)
             plan_collection
                 .findOne({_id:ObjectID(_id)})
                 .then(plan =>{
                     let incoming_targets = req.body.targets.filter( t => {
-                        console.log(plan)
                         return !(plan.targets.map(t => t.id)
                             .includes(t.id))
                     })
                     plan.targets = plan.targets.concat(incoming_targets)
-                    console.log('Incoming targets',plan)
                     delete plan._id
                     plan_collection.updateOne({_id:ObjectID(_id)},{...plan})
                         .then(saved => res.send(saved))
                         .catch(error => res.status(500).send('There was an error while saving'))
                 })
                 .catch(error =>{
-                    console.log(error)
                     res.status(404).send('Plan could not be found')
                 } )
 

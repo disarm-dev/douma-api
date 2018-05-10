@@ -28,7 +28,6 @@ if (!process.env.SHEETS_URL && !process.env.SHEETS_PATH) {
 MongoClient.connect(process.env.MONGODB_URI)
     .then(db => {
         db.collection('records').ensureIndex({'id': 1}, {unique: true, background: true}).then(() => {
-            console.log('created index')
             launch()
         }).catch((e) => {
             console.log('failed in created index', e)

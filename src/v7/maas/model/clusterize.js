@@ -6,8 +6,6 @@ function vectorize_feature_data(data) {
 
 function clusterize({data, k, err}) {
     let clusters = []
-    //console.log('data',data)
-    console.log(k)
     let ans = kmeans(vectorize_feature_data(data), k);
     let good_indexes = get_good_clusters_indexes(ans.centroids, err)
     let bad_indexes = get_bad_clusters_indexes(ans.centroids, err)

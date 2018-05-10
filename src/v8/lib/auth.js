@@ -42,10 +42,7 @@ function checkPermission(user, method, path) {
 
     path = _path&&_path!=='/' ? _path : path
 
-    console.log('Path ', path,_path, 'Endpoint Permissions', user)
-
     if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
-        console.log('Condition 1 fail', method, path)
         return false
     }
 
@@ -56,12 +53,10 @@ function checkPermission(user, method, path) {
     }
 
     if (!user) {
-        console.log('Condition 3 fail')
         return false
     }
 
     return allowedGroups.some(group => user.permissions.includes(group))
-    //  console.log('Final Result ', final_result)
 
 }
 
@@ -72,7 +67,6 @@ function checkPermission(user, method, path) {
  */
 function updateUserList() {
     const path = process.env.SHEETS_URL || process.env.SHEETS_PATH
-    //console.log('Updating users list from:', path)
     return getCSV(path).then(parsedCSV => {
         userList = parsedCSV.map(user => {
             // Parse permissions
@@ -100,8 +94,6 @@ function updateUserList() {
 
             // Generate key
             user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
-            console.log('Created user', user.username, user.key)
-
             return user
         })
         return userList

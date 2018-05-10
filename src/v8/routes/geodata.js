@@ -21,7 +21,6 @@ module.exports = {
     put(req, res) {
         const geodata_collection = req.db.collection('geodata');
         try {
-           // console.log('put', req.path)
             res.send(req.path)
         } catch (e) {
 
@@ -41,7 +40,6 @@ module.exports = {
             })
             res.status(201).send({success: true})
         } catch (e) {
-            console.log(e)
             res.status(500).send(e)
         }
 
@@ -50,7 +48,6 @@ module.exports = {
     delete(req, res) {
         const geodata_collection = req.db.collection('geodata');
         try {
-            //console.log('delete', req.path)
             res.send(req.path)
         } catch (e) {
 

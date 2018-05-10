@@ -84,8 +84,6 @@ function updateUserList() {
 
       // Generate key
       user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
-      //console.log('Created user', user.username, user.key)
-
       return user
     })
     return userList
@@ -138,9 +136,7 @@ function authMiddleware(req, res, next) {
   if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
 
   const user = findByApiKey(key)
-    //console.log('user',endpointPermissions)
   if (!user) return res.status(401).send({message: 'Current API key is not valid. Please log out and try to login again.'})
-
   // In case everything succeeds
   req.user = user
   return next()

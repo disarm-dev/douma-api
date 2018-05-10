@@ -7,7 +7,6 @@ module.exports = {
         try {
             if (config_id) {//
                 if (config_id.indexOf('@') > 0) {
-                   // console.log(config_id.indexOf('@'))
                     // TODO: use findOne, not find().toArray()[0]
                     res.send(await config_collection.find({_id: config_id}).toArray());
                 } else {
@@ -42,10 +41,8 @@ module.exports = {
         try {
             if (config_id) {// if the config id is specified as part of the path
                 if (config_id.indexOf('@') > 0) { // Update one version
-                    //console.log(config_id.indexOf('@'))
                     await config_collection.updateOne({_id: config_id}, {...config_data})
                     const updated_config = await config_collection.findOne({_id: config_id})
-                   // console.log(updated_config)
                     res.send(updated_config);
                 } else { // If there is no config id in the path then get the config id from the data
                     // TODO: Clarify what is going on here, what's happening in the else?
@@ -83,7 +80,6 @@ module.exports = {
                 await config_collection.updateOne({_id: config_id}, {...req.body.config_data})
                 res.status(201).send({success: true})
             } catch (e) {
-                console.log(e)
                 res.status(500).send(e)
             }
         } else {
@@ -95,7 +91,6 @@ module.exports = {
                 })
                 res.status(201).send({success: true})
             } catch (e) {
-                console.log(e)
                 res.status(500).send(e)
             }
         }
@@ -105,12 +100,10 @@ module.exports = {
     delete(req, res) {
         const config_collection = req.db.collection('config');
         try {
-           // console.log('delete', req.path,req.body.query)
             const query = req.body.query
             config_collection.deleteMany(query)
                 .catch(console.log)
                 .then(console.log)
-           // res.send(req.path)
         } catch (e) {
 
         }

@@ -25,8 +25,6 @@ module.exports = {
     const personalised_instance_id = req.personalised_instance_id
     const last_id = req.body.last_id
     const limit = get(req, 'body.limit', 1000)
-    //console.log('limit', limit)
-
     let query
     if (last_id) {
       query = {country, personalised_instance_id, _id: {$gt: new ObjectID(last_id)}}
@@ -53,7 +51,6 @@ module.exports = {
 
     for (const doc of docs) {
       if (!doc) {
-        console.log('no doc, continue')
         continue
       }
       try {

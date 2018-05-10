@@ -46,9 +46,6 @@ module.exports = {
                 .then(plans => res.send(plans))
                 .catch(e => res.status(500).send(e))
 
-            //console.log('Plans ',plans)
-            //res.status(200).send(plans)
-
     },
     plan_by_id: async (req,res) => {
         

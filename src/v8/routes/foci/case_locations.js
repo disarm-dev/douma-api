@@ -14,7 +14,6 @@ async function create(req, res) {
         let inserted = await case_location.insertOne(doc)
         res.status(201).send(inserted)
     } catch (e) {
-        console.log(e)
         res.status(500).send(e)
     }
 }
@@ -27,7 +26,6 @@ async function create_bulk(req, res) {
         let inserted = await case_location.insertMany(docs)
         res.status(201).send(inserted)
     } catch (e) {
-        console.log(e)
         res.status(500).send(e)
     }
 }
@@ -72,14 +70,12 @@ async function update(req, res) {
         let _doc = await case_location.updateOne({_id}, {...doc})
         res.status(200).send(_doc)
     } catch (e) {
-        console.log(e)
         res.status(500).send(e)
     }
 
 }
 
 async function delete_case_location(req,res){
-    //console.log('Delete case points')
     const case_location = req.db.collection(collections.CASE_LOCATIONS)
     let query = req.body;
     try {
