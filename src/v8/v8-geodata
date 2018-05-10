@@ -1,0 +1,255 @@
+
+# Save geodata
+
+**URL** : `/v8/geodata/:instance/:spatial_hierarchy/version`
+
+**Status** : TODO
+
+To upload a version of geodata
+
+**Method** : `POST`
+
+**Auth required** :  YES
+
+**Permissions required** : \[ write:config\]
+
+**Data constraints**
+
+A valid geodata
+
+```json
+
+    {<valid geodata data>}
+
+```
+
+## Success Responses
+
+**Condition** : If provided `geodata_data` is valid .
+
+**Code** : `201 Created`
+
+**Response Content**
+```json
+{
+ "success":true
+}
+```
+## Error Response
+
+```json
+{
+ "success":false,
+ "reason":"<Reason for failure>"
+}
+```
+
+**Condition** : If provided `geodata_data` is not valid .
+
+**Code** : `400 BAD REQUEST`
+
+**Condition** : Something unexpected happened on the server
+
+**Code** : `500 INTERNAL SERVER ERROR`
+
+**Content example**
+
+## Notes
+
+
+
+# Save geodata
+
+**URL** : `/v8/geodata/:instance/:spatial_hierarchy`
+
+**Status** : TODO
+
+To upload a version of geodata and automatically bump version
+
+**Method** : `POST`
+
+**Auth required** :  YES
+
+**Permissions required** : \[ write:config\]
+
+**Data constraints**
+
+A valid geodata
+
+```json
+
+    {<valid geodata data>}
+
+```
+
+## Success Responses
+
+**Condition** : If provided `geodata_data` is valid .
+
+**Code** : `201 Created`
+
+**Response Content**
+```json
+{
+ "success":true
+}
+```
+## Error Response
+
+```json
+{
+ "success":false,
+ "reason":"<Reason for failure>"
+}
+```
+
+**Condition** : If provided `geodata_data` is not valid .
+
+**Code** : `400 BAD REQUEST`
+
+**Condition** : Something unexpected happened on the server
+
+**Code** : `500 INTERNAL SERVER ERROR`
+
+**Content example**
+
+## Notes
+
+
+
+# List levels and versions of geodata for an instance
+
+**URL** : `/v8/geodata/:instance`
+
+**Status** : TODO
+
+To get a list of geodata spatial level hierarchies and their versions for an instance
+
+**Method** : `GET`
+
+**Auth required** :  NO
+
+
+## Success Responses
+
+**Condition** : If provided `:instance` exists .
+
+**Code** : `200 Success`
+
+**Response Content**
+*Example*:
+
+```json
+[
+    {
+        "level":"villages",
+        "version":"2.0.2"
+    },
+    {
+        "level":"districts",
+        "version":"2.0.3"
+    }
+]
+```
+## Error Response
+
+**Condition** : If provided `:instance` does not exist.
+
+**Code** : `404 NOT FOUND`
+
+**Condition** : Something unexpected happened on the server
+
+**Code** : `500 INTERNAL SERVER ERROR`
+
+**Content example**
+
+## Notes
+
+
+
+
+# download a geodata version
+
+**URL** : `/v8/geodata/:instance/:spatial_hierarchy/:version`
+
+**Status** : TODO
+
+To download geodata of the specified hierarchy, instance and version
+
+**Method** : `GET`
+
+**Auth required** :  NO
+
+## Success Responses
+
+**Condition** : If provided `:version`, `:instance`  and `instance`  of the geodata exists.
+
+**Code** : `200 Success`
+
+**Response Content**
+```json
+{
+ <Geodata>
+}
+```
+## Error Response
+
+**Condition** : If provided `:version` does not exist.
+
+**Code** : `401 RESOURCE NOT FOUND`
+
+**Condition** : Something unexpected happened on the server
+
+**Code** : `500 INTERNAL SERVER ERROR`
+
+**Content example**
+
+## Notes
+
+
+
+# download geodata
+
+**URL** : `/v8/geodata/:instance/:spatial_hierarchy`
+
+**Status** : TODO
+
+To download the latest geodata version of the specified hierarchy and  instance
+
+**Method** : `GET`
+
+**Auth required** :  NO
+
+## Success Responses
+
+**Condition** : If provided `:instance`  and `instance` of the geodata exists.
+
+**Code** : `200 Success`
+
+**Response Content**
+```json
+{
+ <Geodata>
+}
+```
+## Error Response
+
+**Condition** : If provided `:instance`  and `instance`  does not exist.
+
+**Code** : `401 RESOURCE NOT FOUND`
+
+**Condition** : Something unexpected happened on the server
+
+**Code** : `500 INTERNAL SERVER ERROR`
+
+**Content example**
+
+## Notes
+
+
+
+
+
+
+
+
