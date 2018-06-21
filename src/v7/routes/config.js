@@ -84,6 +84,12 @@ module.exports = {
         const config_collection = req.db.collection('config');
         const config_id = req.params['config_id'];
         const config_data = req.body.config_data?req.body.config_data:req.body;
+
+        if(!config_data){
+            res.status(500).send({success:false, message:'There is no config data'});
+            return
+        }
+
         const calculated_id = `${config_data.config_id}@${config_data.config_version}`
 
         if (config_id && (config_id === calculated_id)) {
