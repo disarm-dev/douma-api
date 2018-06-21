@@ -91,7 +91,7 @@ json-encoded data
 
 ```json
 [
-<Olan data >
+<Plan data >
 ]
 ```
 
