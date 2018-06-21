@@ -83,12 +83,12 @@ module.exports = {
     async post(req, res) {
         const config_collection = req.db.collection('config');
         const config_id = req.params['config_id'];
-        const config_data = req.body.config_data;
+        const config_data = req.body.config_data?req.body.config_data:req.body;
         const calculated_id = `${config_data.config_id}@${config_data.config_version}`
 
         if (config_id && (config_id === calculated_id)) {
             try {
-                await config_collection.updateOne({_id: config_id}, {...req.body.config_data})
+                await config_collection.updateOne({_id: config_id}, {...config_data})
                 res.status(201).send({success: true})
             } catch (e) {
                 console.log(e)
@@ -96,10 +96,10 @@ module.exports = {
             }
         } else {
             try {
-                await config_collection.removeOne({_id: `${req.body.config_data.config_id}@${req.body.config_data.config_version}`})
+                await config_collection.removeOne({_id: `${config_data.config_id}@${config_data.config_version}`})
                 await config_collection.insertOne({
-                    _id: `${req.body.config_data.config_id}@${req.body.config_data.config_version}`,
-                    ...req.body.config_data
+                    _id: `${config_data.config_id}@${config_data.config_version}`,
+                    ...config_data
                 })
                 res.status(201).send({success: true})
             } catch (e) {
