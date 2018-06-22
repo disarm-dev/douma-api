@@ -92,7 +92,7 @@ module.exports = {
 
         const calculated_id = `${config_data.config_id}@${config_data.config_version}`
 
-        //url_update like /config/bwa@1.2.3
+
         const url_update = config_id && (config_id === calculated_id)
 
         if (url_update) {
@@ -103,7 +103,7 @@ module.exports = {
                 console.log(e)
                 res.status(500).send(e)
             }
-        } else { //post on /config , create, update seasons here
+        } else {
             try {
                 await config_collection.removeOne({_id: `${config_data.config_id}@${config_data.config_version}`})
                 await config_collection.insertOne({

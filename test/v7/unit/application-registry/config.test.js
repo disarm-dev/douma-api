@@ -5,10 +5,7 @@ const request = require('supertest');
 const body_parser = require('body-parser')
 const test = require('ava').test
 const collections = require('../../../../src/v7/lib/collections')
-const {tear_down, populate_responses} = require('../../helper')
-
-const novice_key = '04a184f1adf9b44a065d287a5d377284'
-const admin_key  = '27599f876ad55a65762b2b9b57f1ba31'
+const {tear_down, populate_responses, keys} = require('../../helper')
 
 test.beforeEach(async () => {
     await tear_down()
@@ -27,9 +24,9 @@ test.serial('Get the latest config version', async t => {
     const bwa_config_v3 = require('../../../bwa-config')
     bwa_config_v2.config_data.config_version = '2.0.1'
     bwa_config_v3.config_data.config_version = '3.0.0'
-    const bwa1_res = await request(app).post('/v7/config?country=all').set('Api-Key',admin_key).send(bwa_config_v1)
-    const bwa2_res = await request(app).post('/v7/config?country=all').set('Api-Key',admin_key).send(bwa_config_v2)
-    const bwa3_res = await request(app).post('/v7/config?country=all').set('Api-Key',admin_key).send(bwa_config_v3)
+    const bwa2_res = await request(app).post('/v7/config?country=all').set('Api-Key',keys.admin_key).send(bwa_config_v2)
+    const bwa3_res = await request(app).post('/v7/config?country=all').set('Api-Key',keys.admin_key).send(bwa_config_v3)
+    const bwa1_res = await request(app).post('/v7/config?country=all').set('Api-Key',keys.admin_key).send(bwa_config_v1)
 
     const response = await request(app).get('/v7/config/bwa?country=all')
 
@@ -42,7 +39,7 @@ test.serial('Create A new Config ' , async t => {
     const bwa_config = require('../../../bwa-config')
 
     const res = await request(app).post('/v7/config?country=all')
-        .set('Api-Key', admin_key)
+        .set('Api-Key', keys.admin_key)
         .send({config_data:bwa_config})
 
     t.is(res.status, 201)
@@ -52,7 +49,7 @@ test.serial('Config creation fails with 401 ' , async t => {
     const bwa_config = require('../../../bwa-config')
 
     const res = await request(app).post('/v7/config?country=all')
-        .set('Api-Key', novice_key)
+        .set('Api-Key', keys.novice_key)
         .send({config_data:bwa_config})
     t.is(res.status, 401)
 })

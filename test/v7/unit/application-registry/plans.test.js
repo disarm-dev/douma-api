@@ -1,5 +1,5 @@
 import {app} from "../../../../src/api";
-const {tear_down, populate_responses} = require('../../helper')
+const {tear_down, populate_responses, keys} = require('../../helper')
 
 const express = require('express')
 const request = require('supertest');
@@ -7,8 +7,6 @@ const body_parser = require('body-parser')
 const test = require('ava').test
 const collections = require('../../../../src/v7/lib/collections')
 
-const novice_key = '04a184f1adf9b44a065d287a5d377284'
-const admin_key  = 'f3c04df6f4380af247acf7b13a8328d8'
 
 test.beforeEach(async () => {
     await tear_down()
@@ -141,7 +139,7 @@ const second_plan = {
 test.serial('POST /v7/plan/create config get is open => 200', async t => {
     t.plan(1)
     const res = await request(app).post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
-        .set('Api-Key', admin_key)
+        .set('Api-Key', keys.admin_key)
         .send(plan)
 
     //console.log(res)
@@ -154,15 +152,15 @@ test.serial('POST /v7/plan/list config get is open => 200', async t => {
 
     await request(app)
         .post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
-        .set('Api-Key', admin_key)
+        .set('Api-Key', keys.admin_key)
         .send(plan)
     await request(app)
         .post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
-        .set('Api-Key', admin_key)
+        .set('Api-Key', keys.admin_key)
         .send(second_plan)
 
     const res = await request(app).get('/v7/plan/list?personalised_instance_id=default&country=bwa&instance_slug=bwa')
-        .set('Api-Key', admin_key)
+        .set('Api-Key', keys.admin_key)
     t.is(res.status, 200)
     t.is(res.body.length,2)
 

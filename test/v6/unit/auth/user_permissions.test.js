@@ -9,7 +9,7 @@ const foci_key = 'f03b611f5c032a2dc45de336edc46e4f'
 
 
 
-test('GET /v6/plan/current without api token => 401', async t => {
+test.skip('GET /v6/plan/current without api token => 401', async t => {
     t.plan(2)
 
     const res = await request(app).get('/v6/plan/current?country=swz')
@@ -18,7 +18,7 @@ test('GET /v6/plan/current without api token => 401', async t => {
     t.true(res.text.startsWith('{"message":'))
 })
 
-test('GET /v6/plan/current with wrong api token => 401', async t => {
+test.skip('GET /v6/plan/current with wrong api token => 401', async t => {
     t.plan(2)
 
     const res = await request(app).get('/v6/plan/current?country=swz').set('Api-Key', 'wrongkey')
@@ -27,7 +27,7 @@ test('GET /v6/plan/current with wrong api token => 401', async t => {
     t.true(res.text.startsWith('{"message":'))
 })
 
-test('GET /v6/plan/current with correct api token and no permissions => 401', async t => {
+test.skip('GET /v6/plan/current with correct api token and no permissions => 401', async t => {
     t.plan(1)
 
     const res = await request(app).get('/v6/plan/current?country=swz').set('Api-Key', novice_key)
@@ -35,7 +35,7 @@ test('GET /v6/plan/current with correct api token and no permissions => 401', as
     t.is(res.status, 401)
 })
 
-test('GET /v6/plan/current with correct api token and sufficient permissions => 200', async t => {
+test.skip('GET /v6/plan/current with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
     const res = await request(app).get('/v6/plan/current?country=swz').set('Api-Key', admin_key)
@@ -43,7 +43,7 @@ test('GET /v6/plan/current with correct api token and sufficient permissions => 
     t.is(res.status, 200)
 })
 
-test('Test For getting all plans', async t =>{
+test.skip('Test For getting all plans', async t =>{
     const res = await request(app).get('/v6/plan/all?country=swz').set('Api-Key',admin_key)
    // console.log('res body',res.body)
     t.is(res.status, 200)

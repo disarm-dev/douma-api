@@ -2,7 +2,8 @@ import test from 'ava'
 import request from 'supertest'
 import {app} from '../../../../src/api'
 
-const admin_key  = 'f3c04df6f4380af247acf7b13a8328d8'
+const {tear_down, populate_responses, keys} = require('../../helper')
+
 
 test('POST /v4/login without credentials => 401', async t => {
     t.plan(2)
@@ -40,5 +41,5 @@ test('POST /v7/login with correct credentials => 200', async t => {
 
     const user = JSON.parse(res.text)
     t.is(user.username, 'admin')
-    t.is(user.key, admin_key)
+    t.is(user.key, keys.admin_key)
 })
