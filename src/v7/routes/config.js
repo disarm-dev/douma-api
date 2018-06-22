@@ -83,15 +83,14 @@ module.exports = {
     async post(req, res) {
         const config_collection = req.db.collection('config');
         const config_id = req.params['config_id'];
-        const config_data = req.body.config_data?req.body.config_data:req.body;
+        const config_data = req.body.config_data ? req.body.config_data : req.body;
 
-        if(!config_data){
-            res.status(500).send({success:false, message:'There is no config data'});
+        if (!config_data) {
+            res.status(500).send({success: false, message: 'There is no config data'});
             return
         }
 
         const calculated_id = `${config_data.config_id}@${config_data.config_version}`
-
 
         const url_update = config_id && (config_id === calculated_id)
 
@@ -134,27 +133,3 @@ module.exports = {
     }
 }
 
-function get_config_list() {
-
-}
-
-function find_latest_config(instance_slug, collection) {
-    return new Promise((resolve, reject) => {
-        collection.find({config_id: instance_slug})
-            .sort({config_version})
-            .then(docs => {
-                resolve(docs[0])
-            })
-            .throw(reason => reject(reason))
-    })
-}
-
-function find_configs_list(req, res) {
-    return new Promise((resolve, reject) => {
-
-    })
-}
-
-function create_config(req, res) {
-
-}
