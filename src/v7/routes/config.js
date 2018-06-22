@@ -83,12 +83,20 @@ module.exports = {
     async post(req, res) {
         const config_collection = req.db.collection('config');
         const config_id = req.params['config_id'];
-        const config_data = req.body.config_data;
+        const config_data = req.body.config_data ? req.body.config_data : req.body;
+
+        if (!config_data) {
+            res.status(500).send({success: false, message: 'There is no config data'});
+            return
+        }
+
         const calculated_id = `${config_data.config_id}@${config_data.config_version}`
 
-        if (config_id && (config_id === calculated_id)) {
+        const url_update = config_id && (config_id === calculated_id)
+
+        if (url_update) {
             try {
-                await config_collection.updateOne({_id: config_id}, {...req.body.config_data})
+                await config_collection.updateOne({_id: config_id}, {...config_data})
                 res.status(201).send({success: true})
             } catch (e) {
                 console.log(e)
@@ -96,10 +104,10 @@ module.exports = {
             }
         } else {
             try {
-                await config_collection.removeOne({_id: `${req.body.config_data.config_id}@${req.body.config_data.config_version}`})
+                await config_collection.removeOne({_id: `${config_data.config_id}@${config_data.config_version}`})
                 await config_collection.insertOne({
-                    _id: `${req.body.config_data.config_id}@${req.body.config_data.config_version}`,
-                    ...req.body.config_data
+                    _id: `${config_data.config_id}@${config_data.config_version}`,
+                    ...config_data
                 })
                 res.status(201).send({success: true})
             } catch (e) {
@@ -125,27 +133,3 @@ module.exports = {
     }
 }
 
-function get_config_list() {
-
-}
-
-function find_latest_config(instance_slug, collection) {
-    return new Promise((resolve, reject) => {
-        collection.find({config_id: instance_slug})
-            .sort({config_version})
-            .then(docs => {
-                resolve(docs[0])
-            })
-            .throw(reason => reject(reason))
-    })
-}
-
-function find_configs_list(req, res) {
-    return new Promise((resolve, reject) => {
-
-    })
-}
-
-function create_config(req, res) {
-
-}

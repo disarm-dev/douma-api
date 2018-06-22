@@ -4,7 +4,7 @@ import {app} from '../../../../src/api'
 
 const admin_key  = 'f3c04df6f4380af247acf7b13a8328d8'
 
-test('POST /v4/login without credentials => 401', async t => {
+test.skip('POST /v4/login without credentials => 401', async t => {
     t.plan(2)
 
     const res = await request(app).post('/v4/login?country=swz').send({})
@@ -13,7 +13,7 @@ test('POST /v4/login without credentials => 401', async t => {
     t.true(res.text.startsWith('{"message":'))
 })
 
-test('POST /v4/login with wrong credentials => 401', async t => {
+test.skip('POST /v4/login with wrong credentials => 401', async t => {
     t.plan(2)
 
     const creds = {
@@ -26,7 +26,7 @@ test('POST /v4/login with wrong credentials => 401', async t => {
     t.true(res.text.startsWith('{"message":'))
 })
 
-test('POST /v4/login with correct credentials => 200', async t => {
+test.skip('POST /v4/login with correct credentials => 200', async t => {
     t.plan(4)
 
     const creds = {
