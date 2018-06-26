@@ -27,7 +27,7 @@ test.serial('Send only season start dates to add a season', async t => {
     season_start_dates.push('2018-04-05')
     
     const data = {
-        config_id: bwa_config.config_data.instance.slug,
+        slug: bwa_config.config_data.instance.slug,
         config_version: bwa_config.config_data.config_version,
         season_start_dates: season_start_dates
     }

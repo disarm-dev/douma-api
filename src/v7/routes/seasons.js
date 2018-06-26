@@ -1,7 +1,7 @@
 module.exports = {
   async put(req, res) {
     // /seasons
-    const config_id = req.body.config_id
+    const config_id = req.body.slug
     const config_version = req.body.config_version
     const season_start_dates = req.body.season_start_dates
 
