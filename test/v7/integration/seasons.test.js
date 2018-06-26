@@ -29,7 +29,7 @@ test.serial('Send only season start dates to add a season', async t => {
     const data = {
         config_id: bwa_config.config_data.instance.slug,
         config_version: bwa_config.config_data.config_version,
-        season_start_dates: season_start_dates
+        seasons_start_dates: season_start_dates
     }
     
     const seasons_result = await request(app).put('/v7/seasons?country=all')
@@ -47,7 +47,7 @@ test.serial('Send only season start dates to add a season', async t => {
 
 // TODO: split this out into more and smaller tests
 test.serial('Updating seasons for a config that does not exist', async t => {
-    await request(app).get('/v7/').send()
+
 
     const user = findByUsernamePassword('configAdmin', 'passwd')
 
@@ -65,7 +65,7 @@ test.serial('Updating seasons for a config that does not exist', async t => {
     const data = {
         config_id: 'non_existing_slug',
         config_version: 'no_version',
-        season_start_dates: season_start_dates
+        seasons_start_dates: season_start_dates
     }
 
     const seasons_result = await request(app).put('/v7/seasons?country=all')
