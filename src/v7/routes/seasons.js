@@ -3,7 +3,7 @@ module.exports = {
     // /seasons
     const config_id = req.body.config_id
     const config_version = req.body.config_version
-    const season_start_dates = req.body.season_start_dates
+    const season_start_dates = req.body.seasons_start_dates
 
     if (!config_id || !config_version || !season_start_dates) {
       return res.status(400).send()
