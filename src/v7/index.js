@@ -199,6 +199,12 @@ const endpoints = [
     },
     {
         permissions:['write:config'],
+        method:PUT,
+        path:'/seasons',
+        callback:seasons[PUT]
+    },
+    {
+        permissions:['write:config'],
         method:POST,
         path:'/config/:config_id',
         callback:config[POST]
