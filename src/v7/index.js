@@ -10,6 +10,7 @@ const case_location = require('./routes/foci/case_locations')
 const maas = require('./maas')
 const config = require('./routes/config')
 const geodata = require('./routes/geodata')
+const seasons = require('./routes/seasons')
 
 const {url_base} = require('./lib/url_helper')
 
