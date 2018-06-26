@@ -14,7 +14,14 @@ module.exports = {
 
     try {
       const result = await config_collection.updateOne({ _id: document_id}, {$set: {'applets.irs_monitor.season_start_dates': season_start_dates}})
-      res.send(result)
+
+       if(result.result.nModified){
+           res.send(result.result)
+       }else {
+          throw (new Error('Config not found'))
+       }
+
+
     } catch (e) {
       console.log('e', e);
       res.status(500).send({error: e.message})
