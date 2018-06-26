@@ -199,7 +199,7 @@ const endpoints = [
         callback:config[POST]
     },
     {
-        permissions:['write:config'],
+        permissions:['write:seasons'],
         method:PUT,
         path:'/seasons',
         callback:seasons[PUT]
