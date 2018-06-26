@@ -4,4 +4,4 @@ u1,Power,password,power,"irs_plan, irs_tasker","irs_tasker",swz
 u2,Novice,password,novice,,,swz
 u3,All,m,all,"irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug","irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug",all
 u4,fociAdmin,passwd,fociAdmin,"foci","foci", all
-"configAdmin","configAdmin","passwd","configAdmin","config","config","all"
+"configAdmin","configAdmin","passwd","configAdmin","config, seasons","config, seasons","all"

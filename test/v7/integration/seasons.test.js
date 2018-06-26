@@ -44,3 +44,35 @@ test.serial('Send only season start dates to add a season', async t => {
     t.deepEqual(updated_season_start_dates, season_start_dates)
 })
 
+
+// TODO: split this out into more and smaller tests
+test.serial('Updating seasons for a config that does not exist', async t => {
+    await request(app).get('/v7/').send()
+
+    const user = findByUsernamePassword('configAdmin', 'passwd')
+
+    const bwa_config = require('../../bwa-config')
+
+    // upload config so it exists
+    await request(app).post('/v7/config?country=all')
+        .set('Api-Key', user.key)
+        .send(bwa_config)
+
+    // update season_start_dates
+    const season_start_dates = bwa_config.config_data.applets.irs_monitor.season_start_dates;
+    season_start_dates.push('2018-04-05')
+
+    const data = {
+        config_id: 'non_existing_slug',
+        config_version: 'no_version',
+        season_start_dates: season_start_dates
+    }
+
+    const seasons_result = await request(app).put('/v7/seasons?country=all')
+        .set('Api-Key', user.key)
+        .send(data)
+
+    t.deepEqual(seasons_result.status, 500);
+
+})
+
