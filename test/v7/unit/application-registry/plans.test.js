@@ -1,5 +1,5 @@
 import {app} from "../../../../src/api";
-const {tear_down, populate_responses} = require('../../helper')
+const {tear_down, populate_responses} = require('../../../helpers/helper')('v7')
 
 const express = require('express')
 const request = require('supertest');
@@ -11,6 +11,7 @@ const novice_key = '04a184f1adf9b44a065d287a5d377284'
 const admin_key  = 'f3c04df6f4380af247acf7b13a8328d8'
 
 test.beforeEach(async () => {
+    await  set_db_uri()
     await tear_down()
     await populate_responses()
 })

@@ -5,12 +5,13 @@ const request = require('supertest');
 const body_parser = require('body-parser')
 const test = require('ava').test
 const collections = require('../../../../src/v7/lib/collections')
-const {tear_down, populate_responses} = require('../../helper')
+const {tear_down, populate_responses, set_db_uri} = require('../../../helpers/helper')('v7')
 
 const novice_key = '04a184f1adf9b44a065d287a5d377284'
 const admin_key  = '27599f876ad55a65762b2b9b57f1ba31'
 
 test.beforeEach(async () => {
+    await  set_db_uri()
     await tear_down()
     await populate_responses()
 })

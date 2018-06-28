@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
+import MongodbMemoryServer from 'mongodb-memory-server'
 
 const getDb = function () {
     let url = process.env.MONGODB_URI
@@ -50,6 +51,11 @@ const helper = (version) => {
         },
         user: (user_name, password) => {
             return findByUsernamePassword(user_name, password)
+        },
+        set_db_uri: async() => {
+            const mongod = new MongodbMemoryServer()
+            const uri = await mongod.getConnectionString();
+            console.log('URI ',uri)
         }
     }
 }

@@ -2,7 +2,7 @@ import {app} from "../../../src/api";
 import request from "supertest";
 
 const admin_key = 'f3c04df6f4380af247acf7b13a8328d8'
-const {tear_down, populate_responses} = require('../helper')
+const {tear_down, populate_responses} = require('../../helpers/helper')('v7')
 
 
 const test = require('ava').test
