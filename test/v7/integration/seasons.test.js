@@ -37,6 +37,7 @@ test.serial('Send only season start dates to add a season', async t => {
         .send(data)
 
     t.deepEqual(seasons_result.status, 200);
+  t.deepEqual(seasons_result.body.nModified, 1);
 
     const config_after_update = await request(app).get('/v7/config/bwa?country=all')
 

@@ -1,14 +1,12 @@
 import {app} from "../../../../src/api";
 const {tear_down, populate_responses} = require('../../helper')
 
-const express = require('express')
 const request = require('supertest');
-const body_parser = require('body-parser')
-const test = require('ava').test
-const collections = require('../../../../src/v7/lib/collections')
 
-const novice_key = '04a184f1adf9b44a065d287a5d377284'
-const admin_key  = 'f3c04df6f4380af247acf7b13a8328d8'
+const test = require('ava').test
+
+
+const admin_key = '24e66af5c3c2b25e72ec42c51b88e676'
 
 test.beforeEach(async () => {
     await tear_down()

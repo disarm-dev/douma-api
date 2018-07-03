@@ -1,5 +1,5 @@
 _id,name,password,username,read,write,instance_slug
-u1,Admin,password,admin,"irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug, seasons","seasons, irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug",all
+u1,Admin,password,admin,"irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug, seasons, config","seasons, irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug, config",all
 u1,Power,password,power,"irs_plan, irs_tasker","irs_tasker",swz
 u2,Novice,password,novice,,,swz
 u3,All,m,all,"irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug","irs_monitor, irs_record_point, irs_plan, irs_tasker, structure_recorder, data_wizard, debug",all

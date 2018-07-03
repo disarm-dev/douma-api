@@ -1,7 +1,7 @@
 import {app} from "../../../src/api";
 import request from "supertest";
 
-const admin_key = 'f3c04df6f4380af247acf7b13a8328d8'
+const admin_key = '24e66af5c3c2b25e72ec42c51b88e676'
 const {tear_down, populate_responses} = require('../helper')
 
 
