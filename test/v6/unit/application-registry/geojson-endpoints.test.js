@@ -30,7 +30,7 @@ test.beforeEach(async () => {
 )
 
 test.afterEach(async () => {
-        await  server.clear_geojson();
+  // await  server.clear_geojson();
     }
 )
 

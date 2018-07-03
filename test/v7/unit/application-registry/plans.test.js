@@ -10,7 +10,6 @@ const admin_key = '24e66af5c3c2b25e72ec42c51b88e676'
 
 test.beforeEach(async () => {
     await tear_down()
-    await populate_responses()
 })
 
 

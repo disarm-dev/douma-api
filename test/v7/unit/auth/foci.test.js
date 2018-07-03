@@ -28,21 +28,21 @@ test.afterEach(async () => {
 )
 
 
-test('GET /v7/foci/case_clusters with correct api token and sufficient permissions => 200', async t => {
+test.serial('GET /v7/foci/case_clusters with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
     const res = await request(app).get('/v7/foci/case_clusters?country=swz').set('Api-Key', foci_key)
     t.is(res.status, 200)
 })
 
-test('PUT /v7/foci/case_clusters with correct api token and sufficient permissions => 200', async t => {
+test.serial('PUT /v7/foci/case_clusters with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
     const res = await request(app).get('/v7/foci/case_clusters?country=swz').set('Api-Key', foci_key)
     t.is(res.status, 200)
 })
 
-test('GET /v7/foci/case_locations with correct api token and sufficient permissions => 200', async t => {
+test.serial('GET /v7/foci/case_locations with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
     const res = await request(app).get('/v7/foci/case_locations?country=swz').set('Api-Key', foci_key)
@@ -50,7 +50,7 @@ test('GET /v7/foci/case_locations with correct api token and sufficient permissi
     t.is(res.status, 200)
 })
 
-test('GET /v7/foci/case_locations with correct api token and sufficient permissions => 200', async t => {
+test.serial('GET /v7/foci/case_locations with correct api token and sufficient permissions => 200', async t => {
     t.plan(1)
 
     const res = await request(app).get('/v7/foci/case_locations?country=swz').set('Api-Key', foci_key)
