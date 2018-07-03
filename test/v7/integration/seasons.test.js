@@ -16,7 +16,20 @@ test.serial('Send only season start dates to add a season', async t => {
 
   const user = findByUsernamePassword('configAdmin', 'passwd')
 
-  const bwa_config = require('../../bwa-config')
+  const bwa_config = {
+    "config_data": {
+      "config_id": "bwa",
+      "config_version": "1.0.0",
+      "applets": {
+        "irs_monitor": {
+          "season_start_dates": ["2017-10-01"]
+        }
+      },
+      "instance": {
+        "slug": "bwa"
+      }
+    }
+  }
 
   // upload config so it exists
   await request(app).post('/v7/config?country=all')
@@ -53,7 +66,17 @@ test.serial('Updating seasons for a config that does not exist', async t => {
 
   const user = findByUsernamePassword('configAdmin', 'passwd')
 
-  const bwa_config = require('../../bwa-config')
+  const bwa_config = {
+    "config_data": {
+      "config_id": "bwa",
+      "config_version": "1.0.0",
+      "applets": {
+        "irs_monitor": {
+          "season_start_dates": ["2017-10-01"]
+        }
+      }
+    }
+  }
 
   // upload config so it exists
   await request(app).post('/v7/config?country=all')
