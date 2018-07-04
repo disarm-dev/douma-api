@@ -10,6 +10,73 @@ test.beforeEach(async () => {
   await tear_down()
 })
 
+test.serial('Test For location Selection after saving seasons', async t => {
+  await request(app).get('/v7/').send()
+
+  const user = findByUsernamePassword('configAdmin', 'passwd')
+
+  const expected_location_selection = {
+    "villages": [{"id": 38, "name": "Suvuyti", "category": "Chobe"}, {
+      "id": 377002,
+      "name": "SUA PANS",
+      "category": "Tutume"
+    }, {"id": 34, "name": "CHANGATE", "category": "Tutume"}, {
+      "id": 37,
+      "name": "Chobe Forest Reserve",
+      "category": "Chobe"
+    }]
+  }
+
+  const bwa_config = {
+    "config_data": {
+      "config_id": "bwa",
+      "config_version": "1.0.0",
+      "applets": {
+        "irs_monitor": {
+          "season_start_dates": ["2017-10-01"]
+        }
+      },
+      "instance": {
+        "slug": "bwa"
+      },
+      "location_selection": expected_location_selection
+    }
+  }
+  const season_start_dates = bwa_config.config_data.applets.irs_monitor.season_start_dates;
+  const data = {
+    config_id: bwa_config.config_data.instance.slug,
+    config_version: bwa_config.config_data.config_version,
+    seasons_start_dates: season_start_dates
+  }
+
+  // upload config so it exists
+  const insert_response = await request(app).post('/v7/config?country=all')
+      .set('Api-Key', user.key)
+      .send(bwa_config)
+  t.is(insert_response.status, 201)
+
+
+  season_start_dates.push('2018-04-05')
+
+  const config_before_update = await request(app).get('/v7/config/bwa?country=all')
+
+  t.is(config_before_update.status, 200)
+
+  const seasons_result = await request(app).put('/v7/seasons?country=all')
+      .set('Api-Key', user.key)
+      .send(data)
+
+  t.deepEqual(seasons_result.body, {nModified: 1, n: 1, ok: 1});
+  t.deepEqual(seasons_result.status, 200);
+
+  const config_after_update = await request(app).get('/v7/config/bwa?country=all')
+
+  const persisted_location_selection = config_after_update.body.location_selection
+  t.deepEqual(expected_location_selection, persisted_location_selection)
+
+
+})
+
 // TODO: split this out into more and smaller tests
 test.serial('Send only season start dates to add a season', async t => {
   await request(app).get('/v7/').send()
