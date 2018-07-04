@@ -32,6 +32,7 @@ const tear_down = async function () {
         const _db = await db();
         await _db.collection(collections[col]).removeMany({})
     }
+
 }
 
 const populate_responses = async () => {

@@ -10,6 +10,7 @@ const case_location = require('./routes/foci/case_locations')
 const maas = require('./maas')
 const config = require('./routes/config')
 const geodata = require('./routes/geodata')
+const seasons = require('./routes/seasons')
 
 const {url_base} = require('./lib/url_helper')
 
@@ -196,6 +197,12 @@ const endpoints = [
         method:POST,
         path:'/config',
         callback:config[POST]
+    },
+    {
+        permissions:['write:seasons'],
+        method:PUT,
+        path:'/seasons',
+        callback:seasons[PUT]
     },
     {
         permissions:['write:config'],

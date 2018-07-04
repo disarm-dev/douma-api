@@ -4,7 +4,7 @@ const bwa_config = {
         "config_version": "1.0.0",
         "applets": {
             "irs_monitor": {
-                "season_start_dates": ["2017-10-01", "2018-01-01", "2018-02-01", "2018-03-01"],
+                "season_start_dates": ["2017-10-01"],
                 "map": {
                     "chart_type": "map",
                     "bin_by": "location.selection.id",

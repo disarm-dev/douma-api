@@ -2,12 +2,12 @@ import test from 'ava'
 import request from 'supertest'
 import {app} from '../../../../src/api'
 
-const admin_key  = 'f3c04df6f4380af247acf7b13a8328d8'
+const admin_key = '24e66af5c3c2b25e72ec42c51b88e676'
 
-test('POST /v4/login without credentials => 401', async t => {
+test('POST /v7/login without credentials => 401', async t => {
     t.plan(2)
 
-    const res = await request(app).post('/v4/login?country=swz').send({})
+  const res = await request(app).post('/v7/login?country=swz').send({})
 
     t.is(res.status, 401)
     t.true(res.text.startsWith('{"message":'))
@@ -20,7 +20,7 @@ test('POST /v7/login with wrong credentials => 401', async t => {
         username: 'wrong',
         password: 'user'
     }
-    const res = await request(app).post('/v4/login?country=swz').send(creds)
+  const res = await request(app).post('/v7/login?country=swz').send(creds)
 
     t.is(res.status, 401)
     t.true(res.text.startsWith('{"message":'))
@@ -33,7 +33,8 @@ test('POST /v7/login with correct credentials => 200', async t => {
         username: 'admin',
         password: 'password'
     }
-    const res = await request(app).post('/v7/login?country=swz').send(creds)
+
+  const res = await request(app).post('/v7/login?country=swz').send(creds)
 
     t.is(res.status, 200)
     t.true(res.text.length > 0)
