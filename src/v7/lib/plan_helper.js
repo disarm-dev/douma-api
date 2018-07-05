@@ -22,7 +22,10 @@ const find_latest_plan = (req) => {
  * @returns {Promise.<*>}
  */
 const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
-  // If no focus_filter_area
+  // If no focus_filter_area, return everything as Plan
+  if (!has(incoming_plan, 'focus_filter_area.id')) {
+    return incoming_plan
+  }
 
   // Get instance_config (from cache or remote)
   const instance_config = await get_instance_config(req)
