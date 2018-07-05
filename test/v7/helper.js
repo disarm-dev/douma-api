@@ -46,4 +46,19 @@ const populate_responses = async () => {
 
 }
 
-module.exports = {tear_down, populate_responses}
+const populate_bwa_geodata = async () => {
+  let {villages, districts, clusters} = require('../seed-data/bwa-geodata')
+  try {
+    const _db = await db()
+    await _db.collection(collections.PLAN)
+        .insert(villages)
+    await _db.collection(collections.PLAN)
+        .insert(districts)
+    await _db.collection(collections.PLAN)
+        .insert(clusters)
+  } catch (e) {
+    throw (e)
+  }
+}
+
+module.exports = {tear_down, populate_responses, populate_bwa_geodata}

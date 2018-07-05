@@ -1,12 +1,21 @@
 // DISTRICT PLANS are plans where there's a focus_filter_area set
 import test from 'ava'
+import {app} from "../../../../src/api";
+
+const request = require('supertest');
+const admin_key = '24e66af5c3c2b25e72ec42c51b88e676'
+let {populate_bwa_geodata, tear_down} = require('../../helper')
+
+test.beforeEach(async t => {
+  await tear_down()
+  await populate_bwa_geodata();
+})
 
 function dress_up_targets_for_request_for_district_plans(targets) {
   return {
     id: "fd1e7b6d-8ed0-4be6-b69f-dc06d84791f5",
-    name:"Plan 2",
+    name: "Plan 2",
     country: "bwa",
-
     focus_filter_area: {"id": 1}, // NOTE: id is not null
     targets: targets,
   }
@@ -27,48 +36,212 @@ const sample_area_data = [
   }
 ]
 
-test.serial('Can update a district plan to add targets (in same area)', t => {
+test.serial('Can update a district plan to add targets (in same area)', async t => {
   const existing_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}]
-  const incoming_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}, {id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
-  const expected_targets_all = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}, {id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
-  t.true(false)
+
+  const existing_plan_chobe = dress_up_targets_for_request_for_district_plans(existing_targets_chobe)
+  await request(app)
+      .post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(existing_plan_chobe)
+
+  const incoming_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}, {
+    id: 564,
+    estimated_rooms: 1,
+    assigned_to_team_name: null
+  }]
+  const incoming_plan_chobe = dress_up_targets_for_request_for_district_plans(incoming_targets_chobe)
+  const update_result = await request(app)
+      .put('/v7/plan/update?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(incoming_plan_chobe)
+
+  t.is(update_result.status, 201)
+
+  const expected_targets_all = [
+    {id: 38, estimated_rooms: 1, assigned_to_team_name: null},
+    {
+      id: 564,
+      estimated_rooms: 1,
+      assigned_to_team_name: null
+    }]
+
+  const res = await request(app).get('/v7/plan/list?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+  const plan = await request(app).get(`/v7/plan/detail/${res.body[0]._id}?personalised_instance_id=default&country=bwa&instance_slug=bwa`)
+      .set('Api-Key', admin_key)
+
+
+  const final_plan_all = plan.body;
+  const actual_targets_all = final_plan_all.targets;
+
+
+  t.deepEqual(expected_targets_all, actual_targets_all);
 })
 
-test.serial('Can update a district plan to change targets (in same area)', t => {
+test.serial('Can update a district plan to change targets (in same area)', async t => {
   const existing_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}]
   const incoming_targets_chobe = [{id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
   const expected_targets_all = [{id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
-  t.true(false)
+
+  const existing_plan_chobe = dress_up_targets_for_request_for_district_plans(existing_targets_chobe)
+  await request(app)
+      .post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(existing_plan_chobe)
+
+  const incoming_plan_chobe = dress_up_targets_for_request_for_district_plans(incoming_targets_chobe)
+  await request(app)
+      .put('/v7/plan/update?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(incoming_plan_chobe)
+
+  const res = await request(app).get('/v7/plan/list?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+  const plan = await request(app).get(`/v7/plan/detail/${res.body[0]._id}?personalised_instance_id=default&country=bwa&instance_slug=bwa`)
+      .set('Api-Key', admin_key)
+
+
+  const final_plan_all = plan.body;
+  const actual_targets_all = final_plan_all.targets;
+
+
+  t.deepEqual(expected_targets_all, actual_targets_all);
 })
 
-test.serial('Can update a district plan to remove targets (in same area)', t => {
+test.serial('Can update a district plan to remove targets (in same area)', async t => {
   const existing_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}]
   const incoming_targets_chobe = []
   const expected_targets_all = []
+
+  const existing_plan_chobe = dress_up_targets_for_request_for_district_plans(existing_targets_chobe)
+  await request(app)
+      .post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(existing_plan_chobe)
+
+  const incoming_plan_chobe = dress_up_targets_for_request_for_district_plans(incoming_targets_chobe)
+  await request(app)
+      .put('/v7/plan/update?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(incoming_plan_chobe)
+
+  const res = await request(app).get('/v7/plan/list?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+  const plan = await request(app).get(`/v7/plan/detail/${res.body[0]._id}?personalised_instance_id=default&country=bwa&instance_slug=bwa`)
+      .set('Api-Key', admin_key)
+
+
+  const final_plan_all = plan.body;
+  const actual_targets_all = final_plan_all.targets;
+
+
+  t.deepEqual(expected_targets_all, actual_targets_all);
   t.true(false)
 })
 
-test.serial('Can update a district plan to add targets (in other area)', t => {
+test.serial('Can update a district plan to add targets (in other area)', async t => {
   const existing_targets_tutume = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}]
-  const incoming_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}, {id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
+  const incoming_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}, {
+    id: 564,
+    estimated_rooms: 1,
+    assigned_to_team_name: null
+  }]
   const expected_targets = [
     {id: 358, estimated_rooms: 1, assigned_to_team_name: null},
     {id: 38, estimated_rooms: 1, assigned_to_team_name: null},
     {id: 564, estimated_rooms: 1, assigned_to_team_name: null},
   ]
-  t.true(false)
+
+  const existing_plan_chobe = dress_up_targets_for_request_for_district_plans(existing_targets_chobe)
+  await request(app)
+      .post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(existing_plan_chobe)
+
+  const incoming_plan_chobe = dress_up_targets_for_request_for_district_plans(incoming_targets_chobe)
+  await request(app)
+      .put('/v7/plan/update?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(incoming_plan_chobe)
+
+  const res = await request(app).get('/v7/plan/list?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+  const plan = await request(app).get(`/v7/plan/detail/${res.body[0]._id}?personalised_instance_id=default&country=bwa&instance_slug=bwa`)
+      .set('Api-Key', admin_key)
+
+
+  const final_plan_all = plan.body;
+  const actual_targets_all = final_plan_all.targets;
+
+
+  t.deepEqual(expected_targets_all, actual_targets_all);
 })
 
-test.serial('Can update a district plan to change targets (in other area)', t => {
-  const existing_targets_tutume_chobe = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}, {id: 38, estimated_rooms: 1, assigned_to_team_name: null}]
+test.serial('Can update a district plan to change targets (in other area)', async t => {
+  const existing_targets_tutume_chobe = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}, {
+    id: 38,
+    estimated_rooms: 1,
+    assigned_to_team_name: null
+  }]
   const incoming_targets_chobe = [{id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
-  const expected_targets = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}, {id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
-  t.true(false)
+  const expected_targets = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}, {
+    id: 564,
+    estimated_rooms: 1,
+    assigned_to_team_name: null
+  }]
+
+  const existing_plan_chobe = dress_up_targets_for_request_for_district_plans(existing_targets_chobe)
+  await request(app)
+      .post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(existing_plan_chobe)
+
+  const incoming_plan_chobe = dress_up_targets_for_request_for_district_plans(incoming_targets_chobe)
+  await request(app)
+      .put('/v7/plan/update?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(incoming_plan_chobe)
+
+  const res = await request(app).get('/v7/plan/list?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+  const plan = await request(app).get(`/v7/plan/detail/${res.body[0]._id}?personalised_instance_id=default&country=bwa&instance_slug=bwa`)
+      .set('Api-Key', admin_key)
+
+
+  const final_plan_all = plan.body;
+  const actual_targets_all = final_plan_all.targets;
+
+
+  t.deepEqual(expected_targets_all, actual_targets_all);
 })
 
-test.serial('Can update a district plan to remove targets (in other area)', t => {
+test.serial('Can update a district plan to remove targets (in other area)', async t => {
   const existing_targets_tutume = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}]
   const incoming_targets_chobe = []
   const expected_targets = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}]
-  t.true(false)
+
+  const existing_plan_chobe = dress_up_targets_for_request_for_district_plans(existing_targets_chobe)
+  await request(app)
+      .post('/v7/plan/create?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(existing_plan_chobe)
+
+  const incoming_plan_chobe = dress_up_targets_for_request_for_district_plans(incoming_targets_chobe)
+  await request(app)
+      .put('/v7/plan/update?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+      .send(incoming_plan_chobe)
+
+  const res = await request(app).get('/v7/plan/list?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+  const plan = await request(app).get(`/v7/plan/detail/${res.body[0]._id}?personalised_instance_id=default&country=bwa&instance_slug=bwa`)
+      .set('Api-Key', admin_key)
+
+
+  const final_plan_all = plan.body;
+  const actual_targets_all = final_plan_all.targets;
+
+
+  t.deepEqual(expected_targets_all, actual_targets_all);
 })

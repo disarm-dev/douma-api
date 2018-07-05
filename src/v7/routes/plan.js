@@ -84,14 +84,22 @@ module.exports = {
     try {
       let {_id} = req.params
       const plan_collection = req.db.collection('plans')
-      console.log(req.params)
+      let incoming_plan = req.body
       plan_collection
           .findOne({_id: ObjectID(_id)})
-          .then(plan => {
-            plan.targets = req.body.targets;
+          .then(async current_plan => {
+            if (incoming_plan.focus_filter_area) {
+              try {
+                console.log('Current Plan ', current_plan)
+                incoming_plan = await filter_plan_targets_for_focus_area(req, incoming_plan, current_plan)
+              } catch (e) {
+                return res.status(400).send({message: e.message})
+              }
+            }
 
-            delete plan._id
-            plan_collection.updateOne({_id: ObjectID(_id)}, {...plan})
+
+            delete incoming_plan._id
+            plan_collection.updateOne({_id: ObjectID(_id)}, {...incoming_plan})
                 .then(saved => res.send(saved))
                 .catch(error => res.status(500).send('There was an error while saving'))
           })
@@ -102,6 +110,7 @@ module.exports = {
 
     }
     catch (e) {
+      console.log('Internal Server Error', e)
       res.status(500).send('Internal server error')
     }
   },
