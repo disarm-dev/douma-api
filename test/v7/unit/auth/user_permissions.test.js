@@ -21,7 +21,7 @@ test('GET /v7/plan/current without api token => 401', async t => {
 test('GET /v7/plan/current with wrong api token => 401', async t => {
     t.plan(2)
 
-    const res = await request(app).get('/v7/plan/current?country=swz').set('Api-Key', 'wrongkey')
+  const res = await request(app).get('/v7/plan/current?country=swz&').set('Api-Key', 'wrongkey')
 
     t.is(res.status, 401)
     t.true(res.text.startsWith('{"message":'))

@@ -1,18 +1,23 @@
 const inside = require('@turf/inside')
 const centroid = require('@turf/centroid')
+const {has} = require('lodash')
 
 const {get_geodata, get_instance_config} = require('../lib/remote_data_helper')
 const {get_next_level_up_from_planning_level, get_planning_level_id_field, get_planning_level_name} = require('../lib/spatial_hierarchy_helper')
 
-const find_latest_plan = (req) => {
+const find_latest_plan = async (req) => {
   const plans = req.db.collection('plans')
   const country = req.country
   const personalised_instance_id = req.personalised_instance_id
 
-  return plans
-    .find({country, personalised_instance_id})
-    .sort({updated_at: -1})
-    .limit(1)
+  console.log('Updating Has no current plan')
+
+  let _plans = await plans
+      .find({country, personalised_instance_id})
+      .sort({updated_at: -1})
+      .limit(1)
+      .toArray()
+  return _plans[0]
 }
 
 /**
@@ -21,8 +26,11 @@ const find_latest_plan = (req) => {
  * @param incoming_plan
  * @returns {Promise.<*>}
  */
-const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
-  // If no focus_filter_area
+const filter_plan_targets_for_focus_area = async (req, incoming_plan, current_plan) => {
+  // If no focus_filter_area, return everything as Plan
+  if (!has(incoming_plan, 'focus_filter_area.id')) {
+    return incoming_plan
+  }
 
   // Get instance_config (from cache or remote)
   const instance_config = await get_instance_config(req)
@@ -30,8 +38,10 @@ const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
   // Get current plan
   // TODO: use findOne, not find().toArray()[0]
   const result = await find_latest_plan(req)
-  let current_plan = await result.toArray()
-  current_plan = current_plan[0]
+  if (current_plan) {
+    console.log('Updating, Has current Plan')
+  }
+  current_plan = current_plan ? await result : current_plan
 
   if (!current_plan) {
     // No current plan, so no change to the targets
@@ -53,7 +63,7 @@ const filter_plan_targets_for_focus_area = async (req, incoming_plan) => {
 
   // Filter out all current_plan.targets within focus_filter_area
   const targets_outside_focus_filter_area = current_plan.targets.filter(target => {
-    const found_area = geodata[planning_level_name].features.find(feature => {
+    const found_area = geodata[planning_level_name].features.find(feature => { //target in planning level polygon
       return feature.properties[planning_level_id_field] === target.id
     })
 
