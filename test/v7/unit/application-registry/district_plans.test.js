@@ -4,11 +4,12 @@ import {app} from "../../../../src/api";
 
 const request = require('supertest');
 const admin_key = '24e66af5c3c2b25e72ec42c51b88e676'
-let {populate_bwa_geodata, tear_down} = require('../../helper')
+let {populate_bwa_geodata, tear_down, populate_bwa_config} = require('../../helper')
 
 test.beforeEach(async t => {
   await tear_down()
   await populate_bwa_geodata();
+  await populate_bwa_config();
 })
 
 function dress_up_targets_for_request_for_district_plans(targets) {
@@ -60,7 +61,7 @@ test.serial('Can update a district plan to add targets (in same area)', async t 
       .set('Api-Key', admin_key)
       .send(incoming_plan_chobe)
 
-  t.is(update_result.status, 201)
+  t.is(update_result.status, 200)
 
   const expected_targets_all = [
     {id: 38, estimated_rooms: 1, assigned_to_team_name: null},
