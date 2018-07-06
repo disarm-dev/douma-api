@@ -61,4 +61,15 @@ const populate_bwa_geodata = async () => {
   }
 }
 
+const populate_bwa_config = async () => {
+  let bwa_config = require('../bwa-config')
+  try {
+    const _db = await db()
+    await _db.collection(collections.CONFIG)
+        .insert(bwa_config)
+  } catch (e) {
+    console.log('Cant insert config', e)
+  }
+}
+
 module.exports = {tear_down, populate_responses, populate_bwa_geodata}

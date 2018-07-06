@@ -50,9 +50,13 @@ test.serial('Can update a district plan to add targets (in same area)', async t 
     estimated_rooms: 1,
     assigned_to_team_name: null
   }]
+
+  const _id_response = await request(app).get('/v7/plan/list?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .set('Api-Key', admin_key)
+
   const incoming_plan_chobe = dress_up_targets_for_request_for_district_plans(incoming_targets_chobe)
   const update_result = await request(app)
-      .put('/v7/plan/update?personalised_instance_id=default&country=bwa&instance_slug=bwa')
+      .put(`/v7/plan/${_id_response.body[0]._id}?personalised_instance_id=default&country=bwa&instance_slug=bwa`)
       .set('Api-Key', admin_key)
       .send(incoming_plan_chobe)
 
