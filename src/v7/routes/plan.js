@@ -5,9 +5,9 @@ const ObjectID = require('mongodb').ObjectID
 
 module.exports = {
   get_current(req, res) {
-    find_latest_plan(req).toArray()
+    find_latest_plan(req)
         .then(docs => {
-          let doc = docs[0]
+          let doc = docs
           if (typeof doc === 'undefined') {
             res.send({})
           } else {
@@ -15,6 +15,7 @@ module.exports = {
           }
         })
         .catch(err => {
+          console.log('[get_current]', err)
           if (err) res.status(403).send(err)
         })
   },
@@ -84,7 +85,7 @@ module.exports = {
     try {
       let {_id} = req.params
       const plan_collection = req.db.collection('plans')
-      let incoming_plan = req.body
+      let incoming_plan = decorate_incoming_document({doc: req.body, req})
       plan_collection
           .findOne({_id: ObjectID(_id)})
           .then(async current_plan => {
@@ -97,7 +98,6 @@ module.exports = {
                 return res.status(400).send({message: e})
               }
             }
-
 
             delete incoming_plan._id
             plan_collection.updateOne({_id: ObjectID(_id)}, {...incoming_plan})
