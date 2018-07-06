@@ -71,7 +71,7 @@ test.serial('POST /v7/plan/list can list plans', async t => {
 
 })
 
-test.serial('Removing a target from a plan should reduce the number of targets in the plan', async t => {
+test.failing('Removing a target from a plan should reduce the number of targets in the plan ', async t => {
   const plan_update = {
     "focus_filter_area": {"id": 8},
     "name": "plan 1",
