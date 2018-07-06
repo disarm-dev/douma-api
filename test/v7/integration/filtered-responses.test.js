@@ -20,6 +20,7 @@ test('Get filtered responses', async t => {
     t.plan(2)
     const res = await request(app).get('/v7/record/filtered?country=bwa&start_date=2018-02-20T09:39:45.347Z&end_date=2018-03-27T08:11:58.410Z').set('Api-Key', admin_key)
   t.is(res.status, 200)
-  t.true(res.body.length > 0)
+  const length = res.body.length
+  t.true(length > 0)
 
 })
