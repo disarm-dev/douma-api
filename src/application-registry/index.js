@@ -73,7 +73,7 @@ function attach_waterline_to_express(app) {
 
     //console.log(version_path_regex)
 
-    const v = p => '/v6'+p;
+    const v = p => '/v7'+p;
     auth.updateUserList()
 
     app.use(/\/api\/.*/, auth.authMiddleware)
