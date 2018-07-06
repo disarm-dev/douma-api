@@ -93,7 +93,8 @@ module.exports = {
                 console.log('Current Plan ', current_plan)
                 incoming_plan = await filter_plan_targets_for_focus_area(req, incoming_plan, current_plan)
               } catch (e) {
-                return res.status(400).send({message: e.message})
+                console.log('Current Plan ', e)
+                return res.status(400).send({message: e})
               }
             }
 
@@ -104,7 +105,7 @@ module.exports = {
                 .catch(error => res.status(500).send('There was an error while saving'))
           })
           .catch(error => {
-            console.log(error)
+            console.log('404', error)
             res.status(404).send('Plan could not be found')
           })
 
