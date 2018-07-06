@@ -3,7 +3,6 @@ const validate = schema => data => {
     let ajv = new Ajv()
     let validate = ajv.compile(schema)
     let valid = validate(data)
-    console.log(valid)
     if (valid) {
 
         return valid

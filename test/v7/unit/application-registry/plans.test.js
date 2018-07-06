@@ -53,9 +53,7 @@ test.serial('POST /v7/plan/create config get is open => 200', async t => {
         .set('Api-Key', admin_key)
         .send(plan)
 
-    //console.log(res)
     t.is(res.status, 200)
-  //  t.deepEqual(res.body, {success:true})
 })
 
 test.serial('POST /v7/plan/list config get is open => 200', async t => {
