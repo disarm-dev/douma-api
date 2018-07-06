@@ -50,11 +50,11 @@ const populate_bwa_geodata = async () => {
   let {villages, districts, clusters} = require('../seed-data/bwa-geodata')
   try {
     const _db = await db()
-    await _db.collection(collections.PLAN)
+    await _db.collection(collections.GEODATA)
         .insert(villages)
-    await _db.collection(collections.PLAN)
+    await _db.collection(collections.GEODATA)
         .insert(districts)
-    await _db.collection(collections.PLAN)
+    await _db.collection(collections.GEODATA)
         .insert(clusters)
   } catch (e) {
     throw (e)
@@ -66,10 +66,10 @@ const populate_bwa_config = async () => {
   try {
     const _db = await db()
     await _db.collection(collections.CONFIG)
-        .insert(bwa_config)
+        .insert(bwa_config.config_data)
   } catch (e) {
     console.log('Cant insert config', e)
   }
 }
 
-module.exports = {tear_down, populate_responses, populate_bwa_geodata}
+module.exports = {tear_down, populate_responses, populate_bwa_geodata, populate_bwa_config}
