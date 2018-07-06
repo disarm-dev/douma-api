@@ -16,7 +16,7 @@ function dress_up_targets_for_request_for_district_plans(targets) {
     id: "fd1e7b6d-8ed0-4be6-b69f-dc06d84791f5",
     name: "Plan 2",
     country: "bwa",
-    focus_filter_area: {"id": 1}, // NOTE: id is not null
+    focus_filter_area: {"id": "CHOBE"}, // NOTE: id is not null
     targets: targets,
   }
 }
@@ -36,7 +36,7 @@ const sample_area_data = [
   }
 ]
 
-test.serial('Can update a district plan to add targets (in same area)', async t => {
+test.serial('Can update a district plan to add targets (existing in CHOBE, incoming in CHOBE)', async t => {
   const existing_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}]
 
   const existing_plan_chobe = dress_up_targets_for_request_for_district_plans(existing_targets_chobe)
@@ -83,7 +83,7 @@ test.serial('Can update a district plan to add targets (in same area)', async t 
   t.deepEqual(expected_targets_all, actual_targets_all);
 })
 
-test.serial('Can update a district plan to change targets (in same area)', async t => {
+test.serial('Can update a district plan to change targets (existing in CHOBE, incoming in CHOBE)', async t => {
   const existing_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}]
   const incoming_targets_chobe = [{id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
   const expected_targets_all = [{id: 564, estimated_rooms: 1, assigned_to_team_name: null}]
@@ -113,7 +113,7 @@ test.serial('Can update a district plan to change targets (in same area)', async
   t.deepEqual(expected_targets_all, actual_targets_all);
 })
 
-test.serial('Can update a district plan to remove targets (in same area)', async t => {
+test.serial('Can update a district plan to remove targets (existing in CHOBE, incoming in CHOBE)', async t => {
   const existing_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}]
   const incoming_targets_chobe = []
   const expected_targets_all = []
@@ -144,7 +144,7 @@ test.serial('Can update a district plan to remove targets (in same area)', async
   t.true(false)
 })
 
-test.serial('Can update a district plan to add targets (in other area)', async t => {
+test.serial('Can update a district plan to add targets (existing in TUTUME, incoming in CHOBE)', async t => {
   const existing_targets_tutume = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}]
   const incoming_targets_chobe = [{id: 38, estimated_rooms: 1, assigned_to_team_name: null}, {
     id: 564,
@@ -182,7 +182,7 @@ test.serial('Can update a district plan to add targets (in other area)', async t
   t.deepEqual(expected_targets_all, actual_targets_all);
 })
 
-test.serial('Can update a district plan to change targets (in other area)', async t => {
+test.serial('Can update a district plan to change targets (existing in TUTUME, incoming in CHOBE)', async t => {
   const existing_targets_tutume_chobe = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}, {
     id: 38,
     estimated_rooms: 1,
@@ -220,7 +220,7 @@ test.serial('Can update a district plan to change targets (in other area)', asyn
   t.deepEqual(expected_targets_all, actual_targets_all);
 })
 
-test.serial('Can update a district plan to remove targets (in other area)', async t => {
+test.serial('Can update a district plan to remove targets (existing in TUTUME, incoming in CHOBE)', async t => {
   const existing_targets_tutume = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}]
   const incoming_targets_chobe = []
   const expected_targets = [{id: 358, estimated_rooms: 1, assigned_to_team_name: null}]
