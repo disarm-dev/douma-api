@@ -1,9 +1,9 @@
 //Database Setup
 import test from 'ava'
-const collections = require('../../../../src/v6/lib/collections')
-const maas = require('../../../../src/v6/maas/run_model')
+const collections = require('../../../../src/v7/lib/collections')
+const maas = require('../../../../src/v7/maas/run_model')
 const case_locations = require('../case_location_test_data')
-const config = require('../../../../src/v6/maas/model')
+const config = require('../../../../src/v7/maas/model')
 
 
 
