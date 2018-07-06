@@ -28,7 +28,6 @@ const db = getDb()
 
 const tear_down = async function () {
     for (let col in collections) {
-        console.log(col)
         const _db = await db();
         await _db.collection(collections[col]).removeMany({})
     }

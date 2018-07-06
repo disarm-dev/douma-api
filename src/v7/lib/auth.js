@@ -42,8 +42,6 @@ function checkPermission(user, method, path) {
 
     path = _path&&_path!=='/' ? _path : path
 
-    console.log('Path ', path,_path, 'Endpoint Permissions', user)
-
     if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
         console.log('Condition 1 fail', method, path)
         return false
