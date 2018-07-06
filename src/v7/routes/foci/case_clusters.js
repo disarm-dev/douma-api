@@ -58,10 +58,6 @@ async function update(req, res) {
     let _id = ObjectID(doc._id)
     delete doc._id
 
-    ///console.log('Document _id', _id)
-
-    //const decorated = decorate_incoming_document({doc, req})
-
     try {
         let _doc = await cluster.updateOne({_id}, {$set: {...doc}})
         res.status(200).send(_doc)
@@ -73,7 +69,6 @@ async function update(req, res) {
 }
 
 async function delete_cluster(req, res) {
-   // console.log('Delete cluster')
     const cluster = req.db.collection(CASE_CLUSTERS)
     let query = req.body;
     try {

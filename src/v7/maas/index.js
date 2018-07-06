@@ -18,7 +18,6 @@ async function generate_foci(req, res) {
         .sort({recorded_at: -1})
         .toArray(async (err, docs) => {
             if (err) res.status(403).send(err)
-            //console.log(docs.length)
             try {
                 let input = JSON.parse(JSON.stringify(docs))
                 let result = await run_model({input, config})

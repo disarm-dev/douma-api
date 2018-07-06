@@ -79,7 +79,6 @@ async function update(req, res) {
 }
 
 async function delete_case_location(req,res){
-    //console.log('Delete case points')
     const case_location = req.db.collection(collections.CASE_LOCATIONS)
     let query = req.body;
     try {

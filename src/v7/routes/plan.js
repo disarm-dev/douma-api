@@ -54,9 +54,6 @@ module.exports = {
             })))
             .catch(e => res.status(500).send(e))
 
-        //console.log('Plans ',plans)
-        //res.status(200).send(plans)
-
     },
     plan_by_id: async (req, res) => {
         console.log('Plan By ID',req.params.plan_id)

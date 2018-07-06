@@ -50,7 +50,6 @@ module.exports = {
                     //TODO check that _id is instace@version
                     await config_collection.updateOne({_id: config_id}, {...config_data})
                     const updated_config = await config_collection.findOne({_id: config_id})
-                    // console.log(updated_config)
                     res.send(updated_config);
                 } else { //In the else there is no version in the _id
                     // TODO: Clarify what is going on here, what's happening in the else?
@@ -113,7 +112,6 @@ module.exports = {
     delete(req, res) {
         const config_collection = req.db.collection('config');
         try {
-            // console.log('delete', req.path,req.body.query)
             const query = req.body.query
             config_collection.deleteMany(query)
                 .catch(console.log)

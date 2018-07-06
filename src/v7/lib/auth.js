@@ -59,7 +59,6 @@ function checkPermission(user, method, path) {
     }
 
     return allowedGroups.some(group => user.permissions.includes(group))
-    //  console.log('Final Result ', final_result)
 
 }
 
@@ -70,7 +69,6 @@ function checkPermission(user, method, path) {
  */
 function updateUserList() {
     const path = process.env.SHEETS_URL || process.env.SHEETS_PATH
-    //console.log('Updating users list from:', path)
     return getCSV(path).then(parsedCSV => {
         userList = parsedCSV.map(user => {
             // Parse permissions

@@ -71,8 +71,6 @@ function attach_waterline_to_express(app) {
 
     const version_path_regex = new RegExp('/api/')
 
-    //console.log(version_path_regex)
-
     const v = p => '/v7'+p;
     auth.updateUserList()
 
@@ -104,12 +102,10 @@ function attach_waterline_to_express(app) {
 
 
     app.post('/api/geojson', (req, res) => {
-        //  console.log('Deprectaed Post Geojson',req.body.geojson_id)
         waterline.getModel('geojson', orm)
             .create({_id: req.body.geojson_id, geojson_data: req.body})
             .meta({fetch: true})
             .then(function (newRecord) {
-               // console.log(newRecord)
                 return res.status(201).json(newRecord);
             })
             .catch({name: 'UsageError'}, function (err) {
@@ -131,7 +127,6 @@ function attach_waterline_to_express(app) {
             .create({_id, geojson_data: req.body})
             .meta({fetch: true})
             .then(function (newRecord) {
-                //  console.log(newRecord)
                 return res.status(201).json(newRecord);
             })
             .catch({name: 'UsageError'}, function (err) {
@@ -165,10 +160,7 @@ function attach_waterline_to_express(app) {
         });
     })
 
-    //app.get('/api/config/:config_id')
-
     app.get('/api/geojson', (req, res) => {
-        // console.log('Get Geojson')
         waterline.getModel('geojson', orm)
             .find().exec(function (err, records) {
             if (err) {
@@ -186,8 +178,6 @@ function attach_waterline_to_express(app) {
 
     app.get('/api/config/:config_id', (req, res) => {
         [config_id,config_version] = req.params.config_id.split('@')
-        console.log('Config ID',config_id)
-        console.log('Config Version',config_version)
         const query = {}
         if(config_id){
             query._id = config_id
@@ -244,7 +234,6 @@ function attach_waterline_to_express(app) {
                     return res.sendStatus(500);
                 }
                 else {
-                    console.log('records length',record.length)
                     return res.json(record.filter(rec => rec._id.startsWith(req.params.instance))
                         .map(rec => rec._id.split('/')[1])
 
@@ -255,7 +244,6 @@ function attach_waterline_to_express(app) {
     })
 
     app.put('/api/config/:config_id', (req, res) => {
-        // console.log('put config', req.params.config_id)
         waterline.getModel('config', orm)
             .update({_id: req.params.config_id})
             .set({config_data: req.body.config_data})
@@ -271,11 +259,9 @@ function attach_waterline_to_express(app) {
                     return res.sendStatus(500);
                 }
                 else if (updatedConfigs.length < 1) {
-                    // console.log('updated', updatedConfigs)
                     return res.sendStatus(404);
                 }
                 else {
-                    // console.log('updated', updatedConfigs)
                     return res.status(200).json(updatedConfigs[0]);
                 }
             });
@@ -298,11 +284,9 @@ function attach_waterline_to_express(app) {
                     return res.sendStatus(500);
                 }
                 else if (updatedConfigs.length < 1) {
-                    // console.log('updated', updatedConfigs)
                     return res.sendStatus(404);
                 }
                 else {
-                    //  console.log('updated', updatedConfigs)
                     return res.status(200).json(updatedConfigs[0]);
                 }
             });
@@ -347,17 +331,14 @@ function attach_waterline_to_express(app) {
 
 
 let clearModel = () => {
-    //console.log('In clearModel')
     if (!orm) return;
-    //console.log('Got orm')
     waterline.getModel('config', orm)
         .destroy({}, (err) => {
             if (err) {
                 console.log(err)
                 throw(err)
             } else {
-
-                //   console.log('Cleared The model')
+                // Cleared The model
             }
         })
 }
@@ -387,7 +368,6 @@ let clear_geojson_by_id = async (id) => {
                     console.log(err)
                     reject(err)
                 } else {
-                   // console.log('Cleared Single Geojson')
                     resolve('done')
                 }
             })
@@ -402,7 +382,6 @@ let insertData = async (data) => {
             .then(doc => doc)
             .catch(err => err)
     } else {
-        //console.log('Not orm')
     }
 }
 
