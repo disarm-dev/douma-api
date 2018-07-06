@@ -32,7 +32,6 @@ module.exports = {
       .insertOne(incoming_assignment_plan)
       .then(result => {
         const first = result.ops[0]
-        console.log('id', first._id)
         res.send(result.ops)
       })
       .catch(err => res.status(403).send(err))

@@ -56,7 +56,6 @@ module.exports = {
 
     },
     plan_by_id: async (req, res) => {
-        console.log('Plan By ID',req.params.plan_id)
         try {
             const plan_collection = req.db.collection('plans')
             const plan_id = req.params.plan_id
@@ -66,7 +65,6 @@ module.exports = {
                         cosole.log('Error',error)
                         res.status(500).send('Internal Server Error')
                     }else{
-                        console.log('Doc',doc)
                         res.send(doc)
                     }
                 })
@@ -81,12 +79,10 @@ module.exports = {
         try{
             let {_id} = req.params
             const plan_collection = req.db.collection('plans')
-            console.log(req.params)
             plan_collection
                 .findOne({_id:ObjectID(_id)})
                 .then(plan =>{
                     let incoming_targets = req.body.targets.filter( t => {
-                        console.log(plan)
                         return !(plan.targets.map(t => t.id)
                             .includes(t.id))
                     })
