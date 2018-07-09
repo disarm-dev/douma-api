@@ -5,6 +5,8 @@ const test = require('ava').test
 const {tear_down} = require('../helper')
 const {findByUsernamePassword} = require('../../../src/v7/lib/auth')
 
+const fake_origin = 'http://disarm-registry-stage.surge.sh'
+
 
 test.beforeEach(async () => {
   await tear_down()
@@ -52,6 +54,7 @@ test.serial('Test For location Selection after saving seasons', async t => {
   // upload config so it exists
   const insert_response = await request(app).post('/v7/config?country=all')
       .set('Api-Key', user.key)
+      .set('Origin', fake_origin)
       .send(bwa_config)
   t.is(insert_response.status, 201)
 
@@ -64,6 +67,7 @@ test.serial('Test For location Selection after saving seasons', async t => {
 
   const seasons_result = await request(app).put('/v7/seasons?country=all')
       .set('Api-Key', user.key)
+      .set('Origin', fake_origin)
       .send(data)
 
   t.deepEqual(seasons_result.body, {nModified: 1, n: 1, ok: 1});
@@ -101,6 +105,7 @@ test.serial('Send only season start dates to add a season', async t => {
   // upload config so it exists
   await request(app).post('/v7/config?country=all')
       .set('Api-Key', user.key)
+      .set('Origin', fake_origin)
       .send(bwa_config)
 
   // update season_start_dates
@@ -115,6 +120,7 @@ test.serial('Send only season start dates to add a season', async t => {
 
   const seasons_result = await request(app).put('/v7/seasons?country=all')
       .set('Api-Key', user.key)
+      .set('Origin', fake_origin)
       .send(data)
 
   t.deepEqual(seasons_result.body, {nModified: 1, n: 1, ok: 1});
@@ -148,6 +154,7 @@ test.serial('Updating seasons for a config that does not exist', async t => {
   // upload config so it exists
   await request(app).post('/v7/config?country=all')
       .set('Api-Key', user.key)
+      .set('Origin', fake_origin)
       .send(bwa_config)
 
   // update season_start_dates
@@ -162,6 +169,7 @@ test.serial('Updating seasons for a config that does not exist', async t => {
 
   const seasons_result = await request(app).put('/v7/seasons?country=all')
       .set('Api-Key', user.key)
+      .set('Origin', fake_origin)
       .send(data)
 
   t.deepEqual(seasons_result.status, 500);
