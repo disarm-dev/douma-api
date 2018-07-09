@@ -174,7 +174,6 @@ function addAllowedOrigins(method, path, origins) {
     allowedOrigins[method] = {}
   }
   if (!allowedOrigins[method][path]) {
-    console.log('Resetting Origins', method, path)
     allowedOrigins[method][path] = []
   }
 
@@ -182,17 +181,14 @@ function addAllowedOrigins(method, path, origins) {
     return
   }
 
-  console.log('Origins ', path, method, origins,)
 
   if (Array.isArray(origins)) {
     allowedOrigins[method][path] = allowedOrigins[method][path].concat(origins)
-    console.log('Is Array', origins, allowedOrigins)
     return
   }
 
   if (typeof origins === 'string') {
     allowedOrigins[method][path] = allowedOrigins[method][path].concat([origins])
-    console.log('Is string', origins, allowedOrigins)
     return
   }
   throw (new Error({message: 'Unknown parameter passed as origin'}))
@@ -237,7 +233,6 @@ function allowedOriginsMiddleware(req, res, next) {
   let path = req.path
   let method = req.method.toLowerCase()
 
-  console.log(allowedOrigins[method])
   if (!allowedOrigins[method]) {
     return next()
   }
@@ -261,13 +256,10 @@ function allowedOriginsMiddleware(req, res, next) {
     return next()
   }
 
-  console.log('Allowed Origins Midleware', allowedOrigins[method][path])
-
   if (allowedOrigins[method][path].includes(origin)) {
     return next()
   }
 
-  console.log(`Forbiden request from ${origin}`)
   res.status(403).send(`Requests from ${origin} are not permitted`)
 }
 
