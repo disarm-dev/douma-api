@@ -7,6 +7,8 @@ let userList = []
 // In memory cache of all endpoint permissions
 let endpointPermissions = {}
 
+let allowedOrigins = {}
+
 /*
  * Adds a new permission rule to the route.
  * Adding a new permission rule is effectively whitelisting a route for users that have corresponding permission.
@@ -16,14 +18,14 @@ let endpointPermissions = {}
  * @param permissions An array of permission rules
  */
 function addPermission(method, path, permissions) {
-    if (!endpointPermissions[method]) {
-        endpointPermissions[method] = {}
-    }
-    if (!endpointPermissions[method][path]) {
-        endpointPermissions[method][path] = []
-    }
+  if (!endpointPermissions[method]) {
+    endpointPermissions[method] = {}
+  }
+  if (!endpointPermissions[method][path]) {
+    endpointPermissions[method][path] = []
+  }
 
-    endpointPermissions[method][path] = endpointPermissions[method][path].concat(permissions)
+  endpointPermissions[method][path] = endpointPermissions[method][path].concat(permissions)
 
 }
 
@@ -36,32 +38,32 @@ function addPermission(method, path, permissions) {
  */
 function checkPermission(user, method, path) {
 
-    let _path = Object.keys(endpointPermissions[method])
-        .filter(i => path.startsWith(i)&&i!=='/')
-        .filter(i => i.length)[0]
+  let _path = Object.keys(endpointPermissions[method])
+      .filter(i => path.startsWith(i) && i !== '/')
+      .filter(i => i.length)[0]
 
-    path = _path&&_path!=='/' ? _path : path
+  path = _path && _path !== '/' ? _path : path
 
-    console.log('Path ', path,_path, 'Endpoint Permissions', user)
+  console.log('Path ', path, _path, 'Endpoint Permissions', user)
 
-    if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
-        console.log('Condition 1 fail', method, path)
-        return false
-    }
+  if (!endpointPermissions[method] || !endpointPermissions[method][path]) {
+    console.log('Condition 1 fail', method, path)
+    return false
+  }
 
-    const allowedGroups = endpointPermissions[method][path]
-    if (allowedGroups.includes('*')) {
+  const allowedGroups = endpointPermissions[method][path]
+  if (allowedGroups.includes('*')) {
 
-        return true
-    }
+    return true
+  }
 
-    if (!user) {
-        console.log('Condition 3 fail')
-        return false
-    }
+  if (!user) {
+    console.log('Condition 3 fail')
+    return false
+  }
 
-    return allowedGroups.some(group => user.permissions.includes(group))
-    //  console.log('Final Result ', final_result)
+  return allowedGroups.some(group => user.permissions.includes(group))
+  //  console.log('Final Result ', final_result)
 
 }
 
@@ -71,73 +73,73 @@ function checkPermission(user, method, path) {
  * API keys will change only if user properties in corresponding CSV change.
  */
 function updateUserList() {
-    const path = process.env.SHEETS_URL || process.env.SHEETS_PATH
-    //console.log('Updating users list from:', path)
-    return getCSV(path).then(parsedCSV => {
-        userList = parsedCSV.map(user => {
-            // Parse permissions
-            user.write = user.write || ''
-            user.read = user.read || ''
-            const readPermissions = user.read.split(',').map(perm => 'read:' + perm.toLowerCase().trim())
-            const writePermissions = user.write.split(',').map(perm => 'write:' + perm.toLowerCase().trim())
-            const derivedPermissions = user.write.split(',').map(perm => 'read:' + perm.toLowerCase().trim())
+  const path = process.env.SHEETS_URL || process.env.SHEETS_PATH
+  //console.log('Updating users list from:', path)
+  return getCSV(path).then(parsedCSV => {
+    userList = parsedCSV.map(user => {
+      // Parse permissions
+      user.write = user.write || ''
+      user.read = user.read || ''
+      const readPermissions = user.read.split(',').map(perm => 'read:' + perm.toLowerCase().trim())
+      const writePermissions = user.write.split(',').map(perm => 'write:' + perm.toLowerCase().trim())
+      const derivedPermissions = user.write.split(',').map(perm => 'read:' + perm.toLowerCase().trim())
 
-            const allPermissions = readPermissions.concat(writePermissions).concat(derivedPermissions)
-            const uniquePermissions = allPermissions.reduce((acc, rule) => {
-                if (!acc.includes(rule)) {
-                    acc.push(rule)
-                }
-                return acc
-            }, [])
-            user.permissions = uniquePermissions
+      const allPermissions = readPermissions.concat(writePermissions).concat(derivedPermissions)
+      const uniquePermissions = allPermissions.reduce((acc, rule) => {
+        if (!acc.includes(rule)) {
+          acc.push(rule)
+        }
+        return acc
+      }, [])
+      user.permissions = uniquePermissions
 
 
-            // Generate allowed apps
-            user.allowed_apps = {
-                read: user.read.split(',').map(t => t.toLowerCase().trim()),
-                write: user.write.split(',').map(t => t.toLowerCase().trim())
-            }
+      // Generate allowed apps
+      user.allowed_apps = {
+        read: user.read.split(',').map(t => t.toLowerCase().trim()),
+        write: user.write.split(',').map(t => t.toLowerCase().trim())
+      }
 
-            // Generate key
-            user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
-            console.log('Created user', user.username, user.key)
+      // Generate key
+      user.key = md5(process.env.SECRET + user.username + user.password + user.read + user.write + user.instance_slug)
+      console.log('Created user', user.username, user.key)
 
-            return user
-        })
-        return userList
-    }).catch(err => {
-        console.log('Failed to read CSV with error:', err)
+      return user
     })
+    return userList
+  }).catch(err => {
+    console.log('Failed to read CSV with error:', err)
+  })
 }
 
 /*
  * Find user by their API key.
  */
 function findByApiKey(key) {
-    const foundUsers = userList.filter(user => {
-        return user.key === key
-    })
+  const foundUsers = userList.filter(user => {
+    return user.key === key
+  })
 
-    if (foundUsers.length > 0) {
-        return foundUsers[0]
-    } else {
-        return null
-    }
+  if (foundUsers.length > 0) {
+    return foundUsers[0]
+  } else {
+    return null
+  }
 }
 
 /*
  * Find user by their username and password
  */
 function findByUsernamePassword(username, password) {
-    const foundUsers = userList.filter(user => {
-        return (user.username === username && user.password === password)
-    })
+  const foundUsers = userList.filter(user => {
+    return (user.username === username && user.password === password)
+  })
 
-    if (foundUsers.length > 0) {
-        return foundUsers[0]
-    } else {
-        return null
-    }
+  if (foundUsers.length > 0) {
+    return foundUsers[0]
+  } else {
+    return null
+  }
 }
 
 /*
@@ -147,66 +149,130 @@ function findByUsernamePassword(username, password) {
  * will have access to user object in the request.
  */
 function authMiddleware(req, res, next) {
-    const openPaths = ['/login', '/', '/refresh_users']
-    if (openPaths.includes(req.path)) return next()
+  const openPaths = ['/login', '/', '/refresh_users']
+  if (openPaths.includes(req.path)) return next()
 
-    //TODO : Implement a generic solution for enabling arbitrary paths for specific HTTP verbs
-    if (req.path.startsWith('/config') && req.method === 'GET') return next()
+  //TODO : Implement a generic solution for enabling arbitrary paths for specific HTTP verbs
+  if (req.path.startsWith('/config') && req.method === 'GET') return next()
 
-    const key = req.get('API-Key')
-    if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
+  const key = req.get('API-Key')
+  if (!key) return res.status(401).send({message: 'Please provide API-Key header with this request.'})
 
-    const user = findByApiKey(key)
-    if (!user) return res.status(401).send({message: 'Current API key is not valid. Please log out and try to login again.'})
+  const user = findByApiKey(key)
+  if (!user) return res.status(401).send({message: 'Current API key is not valid. Please log out and try to login again.'})
 
-    // In case everything succeeds
-    req.user = user
-    return next()
+  // In case everything succeeds
+  req.user = user
+  return next()
+}
+
+function addAllowedOrigins(method, path, origins) {
+
+  method = method.toLowerCase()
+
+  if (!allowedOrigins[method]) {
+    allowedOrigins[method] = {}
+  }
+  if (!allowedOrigins[method][path]) {
+    allowedOrigins[method][path] = []
+  }
+
+  if (!origins) {
+    return
+  }
+
+
+  if (Array.isArray(origins)) {
+    allowedOrigins[method][path] = allowedOrigins[method][path].concat(origins)
+    return
+  }
+
+  if (typeof origins === 'string') {
+    allowedOrigins[method][path] = allowedOrigins[method][path].concat([origins])
+    return
+  }
+  throw (new Error({message: 'Unknown parameter passed as origin'}))
 }
 
 /*
  * Checks if current user has sufficient permissions to access current enpoint
  */
 function endpointPermissionsMiddleware(req, res, next) {
-    if (checkPermission(req.user, req.method.toLowerCase(), req.path)) {
-        next()
-    } else {
-        res.status(401).send({message: 'User does not have sufficient permissions to access this endpoint.'})
-    }
+  if (checkPermission(req.user, req.method.toLowerCase(), req.path)) {
+    next()
+  } else {
+    res.status(401).send({message: 'User does not have sufficient permissions to access this endpoint.'})
+  }
 }
 
 /*
  * Checks if request has required query parameters
  */
 function optionsMiddleware(req, res, next) {
-    // Must have a country (though need to TODO: @refac Rename to instance_slug or similar)
-    if (!req.query.country) {
-        res.status(400).send('Country parameter missing')
-    } else {
-        req.country = req.query.country
+  // Must have a country (though need to TODO: @refac Rename to instance_slug or similar)
+  if (!req.query.country) {
+    res.status(400).send('Country parameter missing')
+  } else {
+    req.country = req.query.country
 
-        // check if personalised_instance_id or set to default
-        req.personalised_instance_id = req.query.personalised_instance_id || 'default'
+    // check if personalised_instance_id or set to default
+    req.personalised_instance_id = req.query.personalised_instance_id || 'default'
 
-        next()
-    }
+    next()
+  }
 }
 
 function forceUpdateUserList(req, res) {
-    updateUserList().then(() => {
-        const message = 'Successful update of userList'
-        res.send(message)
-    })
+  updateUserList().then(() => {
+    const message = 'Successful update of userList'
+    res.send(message)
+  })
+}
+
+function allowedOriginsMiddleware(req, res, next) {
+  let path = req.path
+  let method = req.method.toLowerCase()
+
+  if (!allowedOrigins[method]) {
+    return next()
+  }
+
+
+  let _path = Object.keys(allowedOrigins[method])
+      .filter(i => path.startsWith(i) && i !== '/')
+      .filter(i => i.length)[0]
+
+  path = _path && _path !== '/' ? _path : path
+
+
+  if (!allowedOrigins[method][path]) {
+    return next()
+  }
+
+  let origin = req.get('origin');
+
+  if (allowedOrigins[method][path].length === 0) {
+
+    return next()
+  }
+
+  if (allowedOrigins[method][path].includes(origin)) {
+    return next()
+  }
+
+  res.status(403).send(`Requests from ${origin} are not permitted`)
 }
 
 module.exports = {
-    addPermission,
-    checkPermission,
-    updateUserList,
-    findByApiKey,
-    findByUsernamePassword,
-    authMiddleware,
-    endpointPermissionsMiddleware,
-    optionsMiddleware,
-    forceUpdateUserList
+  addPermission,
+  checkPermission,
+  updateUserList,
+  findByApiKey,
+  findByUsernamePassword,
+  authMiddleware,
+  endpointPermissionsMiddleware,
+  optionsMiddleware,
+  forceUpdateUserList,
+  addAllowedOrigins,
+  allowedOriginsMiddleware
 }
