@@ -79,7 +79,7 @@ const endpoints = [
         callback: plan.create
     },
     {
-        permissions: ['read:irs_plan'],
+        permissions: ['read:irs_plan', 'read:irs_monitor'],
         method: GET,
         path: '/plan/current',
         callback: plan.get_current
