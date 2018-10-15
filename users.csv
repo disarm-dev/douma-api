@@ -1,5 +1,2 @@
 _id,name,password,username,read,write,instance_slug
-u1,Test User 1,password,user1,"irs_plan, irs_tasker","irs_tasker",swz
-u2,Test User 2,password,user2,,,swz
-sm,sm,m,sm,"irs_plan, irs_tasker","irs_plan,irs_tasker",swz
-"configAdmin","configAdmin","passwd","configAdmin","config","config","all"
+u3,User,m,user,"irs_monitor, irs_record_point, irs_plan, irs_tasker, debug","irs_monitor, irs_record_point, irs_plan, irs_tasker, debug",demo
