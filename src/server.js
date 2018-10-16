@@ -20,7 +20,7 @@ if (!process.env.MONGODB_URI) {
 // Need at least one source of users CSV
 if (!process.env.SHEETS_URL && !process.env.SHEETS_PATH) {
     console.log(
-        '\nERROR: Missing `SHEETS_URL`.\nNeed to set SHEETS_URL as an environment variable.\nSomething like `set -x SHEETS_URL "https://docs.google.com/spreadsheets/d/...."`\n'
+        '\nERROR: Missing `SHEETS_URL (or SHEETS_PATH)`.\nNeed to set SHEETS_URL as an environment variable.\nSomething like `set -x SHEETS_URL "https://docs.google.com/spreadsheets/d/...."`\n'
     )
     process.exit()
 }
