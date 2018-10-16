@@ -178,7 +178,6 @@ module.exports = function (app, version) {
     }
 
     const version_path_regex = new RegExp(version_prefix)
-    console.log(version_path_regex)
     app.use(version_path_regex, User_v5.authMiddleware)
     app.use(version_path_regex, User_v5.endpointPermissionsMiddleware)
     app.use(version_path_regex, User_v5.optionsMiddleware)
